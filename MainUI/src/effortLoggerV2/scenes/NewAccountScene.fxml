@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Scene?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.stage.Stage?>
+
+<Stage title="Making New Account" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="effortLoggerV2.NewAccountSceneController">
+   <scene>
+      <Scene>
+         <root>
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
+               <children>
+                  <VBox alignment="CENTER_RIGHT" layoutX="63.0" layoutY="113.0" prefHeight="189.0" prefWidth="355.0">
+                     <children>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <VBox prefHeight="36.0" prefWidth="178.0">
+                                 <children>
+                                    <Label text="Enter your First Name:">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label text="(3-12 Characters; Single Spaces)">
+                                       <font>
+                                          <Font size="10.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                              <TextField fx:id="fNameField" prefHeight="25.0" prefWidth="177.0" promptText="First Name" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <VBox prefHeight="36.0" prefWidth="178.0">
+                                 <children>
+                                    <Label text="Enter your Last Name:">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label text="(3-12 Characters; Single Spaces)">
+                                       <font>
+                                          <Font size="10.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                              <TextField fx:id="lNameField" prefHeight="25.0" prefWidth="177.0" promptText="Last Name" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <VBox prefHeight="46.0" prefWidth="178.0">
+                                 <children>
+                                    <Label text="Enter your Username:">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label text="(5-12 Characters; No Spaces)">
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" />
+                                       </VBox.margin>
+                                       <font>
+                                          <Font size="10.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                              <TextField fx:id="usernameField" prefHeight="25.0" prefWidth="177.0" promptText="Make a Username" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <VBox prefHeight="49.0" prefWidth="177.0">
+                                 <children>
+                                    <Label text="Enter your Password:">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label text="(8-12 Characters; 1 uppercase, ">
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                       <font>
+                                          <Font size="10.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="lowercase, &amp; special character)">
+                                       <font>
+                                          <Font size="10.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                              <PasswordField fx:id="passwordField" prefHeight="25.0" prefWidth="178.0" promptText="Make Password" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <VBox prefHeight="25.0" prefWidth="176.0">
+                                 <children>
+                                    <Label text="Enter your Role:">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                              <TextField fx:id="roleField" prefHeight="25.0" prefWidth="179.0" promptText="Your Role" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox layoutX="413.0" layoutY="153.0" />
+                  <Button fx:id="newAccountButton" layoutX="444.0" layoutY="192.0" mnemonicParsing="false" onAction="#makeAccount" text="Make Your Account" />
+               </children>
+            </AnchorPane>
+         </root>
+      </Scene>
+   </scene>
+</Stage>
