@@ -76,7 +76,7 @@
                                           <Insets top="5.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <Label text="(5-12 Characters; No Spaces)">
+                                    <Label text="(5-16 Characters; No Spaces)">
                                        <VBox.margin>
                                           <Insets bottom="5.0" />
                                        </VBox.margin>
@@ -101,7 +101,7 @@
                                           <Insets />
                                        </VBox.margin>
                                     </Label>
-                                    <Label text="(8-12 Characters; 1 uppercase, ">
+                                    <Label text="(8-16 Characters; 1 uppercase, ">
                                        <VBox.margin>
                                           <Insets />
                                        </VBox.margin>
