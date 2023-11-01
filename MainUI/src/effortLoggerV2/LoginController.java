@@ -4,6 +4,7 @@ package effortLoggerV2;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
@@ -20,9 +21,17 @@ public class LoginController extends SceneController{
 	private Button logoutButton;
 	
 	@FXML
+	private Button loginButton;
+	
+	@FXML
 	private Button newAccountButton;
 	
-	//written by Dayton
+	@FXML
+	private Label errorText;
+	
+	int numFails = 0;
+	
+	//written by Dayton & Hardeek
 	public void login(ActionEvent event){
 		String user, pass;
 		try {
@@ -34,11 +43,24 @@ public class LoginController extends SceneController{
 				switchToConsole(event, user, pass);
 			} else {
 				System.out.println("Not Good");
+				numFails++;	// count the number of times user fails to login
+				
+				if(numFails >= 3) {
+					lockAccount();
+				}
 			}
 		} catch(Exception e) {}
 		event.consume();
 
-	}	
+	}
+	
+	// written by Hardeek
+	// method to prevent anymore login attempts
+	public void lockAccount() {
+		loginButton.setDisable(true);
+		newAccountButton.setDisable(true);
+		errorText.setText("Exceeded maximum login attempts. Please wait 5 minutes.");
+	}
 	
 	//written by Dayton
 	public void makeNewAccount(ActionEvent event) {

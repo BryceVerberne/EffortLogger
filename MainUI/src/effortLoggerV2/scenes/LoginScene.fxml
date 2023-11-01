@@ -33,6 +33,7 @@
                      </font>
                   </Button>
                   <Button fx:id="newAccountButton" layoutX="151.0" layoutY="225.0" mnemonicParsing="false" onAction="#makeNewAccount" text="Make A New Account" />
+                  <Label fx:id="errorText" layoutX="105.0" layoutY="288.0" prefHeight="54.0" prefWidth="390.0" textAlignment="CENTER" textFill="RED" wrapText="true" />
                </children>
             </AnchorPane>
          </root>
