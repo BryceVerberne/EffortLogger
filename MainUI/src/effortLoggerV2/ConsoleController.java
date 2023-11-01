@@ -295,6 +295,12 @@ public class ConsoleController implements Initializable{
     }
 }
 
+	
+	public void startActivityExport(ActionEvent event) {
+		populateLogs();
+	}
+	
+	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
