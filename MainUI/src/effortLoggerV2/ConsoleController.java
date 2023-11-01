@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -16,32 +17,42 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 
 //written by Dayton
 public class ConsoleController implements Initializable{
 	
 	@FXML
-	Label clockTitle;
+	Label clockTitle, deliverableLabel;
 	
 	@FXML
-	ListView<EffortLogs> logView;
+	TableView<EffortLogs> logTab;
+	
+	@FXML
+	TableColumn<Project, String> projCol;
+	
+	@FXML
+	TableColumn<Integer, String> indexCol;
+	
+	@FXML
+	TableColumn<String, String> dateCol,
+				delCol, startCol, endCol, deltaCol;
+	
+	@FXML
+	TableColumn<LifeCycle, String> lifeCycleCol;
+	
+	@FXML
+	TableColumn<EffortCategory, String> effortCol;
 	
 	@FXML
 	HBox clockBox;
 	
 	@FXML
-	Label deliverableLabel;
-	
-	@FXML
-	TextField dateTextField;
-	
-	@FXML
-	TextField startTimeTextField;
-	
-	@FXML
-	TextField stopTimeTextField;
+	TextField dateTextField, startTimeTextField, stopTimeTextField;
 	
 	@FXML
 	LogsController logsController;
@@ -152,13 +163,23 @@ public class ConsoleController implements Initializable{
 		});
 	}
 	
+	public void setTable() {
+		indexCol.setCellValueFactory(new PropertyValueFactory<>("index"));
+		dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
+		lifeCycleCol.setCellValueFactory(new PropertyValueFactory<>("lCycleStep"));
+		effortCol.setCellValueFactory(new PropertyValueFactory<>("effCat"));
+		delCol.setCellValueFactory(new PropertyValueFactory<>("del"));
+		startCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+		endCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+		deltaCol.setCellValueFactory(new PropertyValueFactory<>("delta"));
+	}
+	
 	public void populateLogs() {
+		
+
 		if(MainUI.effLogs != null) {
-			if(!logView.getItems().isEmpty()) {
-				logView.getItems().clear();
-			}
-			
-			logView.getItems().addAll(MainUI.effLogs); // (effortLogsObserve);
+			ObservableList<EffortLogs> effortLogsObserve = FXCollections.observableArrayList(MainUI.effLogs);
+			logTab.setItems(effortLogsObserve);
 		}
 	}
 	
@@ -282,7 +303,7 @@ public class ConsoleController implements Initializable{
 		populateLCBoxes();
 		populateECBoxes();
 		populateDeliverableBox();
-		populateLogs();
+		setTable();
 		
 		
 	}

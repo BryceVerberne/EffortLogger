@@ -10,6 +10,8 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -442,7 +444,7 @@
                                                             <Insets right="50.0" />
                                                          </HBox.margin>
                                                       </Label>
-                                                      <Button fx:id="updateEntryButton" mnemonicParsing="false" text="      Update This Entry      " onAction="#checkDateFormat" />
+                                                      <Button fx:id="updateEntryButton" mnemonicParsing="false" onAction="#checkDateFormat" text="      Update This Entry      " />
                                                    </children>
                                                    <padding>
                                                       <Insets left="30.0" />
@@ -800,8 +802,31 @@
                                     </Label>
                                     <HBox alignment="CENTER_RIGHT" layoutX="30.0" layoutY="30.0" prefHeight="202.0" prefWidth="649.0">
                                        <children>
-                                          <ListView fx:id="logView" prefHeight="202.0" prefWidth="465.0" />
-                                          <VBox alignment="CENTER" prefHeight="202.0" prefWidth="167.0">
+                                          <ScrollPane>
+                                             <content>
+                                                <TableView fx:id="logTab" editable="true" fixedCellSize="20.0" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="650.0">
+                                                  <columns>
+                                                      <TableColumn fx:id="projCol" prefWidth="400.0" text="Project Name: ">
+                                                         <columns>
+                                                          <TableColumn fx:id="indexCol" minWidth="34.5" prefWidth="43.5" text="Index" />
+                                                            <TableColumn fx:id="dateCol" minWidth="49.0" prefWidth="100.0" text="Date" />
+                                                            <TableColumn fx:id="lifeCycleCol" prefWidth="100.0" text="Life Cycle Step" />
+                                                            <TableColumn fx:id="effortCol" prefWidth="99.0" text="Effort Category" />
+                                                            <TableColumn fx:id="delCol" prefWidth="125.0" text="Deliverable/Interruption/etc" />
+                                                         </columns>
+                                                      </TableColumn>
+                                                      <TableColumn maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="-1.0" text="Time">
+                                                         <columns>
+                                                            <TableColumn fx:id="startCol" maxWidth="100.0" prefWidth="60.0" text="Start" />
+                                                            <TableColumn fx:id="endCol" maxWidth="100.0" prefWidth="60.0" text="End" />
+                                                            <TableColumn fx:id="deltaCol" prefWidth="50.0" text="Delta" />
+                                                         </columns>
+                                                      </TableColumn>
+                                                  </columns>
+                                                </TableView>
+                                             </content>
+                                          </ScrollPane>
+                                          <VBox alignment="CENTER" prefHeight="202.0" prefWidth="290.0">
                                              <HBox.margin>
                                                 <Insets left="15.0" />
                                              </HBox.margin>

@@ -5,5 +5,5 @@ module MainUI {
 	requires java.sql;
 	requires javafx.base;
 	
-	opens effortLoggerV2 to javafx.graphics, javafx.fxml;
+	opens effortLoggerV2 to javafx.graphics, javafx.fxml, javafx.base;
 }
