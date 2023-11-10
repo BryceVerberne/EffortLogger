@@ -1,7 +1,7 @@
 package effortLoggerV2;
 
 import java.util.ArrayList;
-
+import java.util.HashMap;
 
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -12,6 +12,7 @@ public class MainUI {
 	Employee user;
 	public static ArrayList<Activity> activityList;
 	public static ArrayList<EffortLogs> effLogs;
+	public static HashMap<Project, Integer> projectIndexes;
 	
 	// used to hold SQL database information
 	public static ArrayList<Project> projects;

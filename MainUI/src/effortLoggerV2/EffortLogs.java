@@ -1,18 +1,17 @@
 package effortLoggerV2;
 
-import javafx.beans.property.IntegerProperty;
+import java.util.ArrayList;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
 public class EffortLogs {
 	
-	 Activity act;
-	 Project proj;
-	 LifeCycle lCycleStep;
-	 EffortCategory effCat;
-	 String del, start, end, delta, date;
+	Activity act;
+	Project proj;
+	LifeCycle lCycleStep;
+	EffortCategory effCat;
+	String del, start, end, delta, date;
 	int index;
+	ArrayList<String> keyWords;
 	
 	public EffortLogs(Activity activity, Project project, LifeCycle lc, 
 						EffortCategory ec, String deliver, int index) 
@@ -27,11 +26,13 @@ public class EffortLogs {
 		end = act.getEndTime();
 		delta = act.getDeltaTime();
 		date = act.getDate();
+		keyWords = new ArrayList<String>();
 	}
 	
-	public String getProjectTitle() {
+	public String getProj() {
 		return proj.toString();
 	}
+	
 	
 	public String getDel() {
 		return del;
@@ -65,37 +66,9 @@ public class EffortLogs {
 		SimpleIntegerProperty i = new SimpleIntegerProperty(index);
 		return i;
 	}
-		
-//	public String getDelTitle() {
-//		return del;
-//	}
-//	
-//	public String getEffortTitle() {
-//		return effCat.toString();
-//	}
-//	
-//	public String getLifeTitle() {
-//		return lCycleStep.toString();
-//	}
-//	
-//	public String getDate() {
-//		return act.getDate();
-//	}
-//	
-//	public String getStartTime() {
-//		return act.getStartTime();
-//	}
-//	
-//	public String getEndTime() {
-//		return act.getEndTime();
-//	}
-//	
-//	public String getDeltaTime() {
-//		return act.getDeltaTime();
-//	}	
 	
 	public String toString() {
-		return "" + getProjectTitle() + ", " +  getLCycleStep() + ", " + getEffCat() + 
+		return "" + getProj() + ", " +  getLCycleStep() + ", " + getEffCat() + 
 				", " + getDel() + ", " + getDate() + ", " + getStart() + ", " + getDelta();
 	}
 
