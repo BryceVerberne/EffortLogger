@@ -161,6 +161,45 @@
                                                       </VBox>
                                                    </children>
                                                 </HBox>
+                                                <HBox>
+                                                   <children>
+                                                      <VBox prefWidth="300.0">
+                                                         <children>
+                                                            <Label alignment="CENTER" text="Enter Activity Key Words:">
+                                                               <font>
+                                                                  <Font name="System Bold" size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <VBox alignment="TOP_CENTER">
+                                                               <children>
+                                                                  <TextField fx:id="keyWordTextField" />
+                                                                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#addKeyWords" text="Submit Key Words">
+                                                                     <VBox.margin>
+                                                                        <Insets top="10.0" />
+                                                                     </VBox.margin>
+                                                                  </Button>
+                                                               </children>
+                                                            </VBox>
+                                                         </children>
+                                                         <HBox.margin>
+                                                            <Insets right="24.0" />
+                                                         </HBox.margin>
+                                                      </VBox>
+                                                      <VBox>
+                                                         <children>
+                                                            <Label text="Activity's Key Words">
+                                                               <font>
+                                                                  <Font name="System Bold" size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <ListView fx:id="keyWordList" editable="true" prefHeight="125.0" prefWidth="300.0" />
+                                                         </children>
+                                                         <HBox.margin>
+                                                            <Insets left="24.0" />
+                                                         </HBox.margin>
+                                                      </VBox>
+                                                   </children>
+                                                </HBox>
                                                 <Label text="3. Press the &quot;Stop this activity&quot; to generate an effort log entry using the attributes above.">
                                                    <font>
                                                       <Font name="System Bold" size="12.0" />
@@ -806,6 +845,7 @@
                                                   <columns>
                                                     <TableColumn fx:id="indexCol" minWidth="34.5" prefWidth="43.5" text="Index" />
                                                       <TableColumn fx:id="projCol" prefWidth="100.0" text="Project Name: " />
+                                                      <TableColumn fx:id="keyWordCol" prefWidth="125.0" text="Key Words" />
                                                       <TableColumn fx:id="dateCol" minWidth="49.0" prefWidth="100.0" text="Date" />
                                                       <TableColumn fx:id="lifeCycleCol" prefWidth="120.0" text="Life Cycle Step" />
                                                       <TableColumn fx:id="effortCol" prefWidth="120.0" text="Effort Category" />
@@ -817,7 +857,6 @@
                                                             <TableColumn fx:id="deltaCol" prefWidth="50.0" text="Delta" />
                                                          </columns>
                                                       </TableColumn>
-                                                      <TableColumn fx:id="keyWordCol" prefWidth="175.0" text="Key Words" />
                                                   </columns>
                                                 </TableView>
                                              </children>
@@ -840,7 +879,7 @@
                                                       <Insets bottom="10.0" />
                                                    </VBox.margin>
                                                 </Button>
-                                                <Button mnemonicParsing="false" text="Export Data">
+                                                <Button mnemonicParsing="false" onAction="#filterEffortLogs" text="Filter Effort Logs">
                                                    <VBox.margin>
                                                       <Insets top="10.0" />
                                                    </VBox.margin>

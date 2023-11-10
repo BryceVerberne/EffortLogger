@@ -29,6 +29,10 @@ public class EffortLogs {
 		keyWords = new ArrayList<String>();
 	}
 	
+	public void setKeyWords(ArrayList<String> keyList) {
+		keyWords = keyList;
+	}
+	
 	public String getProj() {
 		return proj.toString();
 	}
@@ -62,6 +66,17 @@ public class EffortLogs {
 		return act.getDeltaTime();
 	}
 	
+	public String getKeyWords() {
+		String s = "";
+		if(keyWords.size() > 0) {
+			s = keyWords.get(0);
+			for(int i = 1; i < keyWords.size(); i++) {
+				s += ", " + keyWords.get(i);
+			}
+		}
+		return s;
+	}
+	
 	public SimpleIntegerProperty indexProperty() {
 		SimpleIntegerProperty i = new SimpleIntegerProperty(index);
 		return i;
@@ -69,7 +84,7 @@ public class EffortLogs {
 	
 	public String toString() {
 		return "" + getProj() + ", " +  getLCycleStep() + ", " + getEffCat() + 
-				", " + getDel() + ", " + getDate() + ", " + getStart() + ", " + getDelta();
+				", " + getDel() + ", " + getDate() + ", " + getStart() + ", " + getDelta() + getKeyWords();
 	}
 
 }
