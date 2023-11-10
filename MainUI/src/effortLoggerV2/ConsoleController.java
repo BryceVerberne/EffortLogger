@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -50,8 +51,9 @@ public class ConsoleController implements Initializable{
 	
 	@FXML
 	TextField dateTextField, startTimeTextField, 
-				stopTimeTextField;
-	
+				stopTimeTextField, keyWordTextField;
+	@FXML
+	ListView<String> keyWordList;
 
 	@FXML
 	ComboBox<Object> deliverableComboBox;
@@ -65,8 +67,10 @@ public class ConsoleController implements Initializable{
 	@FXML
 	ComboBox<LifeCycle> lifeCycleComboBox;
 	
+	Activity act = null;
 	
 	LogsController logControl;
+	
 	
 	public void refreshComboBoxes() {
 		// fills the arrayLists of the different definitions 
@@ -170,7 +174,7 @@ public class ConsoleController implements Initializable{
 	
 	public void setLogsTable() {
 		logControl = new LogsController(indexCol, projCol, dateCol, lifeCycleCol, effortCol, 
-										delCol,	startCol, endCol, deltaCol, logTab);
+										delCol,	startCol, endCol, deltaCol, logTab, keyWordCol);
 		logControl.setLogsTable();
 	}
 	
@@ -179,8 +183,9 @@ public class ConsoleController implements Initializable{
 		logControl.populateLogs();
 	}
 	
-	
-	Activity act = null;
+	public void filterEffortLogs() {
+		logControl.filterEffortLogs();
+	}
 	
 	//written by Dayton
 	public void startActivity(ActionEvent event) {
@@ -192,7 +197,6 @@ public class ConsoleController implements Initializable{
 	}
 	
 	//written by Dayton
-	
 	public void endActivity(ActionEvent event) {
 		if(act != null) {
 			act.stopActivity();
@@ -203,6 +207,8 @@ public class ConsoleController implements Initializable{
 				}
 				// add the activity to a list
 				createEffortLog();
+				// clear the key words list for next activity
+				keyWordList.getItems().clear();
 				act = null;
 				// gets rid of the old activity
 				clockTitle.setText("Clock is stopped");
@@ -217,12 +223,17 @@ public class ConsoleController implements Initializable{
 	
 	
 	public void createEffortLog() {
+		// these get the selections from the combo boxes and key word lists
+		// we take those values to then create an effort log and store it
+		// in a effort log ArrayList 
 		Project project = projectComboBox.getSelectionModel().getSelectedItem();
 		LifeCycle lifeC = lifeCycleComboBox.getSelectionModel().getSelectedItem();
 		EffortCategory effortCat = effortCategoryComboBox.getSelectionModel().getSelectedItem();
 		String deliver = deliverableComboBox.getSelectionModel().getSelectedItem().toString();
 		MainUI.projectIndexes.put(project, MainUI.projectIndexes.get(project) + 1);
-		MainUI.effLogs.add(new EffortLogs(act, project, lifeC, effortCat, deliver, MainUI.projectIndexes.get(project)));
+		EffortLogs effortLog = new EffortLogs(act, project, lifeC, effortCat, deliver, MainUI.projectIndexes.get(project));
+		effortLog.setKeyWords(new ArrayList<>(keyWordList.getItems()));
+		MainUI.effLogs.add(effortLog);
 		System.out.println(MainUI.effLogs);
 	}
 	
@@ -271,7 +282,16 @@ public class ConsoleController implements Initializable{
 	    }
 	}
 	
-
+	public void addKeyWords() {
+		String text = keyWordTextField.getText();
+		if(text.length() < 100) {
+			keyWordList.getItems().add(text);
+			keyWordTextField.clear();
+		}
+		else {
+			System.out.println("error");
+		}
+	}
 	
 	public void startActivityExport(ActionEvent event) {
 		populateLogs();
