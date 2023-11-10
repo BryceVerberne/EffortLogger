@@ -1,9 +1,5 @@
 package effortLoggerV2;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-
 import javafx.application.Application;
 import javafx.stage.Stage;
 

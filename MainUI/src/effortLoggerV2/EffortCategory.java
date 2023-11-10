@@ -21,4 +21,13 @@ public class EffortCategory {
 	public String toString() {
 		return "" + title;
 	}
+	
+	public int getEffortCategory() {
+		for(int i = 0; i < MainUI.ec.size(); i++) {
+			if(title.equals(MainUI.ec.get(i).title)) {
+				return i;
+			}
+		}
+		return 0;
+	}
 }

@@ -111,7 +111,7 @@ public class dataConnect {
 			statement.setString(4, enterUser);
 			statement.setString(5, enterPass);
 	        // we execute a SQL update
-	        int done = statement.executeUpdate();
+	        statement.executeUpdate();
 	        // then a employee has the entered username and password
 	        
 	        statement.close();
@@ -183,7 +183,7 @@ public class dataConnect {
 					proj.get(index).setLifeC();
 				}
 				// then add the new life cycle index to the project's life cycle array index
-				// have to minus 1 for the life cycle array because 
+				// have to minus 1 for the life cycle array because in database the index starts at 1
 				proj.get(index).setLifeCycles(proj, index, lc.get(rs.getInt("LifeCycle") - 1));
 			}
 			rs.close();
