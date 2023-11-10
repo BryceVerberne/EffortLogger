@@ -183,6 +183,9 @@ public class ConsoleController implements Initializable{
 		logControl.populateLogs();
 	}
 	
+	
+	// method for creating the filter pop up
+	// uses a method in the LogsController class to implement
 	public void filterEffortLogs() {
 		logControl.filterEffortLogs();
 	}

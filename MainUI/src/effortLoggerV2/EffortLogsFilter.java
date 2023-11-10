@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 public class EffortLogsFilter extends Dialog<ArrayList<String>> {
 
 	private HBox pane;
+	
 	public EffortLogsFilter() {
 		super();
 		this.setTitle("Effort Logs Filter");

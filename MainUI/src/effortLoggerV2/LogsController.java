@@ -73,7 +73,10 @@ public class LogsController {
 		
 	}
 	
+	// creates the dialog pane pop up for filtering data and shows it to user
 	public void filterEffortLogs() {
+		// creates an instance of the UI with the EffortLogsFilter class object
+		// this UI is controlled by the FilterController class
 		Dialog<ArrayList<String>> dp = new EffortLogsFilter();
 		dp.showAndWait();
 	}
