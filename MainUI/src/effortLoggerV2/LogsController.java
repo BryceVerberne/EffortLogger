@@ -2,6 +2,7 @@ package effortLoggerV2;
 
 
 import java.util.ArrayList;
+import java.util.Optional;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Dialog;
@@ -61,8 +62,7 @@ public class LogsController {
 		keyWordCol.setCellValueFactory(new PropertyValueFactory<>("keyWords"));
 	}
 	
-	public void populateLogs() 
-	{
+	public void populateLogs() {
 		if(MainUI.effLogs != null) {
 			ObservableList<EffortLogs> effortLogsObserve = FXCollections.observableArrayList(MainUI.effLogs);
 			logTab.setItems(effortLogsObserve);
@@ -70,7 +70,20 @@ public class LogsController {
 	}
 	
 	public void populateFilteredLogs(ArrayList<String> keys) {
-		
+		if(!keys.isEmpty()) {
+			// if the keys arrayList is not empty then go ahead with filtering the effort lgos
+			ObservableList<EffortLogs> effortLogsObserve = FXCollections.observableArrayList();
+			for(EffortLogs el : MainUI.effLogs) {
+				// for every effort log, if the effort log contains the filtered keywords, show them in the table
+				if(el.keyWords.containsAll(keys)) {
+					effortLogsObserve.add(el);
+				}
+			}
+			logTab.setItems(effortLogsObserve);
+		} else {
+			// if the filtered key words is empty, then just show all of the effort logs
+			populateLogs();
+		}
 	}
 	
 	// creates the dialog pane pop up for filtering data and shows it to user
@@ -78,7 +91,14 @@ public class LogsController {
 		// creates an instance of the UI with the EffortLogsFilter class object
 		// this UI is controlled by the FilterController class
 		Dialog<ArrayList<String>> dp = new EffortLogsFilter();
-		dp.showAndWait();
+		Optional<ArrayList<String>> result = dp.showAndWait();
+		if(result.isPresent() && (!result.get().isEmpty())) {
+			populateFilteredLogs(result.get());
+		} else {
+			// if the filtered key words is empty, just show all effort logs
+			populateLogs();
+		}
+		
 	}
 	
 }

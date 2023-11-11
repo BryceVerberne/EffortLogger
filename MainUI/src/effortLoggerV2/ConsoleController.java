@@ -179,11 +179,6 @@ public class ConsoleController implements Initializable{
 	}
 	
 	
-	public void populateLogs() {
-		logControl.populateLogs();
-	}
-	
-	
 	// method for creating the filter pop up
 	// uses a method in the LogsController class to implement
 	public void filterEffortLogs() {
@@ -237,9 +232,8 @@ public class ConsoleController implements Initializable{
 		EffortLogs effortLog = new EffortLogs(act, project, lifeC, effortCat, deliver, MainUI.projectIndexes.get(project));
 		effortLog.setKeyWords(new ArrayList<>(keyWordList.getItems()));
 		MainUI.effLogs.add(effortLog);
-		System.out.println(MainUI.effLogs);
+		logControl.populateLogs();
 	}
-	
 	
 	// written by David
 	public void checkDateFormat(ActionEvent event) {
@@ -286,18 +280,31 @@ public class ConsoleController implements Initializable{
 	}
 	
 	public void addKeyWords() {
+		// if the input in the enter field is within a reasonable range, input into the key word ListView
 		String text = keyWordTextField.getText();
-		if(text.length() < 100) {
+		if(text.length() < 100 && text.length() > 0) {
 			keyWordList.getItems().add(text);
 			keyWordTextField.clear();
 		}
 		else {
-			System.out.println("error");
+			System.out.println("Can't have empty KeyWord");
 		}
 	}
 	
+	// clear the key words list
+	public void clearKeyWords() {
+		keyWordList.getItems().clear();
+	}
+	
+	public void deleteKeyWord() {
+		if(!keyWordList.getSelectionModel().isEmpty()) {
+			keyWordList.getItems().remove(keyWordList.getSelectionModel().getSelectedIndex());
+		}
+	}
+	
+	
 	public void startActivityExport(ActionEvent event) {
-		populateLogs();
+		logControl.populateLogs();
 	}
 	
 	public void initIndexes() {

@@ -173,11 +173,20 @@
                                                             <VBox alignment="TOP_CENTER">
                                                                <children>
                                                                   <TextField fx:id="keyWordTextField" />
-                                                                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#addKeyWords" text="Submit Key Words">
+                                                                  <HBox alignment="CENTER">
+                                                                     <children>
+                                                                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#addKeyWords" text="Submit Key Words" />
+                                                                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#clearKeyWords" text="Clear">
+                                                                           <HBox.margin>
+                                                                              <Insets left="10.0" right="10.0" />
+                                                                           </HBox.margin>
+                                                                        </Button>
+                                                                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#deleteKeyWord" text="Delete" />
+                                                                     </children>
                                                                      <VBox.margin>
                                                                         <Insets top="10.0" />
                                                                      </VBox.margin>
-                                                                  </Button>
+                                                                  </HBox>
                                                                </children>
                                                             </VBox>
                                                          </children>
@@ -882,11 +891,6 @@
                                                 <Button mnemonicParsing="false" onAction="#filterEffortLogs" text="Filter Effort Logs">
                                                    <VBox.margin>
                                                       <Insets top="10.0" />
-                                                   </VBox.margin>
-                                                </Button>
-                                                <Button mnemonicParsing="false" onAction="#populateLogs" text="Show Logs">
-                                                   <VBox.margin>
-                                                      <Insets top="20.0" />
                                                    </VBox.margin>
                                                 </Button>
                                              </children>
