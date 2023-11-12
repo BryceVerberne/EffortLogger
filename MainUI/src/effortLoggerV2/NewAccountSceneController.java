@@ -1,3 +1,15 @@
+/**
+ * Title:       New Account Scene Controller
+ * Author(s):   Bryce Verberne, Dayton Koehler  
+ * Email(s):    bverbern@asu.edu, Dkoehle4@asu.edu
+ * Description: This class, part of the effortLoggerV2 JavaFX application, manages the new account creation scene.
+ *              It handles user input validation, ensuring compliance with criteria for usernames, passwords,
+ *              and personal information. The class also checks username uniqueness, provides user feedback,
+ *              and transitions users to the login scene after successful account creation.
+ */
+
+
+
 package effortLoggerV2;
 
 import javafx.event.ActionEvent;
@@ -5,7 +17,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-//written by Dayton
 public class NewAccountSceneController extends SceneController{
 	
 	@FXML
@@ -113,5 +124,4 @@ public class NewAccountSceneController extends SceneController{
 			
 			event.consume();
 		}
-	
 }
