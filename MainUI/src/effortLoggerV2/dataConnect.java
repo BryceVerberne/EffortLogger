@@ -1,3 +1,17 @@
+/**
+ * Title:       Database Connection Class
+ * Authors:     Dayton Koehler, Bryce Verberne
+ * Emails:      Dkoehle4@asu.edu, bverbern@asu.edu
+ * Description: Part of the effortLoggerV2 application, this class manages database connections and operations. 
+ *              It includes methods for connecting to a SQLite database, querying employee details, 
+ *              and inserting new user data. The class also provides functions to populate various 
+ *              project-related entities like Projects, LifeCycles, and EffortCategories from the database, 
+ *              facilitating dynamic data retrieval and management within the application.
+ */
+
+
+
+
 package effortLoggerV2;
 
 import java.sql.Connection;
@@ -16,7 +30,6 @@ public class dataConnect {
 		connection = connect();
 	}
 	
-	// written by Dayton
 	public static Connection connect() {
 		try {
 			// uses SQLite to use database on local file of effortLoggerV2
@@ -63,7 +76,6 @@ public class dataConnect {
 			return false;
 		}
 	
-	// written by Dayton
 	// searches for the username and password of employees in database
 	public static boolean findUserPass(String enterUser, String enterPass) {
 		try {
@@ -93,7 +105,6 @@ public class dataConnect {
 		return false;
 	}
 	
-	// written by Dayton
 	public static boolean newUserPass(String enterUser, String enterPass, String fName,
 			String lName, String role) {
 		try {
@@ -123,7 +134,6 @@ public class dataConnect {
 		return false;
 	}
 	
-	//written by Dayton
 	public static Employee getEmployee(String user, String pass) {
 		try {
 			// create a connection to database
@@ -166,7 +176,6 @@ public class dataConnect {
 		
 	}
 	
-	// written by Dayton
 	public static ArrayList<Project> fillProjects(ArrayList<Project> proj, ArrayList<LifeCycle> lc) {
 		try {
 			ResultSet rs = getRS("project", "LifeCycle is not NULL");
@@ -195,7 +204,6 @@ public class dataConnect {
 		
 	}
 	
-	// Written by Dayton
 	public static ArrayList<LifeCycle> fillLifeCycles(ArrayList<LifeCycle> lc,
 			ArrayList<EffortCategory> ec, int keyItem) {
 		try {
@@ -224,7 +232,6 @@ public class dataConnect {
 		return null;
 	}
 	
-	// written by Dayton
 	public static ArrayList<EffortCategory> fillEffortCategories(ArrayList<EffortCategory> ec) {
 		try {
 			ResultSet rs = getRS("effortcategory", "titleEC is not NULL");
@@ -243,7 +250,6 @@ public class dataConnect {
 		return null;
 	}
 	
-	// written by Dayton
 	public static ArrayList<Plan> fillPlans(ArrayList<Plan> plan) {
 		try {
 			ResultSet rs = getRS("plan", "titlePlan is not NULL");
@@ -261,7 +267,6 @@ public class dataConnect {
 		return null;
 	}
 	
-	// written by Dayton
 	public static ArrayList<Deliverable> fillDeliverables(ArrayList<Deliverable> del) {
 		try {
 			ResultSet rs = getRS("deliverable", "titleDel is not NULL");
@@ -279,7 +284,6 @@ public class dataConnect {
 		return null;
 	}
 	
-	// written by Dayton
 	public static ArrayList<Interruption> fillInterruption(ArrayList<Interruption> inter) {
 		try {
 			ResultSet rs = getRS("interruption", "titleInter is not NULL");
@@ -297,7 +301,6 @@ public class dataConnect {
 		return null;
 	}
 	
-	// written by Dayton
 	public static ArrayList<DefectCategory> fillDefectCategories(ArrayList<DefectCategory> dc) {
 		try {
 			ResultSet rs = getRS("defectcategory", "titleDC is not NULL");
@@ -316,7 +319,6 @@ public class dataConnect {
 		
 	}
 	
-	// written by Dayton
 	public static ResultSet getRS(String location, String want) {
 		connection = connect();
 		Statement statement;

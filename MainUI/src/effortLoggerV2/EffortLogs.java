@@ -1,3 +1,15 @@
+/**
+ * Title:       Effort Logs Class
+ * Author:      Dayton Koehler
+ * Email:       Dkoehle4@asu.edu
+ * Description: In the effortLoggerV2 application, this class is responsible for logging various efforts. 
+ *              It tracks project details, life cycle steps, effort categories, and deliverables, 
+ *              along with time metrics. Key features include managing activity durations and associated keywords, 
+ *              crucial for effective effort management in projects.
+ */
+
+
+
 package effortLoggerV2;
 
 import java.util.ArrayList;

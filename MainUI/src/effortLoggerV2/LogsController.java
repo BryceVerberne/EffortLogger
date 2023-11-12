@@ -1,5 +1,17 @@
-package effortLoggerV2;
+/**
+ * Title:       Logs Controller Class
+ * Authors:     Dayton Koehler
+ * Emails:      Dkoehle4@asu.edu
+ * Description: This class, part of the effortLoggerV2 application, manages the logs table interface. 
+ *              It controls a TableView for displaying effort logs, with columns for project, index, date, lifecycle, 
+ *              effort category, and other log details. The class provides methods for setting up the table columns, 
+ *              populating the logs table with data, filtering logs based on keywords, and handling the user interface 
+ *              for filtering logs. It uses JavaFX collections and properties for dynamic data handling and display.
+ */
 
+
+
+package effortLoggerV2;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -26,10 +38,6 @@ public class LogsController {
 	
 	TableColumn<EffortCategory, String> effortCol;
 	
-	
-
-	
-
 	public LogsController(TableColumn<Integer, String> indexCol2, TableColumn<Project, String> projCol2, TableColumn<String, 
 							String> dateCol2, TableColumn<LifeCycle, String> lifeCycleCol2, TableColumn<EffortCategory, 
 							String> effortCol2, TableColumn<String, String> delCol2, 
@@ -102,4 +110,3 @@ public class LogsController {
 	}
 	
 }
-

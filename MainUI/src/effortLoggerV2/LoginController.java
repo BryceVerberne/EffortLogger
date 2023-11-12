@@ -1,3 +1,16 @@
+/**
+ * Title:       Login Controller
+ * Authors:     Dayton Koehler, Hardeek Das
+ * Emails:      Dkoehle4@asu.edu, hdas2@asu.edu
+ * Description: This class, part of the effortLoggerV2 application, extends SceneController and manages the login functionality. 
+ *              It handles the user interface for login, including fields for username and password, login, logout, 
+ *              and account creation buttons, and an error message label. The class includes methods for handling login attempts, 
+ *              locking an account after multiple failed attempts, and transitioning to account creation. 
+ *              These functionalities are implemented with JavaFX components and event handling.
+ */
+
+
+
 package effortLoggerV2;
 
 
@@ -8,7 +21,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-//written by Dayton
 public class LoginController extends SceneController{
 
 	@FXML
@@ -31,7 +43,6 @@ public class LoginController extends SceneController{
 	
 	int numFails = 0;
 	
-	//written by Dayton & Hardeek
 	public void login(ActionEvent event){
 		String user, pass;
 		try {
@@ -54,7 +65,6 @@ public class LoginController extends SceneController{
 
 	}
 	
-	// written by Hardeek
 	// method to prevent anymore login attempts
 	public void lockAccount() {
 		loginButton.setDisable(true);
@@ -62,7 +72,6 @@ public class LoginController extends SceneController{
 		errorText.setText("Exceeded maximum login attempts. Please wait 5 minutes.");
 	}
 	
-	//written by Dayton
 	public void makeNewAccount(ActionEvent event) {
 		try {
 			switchToNewAccount(event);

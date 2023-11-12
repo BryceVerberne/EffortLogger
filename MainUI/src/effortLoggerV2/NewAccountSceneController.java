@@ -1,5 +1,5 @@
 /**
- * Title:       New Account Scene Controller
+ * Title:       New Account Scene Controller Class
  * Author(s):   Bryce Verberne, Dayton Koehler  
  * Email(s):    bverbern@asu.edu, Dkoehle4@asu.edu
  * Description: This class, part of the effortLoggerV2 JavaFX application, manages the new account creation scene.

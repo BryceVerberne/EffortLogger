@@ -1,3 +1,17 @@
+/**
+ * Title:       Main User Interface
+ * Authors:     Dayton Koehler
+ * Emails:      Dkoehle4@asu.edu
+ * Description: Part of the effortLoggerV2 application, this class manages the main user interface. 
+ *              It maintains the application state, including the current user, lists of activities, logs, and various project entities. 
+ *              The class is responsible for loading and displaying the main UI scene using JavaFX's FXMLLoader. 
+ *              It also initializes and holds references to various data collections like projects, life cycles, 
+ *              effort categories, deliverables, plans, interruptions, and defect categories, 
+ *              which are essential for the application's operation.
+ */
+
+
+
 package effortLoggerV2;
 
 import java.util.ArrayList;
@@ -7,7 +21,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 
 public class MainUI {
-	
 	
 	Employee user;
 	public static ArrayList<Activity> activityList;
@@ -28,8 +41,6 @@ public class MainUI {
 	
 	// used to show the array list of definitions in the combo boxes of EffortLogger Console
 		
-	
-	// written by Dayton
 	public MainUI() {
 		user = null;
 	}
@@ -45,4 +56,3 @@ public class MainUI {
 	}
 	
 }
-	

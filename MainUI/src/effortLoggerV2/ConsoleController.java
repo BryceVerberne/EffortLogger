@@ -1,3 +1,17 @@
+/**
+ * Title:       Console Controller Class
+ * Authors:     Dayton Koehler, David Lee
+ * Emails:      Dkoehle4@asu.edu, dblee5@asu.edu
+ * Description: Part of the effortLoggerV2 JavaFX application, this class manages the console interface. 
+ *              It handles UI elements like ComboBoxes, TableView, and TextBoxes for project management and effort logging. 
+ *              The class is responsible for initializing UI components, populating data, managing user inputs, 
+ *              and updating the log table. It also includes methods for starting and ending activities, 
+ *              validating date and time formats, and managing keywords for logs.
+ */
+
+
+
+
 package effortLoggerV2;
 
 import java.net.URL;
@@ -21,7 +35,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 
-//written by Dayton
+
 public class ConsoleController implements Initializable{
 	
 	@FXML
@@ -90,7 +104,6 @@ public class ConsoleController implements Initializable{
 		
 	}
 	
-	// written by dayton
 	public void populateLCBoxes() {
 		int projectNumber = projectComboBox.getSelectionModel().getSelectedIndex();
 		// creates an observable list of the life cycles defined in the project
@@ -106,7 +119,6 @@ public class ConsoleController implements Initializable{
 	}
 	
 	
-	// written by dayton
 	public void populateECBoxes() {
 		// create the observable list for the effort category
 		ObservableList<EffortCategory> effortCategoryObserve = FXCollections.observableArrayList(MainUI.ec);
@@ -120,7 +132,6 @@ public class ConsoleController implements Initializable{
 		
 	}
 	
-	// written by dayton
 	public void populateDeliverableBox() {
 			String effortbox = effortCategoryComboBox.getSelectionModel().getSelectedItem().title;
 			if (effortbox.equals("Plans")){
@@ -185,7 +196,7 @@ public class ConsoleController implements Initializable{
 		logControl.filterEffortLogs();
 	}
 	
-	//written by Dayton
+	
 	public void startActivity(ActionEvent event) {
 		if(act == null) {
 			act = new Activity();
@@ -194,7 +205,6 @@ public class ConsoleController implements Initializable{
 		} 
 	}
 	
-	//written by Dayton
 	public void endActivity(ActionEvent event) {
 		if(act != null) {
 			act.stopActivity();
@@ -219,7 +229,6 @@ public class ConsoleController implements Initializable{
 		
 	}
 	
-	
 	public void createEffortLog() {
 		// these get the selections from the combo boxes and key word lists
 		// we take those values to then create an effort log and store it
@@ -235,7 +244,6 @@ public class ConsoleController implements Initializable{
 		logControl.populateLogs();
 	}
 	
-	// written by David
 	public void checkDateFormat(ActionEvent event) {
 	    int wrongFormat = 0; // Variable to track if the input is in the wrong format
 	    String dateText = dateTextField.getText(); // Get date text from dateTextField

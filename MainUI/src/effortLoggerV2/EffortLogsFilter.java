@@ -1,3 +1,16 @@
+/**
+ * Title:       Effort Logs Filter Class
+ * Authors:     Dayton Koehler
+ * Emails:      Dkoehle4@asu.edu
+ * Description: Part of the effortLoggerV2 JavaFX application, this class manages the filtering interface for effort logs. 
+ *              It includes UI elements like ListView and TextField for filtering logged efforts. 
+ *              This class is responsible for initializing and managing these UI components, 
+ *              handling user inputs, and providing filtered results. It includes methods for submitting and 
+ *              clearing filters, as well as building the interface components.
+ */
+
+
+
 package effortLoggerV2;
 
 import java.util.ArrayList;

@@ -1,23 +1,30 @@
+/**
+ * Title:       Effort Category Class
+ * Author:      Dayton Koehler
+ * Email:       Dkoehle4@asu.edu
+ * Description: Integral to the effortLoggerV2 application, this class is responsible for representing effort categories. 
+ *              It stores each category's title and aliases with the database to populate an array list of effort categories. 
+ *              This class is crucial for categorizing and managing different types of efforts within the application.
+ */
+
+
+
 package effortLoggerV2;
 
 import java.util.ArrayList;
 
-//written by Dayton
 public class EffortCategory {
 	String title;
 	
-	//written by Dayton
 	public EffortCategory(String title) {
 		this.title = title;
 		
 	}
 	
-	//written by Dayton
 	public static ArrayList<EffortCategory> fillEC(ArrayList<EffortCategory> ec) {
 		return dataConnect.fillEffortCategories(ec);
 	}
 	
-	//written by Dayton
 	public String toString() {
 		return "" + title;
 	}

@@ -1,10 +1,20 @@
+/**
+ * Title:       Activity Class Class
+ * Author:      Dayton Koehler
+ * Email:       Dkoehle4@asu.edu
+ * Description: Part of the effortLoggerV2 JavaFX application, this class tracks and manages activity durations. 
+ *              It records start/end times, calculates duration, and provides formatted time data. 
+ *              The class facilitates starting and stopping activities, offering precise time logging capabilities.
+ */
+
+
+
 package effortLoggerV2;
 
 import java.text.DecimalFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 
-// written by Dayton
 public class Activity {
 	// tells if activity is going on
 	DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -13,7 +23,6 @@ public class Activity {
 	double deltaTime;
 	LocalDate dateStart, dateEnd = null;
 	
-	// written by Dayton
 	public Activity() {
 		// activity is on now
 		on = true;
@@ -21,7 +30,6 @@ public class Activity {
 		dateStart = LocalDate.now();
 	}
 	
-	// written by Dayton
 	public void stopActivity() {
 		end = LocalDateTime.now();
 		deltaTime = (double) Duration.between(start, end).toSeconds() / 60.0;
@@ -29,7 +37,6 @@ public class Activity {
 		on = false; // stop activity now		
 	}
 	
-	// written by Dayton
 	public String toString() {
 		return "" + this.start.format(format) + "\n" + this.end.format(format) + "\n";
 	}
