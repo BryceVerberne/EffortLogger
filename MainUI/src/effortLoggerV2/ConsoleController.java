@@ -1,7 +1,7 @@
 /**
  * Title:       Console Controller Class
- * Authors:     Dayton Koehler, David Lee
- * Emails:      Dkoehle4@asu.edu, dblee5@asu.edu
+ * Authors:     Dayton Koehler, David Lee, Bryce Verberne
+ * Emails:      Dkoehle4@asu.edu, dblee5@asu.edu, bverbern@asu.edu
  * Description: Part of the effortLoggerV2 JavaFX application, this class manages the console interface. 
  *              It handles UI elements like ComboBoxes, TableView, and TextBoxes for project management and effort logging. 
  *              The class is responsible for initializing UI components, populating data, managing user inputs, 
@@ -21,7 +21,6 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -37,6 +36,15 @@ import javafx.scene.layout.HBox;
 
 
 public class ConsoleController implements Initializable{
+	
+	@FXML
+	private ListView<String> injectionStepListView;
+	
+	@FXML
+	private ListView<String> removalStepListView;
+	
+	@FXML
+	private ListView<String> defectCategoryListView;
 	
 	@FXML
 	Label clockTitle, deliverableLabel;
@@ -349,6 +357,12 @@ public class ConsoleController implements Initializable{
 				populateDeliverableBox();
 			}
 		});
+		
+		// Add options for Defect Console list views "Step when injected", "Step when removed", & "Defect Category"
+		injectionStepListView.getItems().addAll("Planning", "Information Gathering", "Information Understanding", "Verifying", "Outlining");
+		removalStepListView.getItems().addAll("Planning", "Information Gathering", "Information Understanding", "Verifying", "Outlining");
+		defectCategoryListView.getItems().addAll("Not specified", "10 Documentation", "20 Syntax", "30 Build, Package", "40 Assignment");
+		
 	}
 	
 }
