@@ -21,6 +21,12 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -39,12 +45,22 @@ public class ConsoleController implements Initializable{
 	
 	@FXML
 	private ListView<String> injectionStepListView;
+	String[] injectionOptions = {"Planning", "Information Gathering", "Information Understanding", "Verifying", "Outlining"};
+	String currentInjection;
+	
 	
 	@FXML
 	private ListView<String> removalStepListView;
+	String[] removalOptions = {"Planning", "Information Gathering", "Information Understanding", "Verifying", "Outlining"};
+	String currentRemoval;
 	
 	@FXML
 	private ListView<String> defectCategoryListView;
+	String[] defectCategoryOptions = {"Not specified", "10 Documentation", "20 Syntax", "30 Build, Package", "40 Assignment"};
+	String currentDefectCategory;
+	
+	@FXML
+	private ComboBox<String> projectSelection;
 	
 	@FXML
 	Label clockTitle, deliverableLabel;
@@ -358,11 +374,44 @@ public class ConsoleController implements Initializable{
 			}
 		});
 		
-		// Add options for Defect Console list views "Step when injected", "Step when removed", & "Defect Category"
-		injectionStepListView.getItems().addAll("Planning", "Information Gathering", "Information Understanding", "Verifying", "Outlining");
-		removalStepListView.getItems().addAll("Planning", "Information Gathering", "Information Understanding", "Verifying", "Outlining");
-		defectCategoryListView.getItems().addAll("Not specified", "10 Documentation", "20 Syntax", "30 Build, Package", "40 Assignment");
 		
+		// Add options for Defect Console list views "Step when injected", "Step when removed", & "Defect Category"
+		injectionStepListView.getItems().addAll(injectionOptions);
+		removalStepListView.getItems().addAll(removalOptions);
+		defectCategoryListView.getItems().addAll(defectCategoryOptions);
+		
+		// Add event listener to track user selection for injection list view section
+		injectionStepListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
+				// Based on user input, set the current injection value
+				currentInjection = injectionStepListView.getSelectionModel().getSelectedItem();
+				System.out.println(currentInjection);
+			}
+		});
+		
+		// Add event listener to track user selection for removal list view section
+		removalStepListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
+				// Based on user input, set the current removal value
+				currentRemoval = removalStepListView.getSelectionModel().getSelectedItem();
+				System.out.println(currentRemoval);
+			}
+		});
+		
+		// Add event listener to track user selection for defect category list view section
+		defectCategoryListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
+				// Based on user input, set the current defect category value
+				currentDefectCategory = defectCategoryListView.getSelectionModel().getSelectedItem();
+				System.out.println(currentDefectCategory);
+			}
+		});
+		
+		
+		projectSelection.getItems().addAll("Business Project", "Development Project");
 	}
 	
 }
