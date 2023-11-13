@@ -369,6 +369,10 @@ public class ConsoleController implements Initializable{
 		});
 		
 		
+		// ***************
+		// Defect Console
+		// ***************
+		
 		// String arrays containing text to populate list views
 		String[] projectOptions = {"Business Project", "Development Project"};
 		String[] businessOptions = {"Planning", "Information Gathering", "Information Understanding", "Verifying", "Outlining"};
@@ -384,6 +388,7 @@ public class ConsoleController implements Initializable{
 			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
 				// Based on user input, set the current project type
 				currentProjectType = projectSelection.getSelectionModel().getSelectedItem();
+				System.out.println("Select the project: " + currentProjectType);
 				
 				// Clear the current list view options
 				injectionStepListView.getItems().clear();
@@ -395,7 +400,7 @@ public class ConsoleController implements Initializable{
 					injectionStepListView.getItems().addAll(businessOptions);
 					removalStepListView.getItems().addAll(businessOptions);
 				}
-				else {
+				else if (currentProjectType.equals("Development Project")) {
 					injectionStepListView.getItems().addAll(developmentOptions);
 					removalStepListView.getItems().addAll(developmentOptions);
 				}
@@ -411,7 +416,7 @@ public class ConsoleController implements Initializable{
 			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
 				// Based on user input, set the current injection value
 				currentInjection = injectionStepListView.getSelectionModel().getSelectedItem();
-				System.out.println(currentInjection);
+				System.out.println("Step when injected: " + currentInjection);
 			}
 		});
 		
@@ -421,7 +426,7 @@ public class ConsoleController implements Initializable{
 			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
 				// Based on user input, set the current removal value
 				currentRemoval = removalStepListView.getSelectionModel().getSelectedItem();
-				System.out.println(currentRemoval);
+				System.out.println("Step when removed: " + currentRemoval);
 			}
 		});
 		
@@ -431,10 +436,8 @@ public class ConsoleController implements Initializable{
 			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
 				// Based on user input, set the current defect category value
 				currentDefectCategory = defectCategoryListView.getSelectionModel().getSelectedItem();
-				System.out.println(currentDefectCategory);
+				System.out.println("Defect Category: " + currentDefectCategory);
 			}
 		});
-		
 	}
-	
 }
