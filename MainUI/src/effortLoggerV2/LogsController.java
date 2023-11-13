@@ -23,7 +23,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class LogsController {
-	
+		
 	TableView<EffortLogs> logTab;
 	
 	TableColumn<Project, String> projCol;
@@ -37,6 +37,7 @@ public class LogsController {
 	TableColumn<LifeCycle, String> lifeCycleCol;
 	
 	TableColumn<EffortCategory, String> effortCol;
+	
 	
 	public LogsController(TableColumn<Integer, String> indexCol2, TableColumn<Project, String> projCol2, TableColumn<String, 
 							String> dateCol2, TableColumn<LifeCycle, String> lifeCycleCol2, TableColumn<EffortCategory, 

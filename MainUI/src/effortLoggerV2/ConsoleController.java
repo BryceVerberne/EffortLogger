@@ -29,6 +29,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -36,14 +37,23 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 
 
 public class ConsoleController implements Initializable{
 	
 	@FXML
+	TableView<DefectLogs> defectLogsTable;
+	
+	@FXML
+	TableColumn indexColumn, projectNameColumn, projectTypeColumn, detailColumn, injectedColumn, removedColumn, categoryColumn;
+	
+	@FXML
 	TextArea defectSymptomsTextArea;
-	String currentTextAreaContent;
+	
+	@FXML
+	Button createDefectButton, updateDefectButton;
 	
 	@FXML
 	Label clockTitle, deliverableLabel;
@@ -72,21 +82,10 @@ public class ConsoleController implements Initializable{
 	
 	@FXML
 	TextField dateTextField, startTimeTextField, 
-				stopTimeTextField, keyWordTextField;
-	@FXML
-	ListView<String> keyWordList;
+				stopTimeTextField, keyWordTextField, defectNameTextField;
 	
 	@FXML
-	private ListView<String> injectionStepListView;
-	String currentInjection;
-	
-	@FXML
-	private ListView<String> removalStepListView;
-	String currentRemoval;
-	
-	@FXML
-	private ListView<String> defectCategoryListView;
-	String currentDefectCategory;
+	ListView<String> keyWordList, injectionStepListView, removalStepListView, defectCategoryListView;
 
 	@FXML
 	ComboBox<Object> deliverableComboBox;
@@ -101,14 +100,38 @@ public class ConsoleController implements Initializable{
 	ComboBox<LifeCycle> lifeCycleComboBox;
 	
 	@FXML
-	private ComboBox<String> projectSelection;
-	String currentProjectType;
+	ComboBox<String> projectSelection, defectSelection;
 	
 	Activity act = null;
-	
 	LogsController logControl;
 	
+	int index = 0;
+	boolean createNewDefect = false;
+	String currentInjection;
+	String currentRemoval;
+	String currentDefectCategory;
+	String currentProjectType = "Business Project";
+	String currentDefectSelected;
+	String currentTextAreaContent;
+	String currentDefectName;
 	
+	public void setDefectLogsTable() {
+		indexColumn.setCellValueFactory(new PropertyValueFactory<>("index"));
+		projectNameColumn.setCellValueFactory(new PropertyValueFactory<>("projectName"));
+		projectTypeColumn.setCellValueFactory(new PropertyValueFactory<>("projectType"));
+		detailColumn.setCellValueFactory(new PropertyValueFactory<>("detail"));
+		injectedColumn.setCellValueFactory(new PropertyValueFactory<>("injected"));
+		removedColumn.setCellValueFactory(new PropertyValueFactory<>("removed"));
+		categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
+	}
+	
+	public void populateDefectLogs() {
+		if(MainUI.defectLogs != null) {
+			ObservableList<DefectLogs> defectLogsObserve = FXCollections.observableArrayList(MainUI.defectLogs);
+			defectLogsTable.setItems(defectLogsObserve);
+		}
+	}
+
 	public void refreshComboBoxes() {
 		// fills the arrayLists of the different definitions 
 		MainUI.deliv = Deliverable.fillDel(new ArrayList<Deliverable>());
@@ -264,7 +287,17 @@ public class ConsoleController implements Initializable{
 		EffortLogs effortLog = new EffortLogs(act, project, lifeC, effortCat, deliver, MainUI.projectIndexes.get(project));
 		effortLog.setKeyWords(new ArrayList<>(keyWordList.getItems()));
 		MainUI.effLogs.add(effortLog);
-		logControl.populateLogs();
+		populateDefectLogs();
+	}
+	
+	public void createDefectLog() {
+		
+		if (MainUI.defectLogs == null) {
+			MainUI.defectLogs = new ArrayList<DefectLogs>();
+		}
+		
+		DefectLogs defectLog = new DefectLogs(index, currentDefectCategory, currentProjectType, currentTextAreaContent, currentInjection, currentRemoval, currentDefectCategory);
+		MainUI.defectLogs.add(defectLog);
 	}
 	
 	public void checkDateFormat(ActionEvent event) {
@@ -354,6 +387,7 @@ public class ConsoleController implements Initializable{
 		populateDeliverableBox();
 		setLogsTable();
 		initIndexes();
+		setDefectLogsTable();
 		projectComboBox.valueProperty().addListener((obs, old, newItem) -> {
 			if(newItem != null) {
 				System.out.println(newItem);
@@ -384,8 +418,40 @@ public class ConsoleController implements Initializable{
 		String[] developmentOptions = {"Problem Understanding", "Conceptual Design Plan", "Requirements", "Conceptual Design", "Conceptual Design Review"};
 		String[] defectCategoryOptions = {"Not specified", "10 Documentation", "20 Syntax", "30 Build, Package", "40 Assignment"};
 		
-		// Populate ComboBox with project type
+		// Populate ComboBox with project type & set default
 		projectSelection.getItems().addAll(projectOptions);
+		projectSelection.setValue("Business Project");
+		
+		// Populate ListViews with options
+		injectionStepListView.getItems().addAll(businessOptions);		
+		removalStepListView.getItems().addAll(businessOptions);
+		defectCategoryListView.getItems().addAll(defectCategoryOptions);
+		
+		// Add an action listener to determine if the user wants to make a new defect log
+		createDefectButton.setOnAction(event -> {
+			createNewDefect = true;
+			System.out.println("Create New Defect");
+			currentDefectName = "- new defect -";
+			defectNameTextField.setText("- new defect -");
+		});
+		
+		// Finish the creation of the new defect
+		updateDefectButton.setOnAction(event -> {
+			
+			if (createNewDefect) {
+				++index;
+				defectSelection.getItems().addAll(currentDefectName);
+				defectSelection.setValue(currentDefectName);
+				System.out.println("Success: Defect Created");
+				
+				createDefectLog();
+				populateDefectLogs();
+			}
+			else {
+				System.out.println("Error: No New Defects Created");
+			}
+			
+		});
 		
 		// Add event listener to track user selection for project type & populate list views accordingly
 		projectSelection.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
@@ -398,7 +464,6 @@ public class ConsoleController implements Initializable{
 				// Clear the current list view options
 				injectionStepListView.getItems().clear();
 				removalStepListView.getItems().clear();
-				defectCategoryListView.getItems().clear();
 				
 				// Populate list views based on the project type selected
 				if (currentProjectType.equals("Business Project")) {
@@ -409,8 +474,23 @@ public class ConsoleController implements Initializable{
 					injectionStepListView.getItems().addAll(developmentOptions);
 					removalStepListView.getItems().addAll(developmentOptions);
 				}
-				
-				defectCategoryListView.getItems().addAll(defectCategoryOptions);
+			}
+		});
+		
+		// Add event listener to track user selection for existing defect logs
+		defectSelection.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
+				currentDefectSelected = injectionStepListView.getSelectionModel().getSelectedItem();
+			}
+		});
+		
+		// Add event listener to track user input for the Defect Name TextField section
+		defectNameTextField.textProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				currentDefectName = newValue;
+				System.out.println("TextField Text Changed: \n" + currentDefectName);
 			}
 		});
 		
@@ -422,7 +502,6 @@ public class ConsoleController implements Initializable{
 				System.out.println("TextArea Text Changed: \n" + currentTextAreaContent);
 			}
 		});
-		
 		
 		// Add event listener to track user selection for injection list view section
 		injectionStepListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
@@ -453,8 +532,6 @@ public class ConsoleController implements Initializable{
 				System.out.println("Defect Category: " + currentDefectCategory);
 			}
 		});
-		
-		
 		
 	}
 }

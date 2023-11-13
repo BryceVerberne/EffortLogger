@@ -629,12 +629,12 @@
 			                                                </Label>
 			                                                <HBox prefHeight="21.0" prefWidth="564.0">
 			                                                   <children>
-			                                                      <ComboBox editable="true" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="305.0" promptText="- no defect selected -" HBox.hgrow="ALWAYS">
+			                                                      <ComboBox fx:id="defectSelection" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="305.0" promptText="- no defect selected -" HBox.hgrow="ALWAYS">
 			                                                         <HBox.margin>
 			                                                            <Insets right="80.0" />
 			                                                         </HBox.margin>
 			                                                      </ComboBox>
-			                                                      <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="164.0" text="Create a New Defect" />
+			                                                      <Button fx:id="createDefectButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="164.0" text="Create a New Defect" />
 			                                                   </children>
 			                                                   <VBox.margin>
 			                                                      <Insets left="30.0" />
@@ -665,7 +665,7 @@
 			                                                                  <Font name="System Bold" size="12.0" />
 			                                                               </font>
 			                                                            </Label>
-			                                                            <TextField prefHeight="6.0" prefWidth="297.0">
+			                                                            <TextField fx:id="defectNameTextField" prefHeight="6.0" prefWidth="297.0">
 			                                                               <padding>
 			                                                                  <Insets right="1.0" />
 			                                                               </padding>
@@ -712,7 +712,7 @@
 			                                                      <Font name="System Bold" size="12.0" />
 			                                                   </font>
 			                                                </Label>
-                                                            <TextArea prefHeight="200.0" prefWidth="200.0" />
+                                                            <TextArea fx:id="defectSymptomsTextArea" prefHeight="200.0" prefWidth="200.0" />
 			                                             </children>
 			                                          </VBox>
 			                                       </children>
@@ -806,7 +806,7 @@
 			                                                </Label>
 			                                                <HBox prefHeight="100.0" prefWidth="200.0">
 			                                                   <children>
-			                                                      <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="193.0" text="Update the Current Defect">
+			                                                      <Button fx:id="updateDefectButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="193.0" text="Update the Current Defect">
 			                                                         <HBox.margin>
 			                                                            <Insets right="10.0" />
 			                                                         </HBox.margin>
@@ -916,16 +916,15 @@
                                        <children>
                                           <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                                              <children>
-                                                <TableView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="200.0" prefWidth="500.0">
+                                                <TableView fx:id="defectLogsTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="200.0" prefWidth="500.0">
                                                   <columns>
-                                                    <TableColumn prefWidth="75.0" text="Index" />
-                                                    <TableColumn prefWidth="100.0" text="Project Name" />
-                                                      <TableColumn prefWidth="75.0" text="Detail" />
-                                                      <TableColumn prefWidth="75.0" text="Injected" />
-                                                      <TableColumn prefWidth="75.0" text="Removed" />
-                                                      <TableColumn prefWidth="75.0" text="Category" />
-                                                      <TableColumn prefWidth="75.0" text="Status" />
-                                                      <TableColumn prefWidth="75.0" text="Fix" />
+                                                    <TableColumn fx:id="indexColumn" prefWidth="75.0" text="Index" />
+                                                    <TableColumn fx:id="projectNameColumn" prefWidth="100.0" text="Project Name" />
+                                                      <TableColumn fx:id="projectTypeColumn" prefWidth="100.0" text="Project Type" />
+                                                      <TableColumn fx:id="detailColumn" prefWidth="75.0" text="Detail" />
+                                                      <TableColumn fx:id="injectedColumn" prefWidth="75.0" text="Injected" />
+                                                      <TableColumn fx:id="removedColumn" prefWidth="75.0" text="Removed" />
+                                                      <TableColumn fx:id="categoryColumn" prefWidth="75.0" text="Category" />
                                                   </columns>
                                                 </TableView>
                                              </children>
