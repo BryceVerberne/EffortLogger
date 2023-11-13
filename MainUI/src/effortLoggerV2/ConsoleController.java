@@ -34,6 +34,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 
@@ -41,20 +42,8 @@ import javafx.scene.layout.HBox;
 public class ConsoleController implements Initializable{
 	
 	@FXML
-	private ListView<String> injectionStepListView;
-	String currentInjection;
-	
-	@FXML
-	private ListView<String> removalStepListView;
-	String currentRemoval;
-	
-	@FXML
-	private ListView<String> defectCategoryListView;
-	String currentDefectCategory;
-	
-	@FXML
-	private ComboBox<String> projectSelection;
-	String currentProjectType;
+	TextArea defectSymptomsTextArea;
+	String currentTextAreaContent;
 	
 	@FXML
 	Label clockTitle, deliverableLabel;
@@ -86,6 +75,18 @@ public class ConsoleController implements Initializable{
 				stopTimeTextField, keyWordTextField;
 	@FXML
 	ListView<String> keyWordList;
+	
+	@FXML
+	private ListView<String> injectionStepListView;
+	String currentInjection;
+	
+	@FXML
+	private ListView<String> removalStepListView;
+	String currentRemoval;
+	
+	@FXML
+	private ListView<String> defectCategoryListView;
+	String currentDefectCategory;
 
 	@FXML
 	ComboBox<Object> deliverableComboBox;
@@ -98,6 +99,10 @@ public class ConsoleController implements Initializable{
 	
 	@FXML
 	ComboBox<LifeCycle> lifeCycleComboBox;
+	
+	@FXML
+	private ComboBox<String> projectSelection;
+	String currentProjectType;
 	
 	Activity act = null;
 	
@@ -409,6 +414,15 @@ public class ConsoleController implements Initializable{
 			}
 		});
 		
+		// Add event listener to track user input for "Defect Symptoms or Cause/Resolution" TextArea section
+		defectSymptomsTextArea.textProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				currentTextAreaContent = newValue;
+				System.out.println("TextArea Text Changed: \n" + currentTextAreaContent);
+			}
+		});
+		
 		
 		// Add event listener to track user selection for injection list view section
 		injectionStepListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
@@ -439,5 +453,8 @@ public class ConsoleController implements Initializable{
 				System.out.println("Defect Category: " + currentDefectCategory);
 			}
 		});
+		
+		
+		
 	}
 }
