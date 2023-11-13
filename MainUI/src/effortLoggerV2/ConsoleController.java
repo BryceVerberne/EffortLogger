@@ -23,9 +23,6 @@ import java.util.regex.Pattern;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -45,22 +42,19 @@ public class ConsoleController implements Initializable{
 	
 	@FXML
 	private ListView<String> injectionStepListView;
-	String[] injectionOptions = {"Planning", "Information Gathering", "Information Understanding", "Verifying", "Outlining"};
 	String currentInjection;
-	
 	
 	@FXML
 	private ListView<String> removalStepListView;
-	String[] removalOptions = {"Planning", "Information Gathering", "Information Understanding", "Verifying", "Outlining"};
 	String currentRemoval;
 	
 	@FXML
 	private ListView<String> defectCategoryListView;
-	String[] defectCategoryOptions = {"Not specified", "10 Documentation", "20 Syntax", "30 Build, Package", "40 Assignment"};
 	String currentDefectCategory;
 	
 	@FXML
 	private ComboBox<String> projectSelection;
+	String currentProjectType;
 	
 	@FXML
 	Label clockTitle, deliverableLabel;
@@ -375,10 +369,41 @@ public class ConsoleController implements Initializable{
 		});
 		
 		
-		// Add options for Defect Console list views "Step when injected", "Step when removed", & "Defect Category"
-		injectionStepListView.getItems().addAll(injectionOptions);
-		removalStepListView.getItems().addAll(removalOptions);
-		defectCategoryListView.getItems().addAll(defectCategoryOptions);
+		// String arrays containing text to populate list views
+		String[] projectOptions = {"Business Project", "Development Project"};
+		String[] businessOptions = {"Planning", "Information Gathering", "Information Understanding", "Verifying", "Outlining"};
+		String[] developmentOptions = {"Problem Understanding", "Conceptual Design Plan", "Requirements", "Conceptual Design", "Conceptual Design Review"};
+		String[] defectCategoryOptions = {"Not specified", "10 Documentation", "20 Syntax", "30 Build, Package", "40 Assignment"};
+		
+		// Populate ComboBox with project type
+		projectSelection.getItems().addAll(projectOptions);
+		
+		// Add event listener to track user selection for project type & populate list views accordingly
+		projectSelection.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
+				// Based on user input, set the current project type
+				currentProjectType = projectSelection.getSelectionModel().getSelectedItem();
+				
+				// Clear the current list view options
+				injectionStepListView.getItems().clear();
+				removalStepListView.getItems().clear();
+				defectCategoryListView.getItems().clear();
+				
+				// Populate list views based on the project type selected
+				if (currentProjectType.equals("Business Project")) {
+					injectionStepListView.getItems().addAll(businessOptions);
+					removalStepListView.getItems().addAll(businessOptions);
+				}
+				else {
+					injectionStepListView.getItems().addAll(developmentOptions);
+					removalStepListView.getItems().addAll(developmentOptions);
+				}
+				
+				defectCategoryListView.getItems().addAll(defectCategoryOptions);
+			}
+		});
+		
 		
 		// Add event listener to track user selection for injection list view section
 		injectionStepListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
@@ -410,8 +435,6 @@ public class ConsoleController implements Initializable{
 			}
 		});
 		
-		
-		projectSelection.getItems().addAll("Business Project", "Development Project");
 	}
 	
 }
