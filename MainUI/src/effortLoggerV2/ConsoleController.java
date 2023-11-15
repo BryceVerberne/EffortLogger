@@ -287,7 +287,7 @@ public class ConsoleController implements Initializable{
 		EffortLogs effortLog = new EffortLogs(act, project, lifeC, effortCat, deliver, MainUI.projectIndexes.get(project));
 		effortLog.setKeyWords(new ArrayList<>(keyWordList.getItems()));
 		MainUI.effLogs.add(effortLog);
-		populateDefectLogs();
+		logControl.populateLogs();
 	}
 	
 	public void createDefectLog() {
