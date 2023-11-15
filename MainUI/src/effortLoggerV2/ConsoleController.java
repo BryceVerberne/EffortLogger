@@ -3,10 +3,11 @@ package effortLoggerV2;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import java.util.stream.Collectors;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,6 +17,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -25,7 +28,7 @@ import javafx.scene.layout.HBox;
 public class ConsoleController implements Initializable{
 	
 	@FXML
-	Label clockTitle, deliverableLabel;
+	Label clockTitle, deliverableLabel, deliverableLabelEditor, numEntriesLabel, unsavedChangesLabel;
 	
 	@FXML
 	TableView<EffortLogs> logTab;
@@ -67,10 +70,46 @@ public class ConsoleController implements Initializable{
 	@FXML
 	ComboBox<LifeCycle> lifeCycleComboBox;
 	
+	
+	// EDITOR
+	
+	@FXML
+	ComboBox<Project> projectComboBoxEditor;
+	
+	@FXML
+	ComboBox<EffortLogs> effortLogsComboBox;
+	
+	@FXML
+	ComboBox<LifeCycle> lifeCycleComboBoxEditor;
+	
+	@FXML
+	ComboBox<EffortCategory> effortCategoryComboBoxEditor;
+	
+	@FXML
+	ComboBox<Object> deliverableComboBoxEditor;
+	
+	@FXML
+    Tab effortConsoleTab;
+	
+	@FXML
+	Tab effortLogEditorTab;
+	
 	Activity act = null;
 	
 	LogsController logControl;
 	
+	int numBusinessEntries = 0;
+	int numDevelopmentEntries = 0;
+	
+	public void switchToEffortConsole(ActionEvent event) {
+		TabPane tabPane = effortConsoleTab.getTabPane();
+		tabPane.getSelectionModel().select(effortConsoleTab);
+	}
+	
+	public void switchToEffortLogEditor(ActionEvent event) {
+		TabPane tabPane = effortLogEditorTab.getTabPane();
+		tabPane.getSelectionModel().select(effortLogEditorTab);
+	}
 	
 	public void refreshComboBoxes() {
 		// fills the arrayLists of the different definitions 
@@ -83,11 +122,18 @@ public class ConsoleController implements Initializable{
 		MainUI.projects = Project.fillProjects(new ArrayList<Project>(), MainUI.lifeCycles);
 	}	
 	
+	// console
 	public void populateProjectBox() {
 		ObservableList<Project> projectObserve = FXCollections.observableArrayList(MainUI.projects);
 		projectComboBox.getItems().addAll(projectObserve);
 		projectComboBox.getSelectionModel().select(0);
-		
+	}
+	
+	// editor
+	public void populateProjectsBox() {
+		ObservableList<Project> projectObserve = FXCollections.observableArrayList(MainUI.projects);
+		projectComboBoxEditor.getItems().addAll(projectObserve);
+		projectComboBoxEditor.getSelectionModel().select(0);
 	}
 	
 	// written by dayton
@@ -105,6 +151,20 @@ public class ConsoleController implements Initializable{
 		
 	}
 	
+	// editor
+	public void populateLCBoxesEditor() {
+		int projectNumber = projectComboBoxEditor.getSelectionModel().getSelectedIndex();
+		// creates an observable list of the life cycles defined in the project
+		ObservableList<LifeCycle> lifeCycleObserve = FXCollections.observableArrayList(MainUI.projects.get(projectNumber).lifeC);
+		// now populate the combobox with the life cycle observable list
+		if(!lifeCycleComboBoxEditor.getItems().isEmpty()) {
+			lifeCycleComboBoxEditor.getItems().clear();
+		}
+		lifeCycleComboBoxEditor.getItems().addAll(lifeCycleObserve);
+		// now show the first item in the combobox to be the first lifecycle in the definitions list
+		lifeCycleComboBoxEditor.getSelectionModel().select(projectComboBoxEditor.getSelectionModel().getSelectedItem().lifeC.get(0));
+		
+	}
 	
 	// written by dayton
 	public void populateECBoxes() {
@@ -117,6 +177,19 @@ public class ConsoleController implements Initializable{
 		// now show the first item in the combobox to be the identified effort category
 		// in the lifecycle table in the definition
 		effortCategoryComboBox.getSelectionModel().select(lifeCycleComboBox.getSelectionModel().getSelectedItem().EC);
+		
+	}
+	
+	public void populateECBoxesEditor() {
+		// create the observable list for the effort category
+		ObservableList<EffortCategory> effortCategoryObserve = FXCollections.observableArrayList(MainUI.ec);
+		if(!effortCategoryComboBoxEditor.getItems().isEmpty()) {
+			effortCategoryComboBoxEditor.getItems().clear();
+		}
+		effortCategoryComboBoxEditor.getItems().addAll(effortCategoryObserve);
+		// now show the first item in the combobox to be the identified effort category
+		// in the lifecycle table in the definition
+		effortCategoryComboBoxEditor.getSelectionModel().select(lifeCycleComboBoxEditor.getSelectionModel().getSelectedItem().EC);
 		
 	}
 	
@@ -172,6 +245,58 @@ public class ConsoleController implements Initializable{
 			}	
 		}
 	
+	// editor
+	public void populateDeliverableBoxEditor() {
+			String effortbox = effortCategoryComboBoxEditor.getSelectionModel().getSelectedItem().title;
+			if (effortbox.equals("Plans")){
+				// show all of the plans
+				ObservableList<Plan> deliverableObserve = FXCollections.observableArrayList(MainUI.plan);
+				if(!deliverableComboBoxEditor.getItems().isEmpty()) {
+					deliverableComboBoxEditor.getItems().clear();
+				}
+				deliverableComboBoxEditor.getItems().addAll(deliverableObserve);
+				deliverableComboBoxEditor.getSelectionModel().select(0);
+				// set the label above the box below the life cycle steps
+				String combo = effortCategoryComboBoxEditor.getSelectionModel().getSelectedItem().toString() + ": ";
+				//deliverableLabelEditor.setText(combo);
+			} else if(effortbox.equals("Deliverables")){
+				// show all the deliverables
+				ObservableList<Deliverable> deliverableObserve = FXCollections.observableArrayList(MainUI.deliv);
+				if(!deliverableComboBoxEditor.getSelectionModel().isEmpty()) {
+					deliverableComboBoxEditor.getItems().clear();
+				}
+				deliverableComboBoxEditor.getItems().addAll(deliverableObserve);
+				deliverableComboBoxEditor.getSelectionModel().select(0);
+				// set the label above the box below the life cycle steps
+				String combo = effortCategoryComboBoxEditor.getSelectionModel().getSelectedItem().toString() + ": ";
+				//deliverableLabelEditor.setText(combo);
+			} else if (effortbox.equals("Interruptions")){
+				// changes the deliverable box to show the interruptions
+				ObservableList<Interruption> deliverableObserve = FXCollections.observableArrayList(MainUI.interrupt);
+				if(!deliverableComboBoxEditor.getSelectionModel().isEmpty()) {
+					deliverableComboBoxEditor.getItems().clear();
+				}
+				deliverableComboBoxEditor.getItems().addAll(deliverableObserve);
+				deliverableComboBoxEditor.getSelectionModel().select(0);
+				// set the label above the box below the life cycle steps
+				String combo = effortCategoryComboBoxEditor.getSelectionModel().getSelectedItem().toString() + ": ";
+				//deliverableLabelEditor.setText(combo);
+
+			} else if (effortbox.equals("Defects")){
+				// changes the deliverable box to show the defects
+				ObservableList<DefectCategory> deliverableObserve = FXCollections.observableArrayList(MainUI.dc);
+				if(!deliverableComboBoxEditor.getSelectionModel().isEmpty()) {
+					deliverableComboBoxEditor.getItems().clear();
+				}
+				deliverableComboBoxEditor.getItems().addAll(deliverableObserve);
+				deliverableComboBoxEditor.getSelectionModel().select(0);
+				// set the label above the box below the life cycle steps
+				String combo = effortCategoryComboBoxEditor.getSelectionModel().getSelectedItem().toString() + ": ";
+				//deliverableLabelEditor.setText(combo);
+
+			}	
+		}
+	
 	public void setLogsTable() {
 		logControl = new LogsController(indexCol, projCol, dateCol, lifeCycleCol, effortCol, 
 										delCol,	startCol, endCol, deltaCol, logTab, keyWordCol);
@@ -205,6 +330,23 @@ public class ConsoleController implements Initializable{
 				}
 				// add the activity to a list
 				createEffortLog();
+				// initial projects combo box
+				editEffortLog();
+				
+				// keep track of the number of business and development logs
+				String projectsBox = projectComboBox.getSelectionModel().getSelectedItem().title;
+				if (projectsBox.equals("Business Project")){
+					numBusinessEntries++;
+				}
+				else if (projectsBox.equals("Development Project")) {
+					numDevelopmentEntries++;
+				}
+				else {
+					// handle other projects
+				}
+				
+				updateNumEntries();
+				
 				// clear the key words list for next activity
 				keyWordList.getItems().clear();
 				act = null;
@@ -219,7 +361,22 @@ public class ConsoleController implements Initializable{
 		
 	}
 	
+	// update the number of business or development logs
+	public void updateNumEntries() {
+		String projectsBox = projectComboBoxEditor.getSelectionModel().getSelectedItem().title;
+			if (projectsBox.equals("Business Project")){
+				// show effort logs for business projects
+				numEntriesLabel.setText(numBusinessEntries + " effort log entries for this project");
+			}
+			else if (projectsBox.equals("Development Project")) {
+				numEntriesLabel.setText(numDevelopmentEntries + " effort log entries for this project");
+			}
+			else {
+				// handle other projects
+			}
+	}
 	
+	// written by Hardeek
 	public void createEffortLog() {
 		// these get the selections from the combo boxes and key word lists
 		// we take those values to then create an effort log and store it
@@ -235,8 +392,218 @@ public class ConsoleController implements Initializable{
 		logControl.populateLogs();
 	}
 	
+	public void populateBusinessLogs() {
+	    if (MainUI.effLogs != null) {
+	        ObservableList<EffortLogs> businessLogs = FXCollections.observableArrayList();
+	
+	        for (EffortLogs log : MainUI.effLogs) {
+	            if ("Business Project".equals(log.getProj())) {
+	                businessLogs.add(log);
+	            }
+	        }
+	        effortLogsComboBox.setItems(businessLogs);
+	    }
+	}
+	
+	public void populateDevelopmentLogs() {
+	    if (MainUI.effLogs != null) {
+	        ObservableList<EffortLogs> developmentLogs = FXCollections.observableArrayList();
+	
+	        for (EffortLogs log : MainUI.effLogs) {
+	            if ("Development Project".equals(log.getProj())) {
+	                developmentLogs.add(log);
+	            }
+	        }
+	        effortLogsComboBox.setItems(developmentLogs);
+	    }
+	}
+	
+	public void editEffortLog(ActionEvent event) {
+    // Assuming your ComboBox is the source of the event
+    ComboBox<Project> comboBox = (ComboBox<Project>) event.getSource();
+    Project selectedProject = comboBox.getSelectionModel().getSelectedItem();
+
+    if (selectedProject != null) {
+        String projectType = selectedProject.title;
+        if ("Business Project".equals(projectType)) {
+            populateBusinessLogs();
+        } else if ("Development Project".equals(projectType)) {
+            populateDevelopmentLogs();
+        } else {
+            // Handle other project types if needed
+        }
+    }
+
+    String projectsBox = projectComboBoxEditor.getSelectionModel().getSelectedItem().title;
+    if ("Business Project".equals(projectsBox)) {
+        // show effort logs for business projects
+        populateBusinessLogs();
+    } else if ("Development Project".equals(projectsBox)) {
+        // show effort logs for development projects
+        populateDevelopmentLogs();
+    } else {
+        // Handle other project types if needed
+    }
+    
+    updateNumEntries();
+}
+
+	// function to populate combo box after stopping an activity
+	public void editEffortLog() {
+		String projectsBox = projectComboBoxEditor.getSelectionModel().getSelectedItem().title;
+		if (projectsBox.equals("Business Project")){
+			// show effort logs for business projects
+			populateBusinessLogs();
+		}
+		else if (projectsBox.equals("Development Project")) {
+			populateDevelopmentLogs();
+		}
+		else {
+			// handle other projects
+		}
+	}
+	
+	// set textfields of effort log after clicking on combo box
+	public void setTextfields(ActionEvent event) {
+		ComboBox<EffortLogs> comboBox = (ComboBox<EffortLogs>) event.getSource();
+		EffortLogs selectedEffortLog = comboBox.getSelectionModel().getSelectedItem();
+		
+		if (selectedEffortLog != null) {
+			dateTextField.setText(selectedEffortLog.getDate());
+			startTimeTextField.setText(selectedEffortLog.getStart());
+			stopTimeTextField.setText(selectedEffortLog.getEnd());
+		}
+	}
+	
+	// all methods called upon pressing "update entry"
+	public void updateCheckDateSave(ActionEvent event) {
+		checkDateFormat();
+		updateEntry();
+		saveChanges();
+	}
+	
+	// method to update effort logs in the editor
+	public void updateEntry() {
+		EffortLogs effortLog = effortLogsComboBox.getSelectionModel().getSelectedItem();
+		LifeCycle lifeC = lifeCycleComboBoxEditor.getSelectionModel().getSelectedItem();
+		EffortCategory effortCat = effortCategoryComboBoxEditor.getSelectionModel().getSelectedItem();
+		String deliver = deliverableComboBoxEditor.getSelectionModel().getSelectedItem().toString();	
+		String date = dateTextField.getText();
+		String start = startTimeTextField.getText();
+		String end = stopTimeTextField.getText();
+		
+		if(effortLog != null) {
+			effortLog.setDate(date);
+			effortLog.setStart(start);
+			effortLog.setEnd(end);
+			effortLog.setLCycleStep(lifeC);
+			effortLog.setEffCat(effortCat);
+			effortLog.setDel(deliver);
+		}
+		
+		// Manually refresh the combo box items
+	    int selectedIndex = effortLogsComboBox.getSelectionModel().getSelectedIndex();
+	    effortLogsComboBox.getItems().set(selectedIndex, effortLog);
+	    effortLogsComboBox.getSelectionModel().select(selectedIndex);
+	}
+	
+	public void deleteEntry(ActionEvent event) {
+		EffortLogs effortLog = effortLogsComboBox.getSelectionModel().getSelectedItem();
+		
+		String projectsBox = projectComboBoxEditor.getSelectionModel().getSelectedItem().title;
+		if (projectsBox.equals("Business Project")){
+			if (MainUI.effLogs.remove(effortLog)) {
+				numBusinessEntries--;
+				effortLogsComboBox.getItems().remove(effortLog); // remove from combo box
+			}
+		}
+		else if (projectsBox.equals("Development Project")) {
+			if (MainUI.effLogs.remove(effortLog)) {
+				numDevelopmentEntries--;
+				effortLogsComboBox.getItems().remove(effortLog); // remove from combo box
+			}
+		}
+		else {
+			// handle other projects
+		}
+		
+		updateNumEntries();
+		
+		logControl.populateLogs();
+	}
+	
+	public void clearEntries(ActionEvent event) {
+	    String projectBox = projectComboBoxEditor.getSelectionModel().getSelectedItem().title;
+	
+	    if (projectBox.equals("Business Project")) {
+	        removeAllEntriesForProject("Business Project");
+	        numBusinessEntries = 0;
+	    } else if (projectBox.equals("Development Project")) {
+	        removeAllEntriesForProject("Development Project");
+	        numDevelopmentEntries = 0;
+	    } else {
+	        // Handle other projects
+	    }
+	
+	    effortLogsComboBox.getItems().clear(); // Clear the combo box items
+	    updateNumEntries();
+	    logControl.populateLogs();
+	}
+	
+	private void removeAllEntriesForProject(String projectName) {
+	    Iterator<EffortLogs> iterator = MainUI.effLogs.iterator();
+	
+	    while (iterator.hasNext()) {
+	        EffortLogs effortLog = iterator.next();
+	        if (effortLog.getProj().equals(projectName)) {
+	            iterator.remove();
+	        }
+	    }
+	}
+	
+	// method to tell the user there are unsaved changes
+	public void unsavedChanges(ActionEvent event) {
+		unsavedChangesLabel.setText("Warning: These attributes have not been saved!");
+	}
+	
+	public void saveChanges() {
+		unsavedChangesLabel.setText("These attributes have been saved.");
+	}
+	
+	// FIXME
+	public void splitEntries(ActionEvent event) {
+		EffortLogs effortLog = effortLogsComboBox.getSelectionModel().getSelectedItem();
+    
+    	Project project = projectComboBoxEditor.getSelectionModel().getSelectedItem();
+		LifeCycle lifeC = lifeCycleComboBoxEditor.getSelectionModel().getSelectedItem();
+		EffortCategory effortCat = effortCategoryComboBoxEditor.getSelectionModel().getSelectedItem();
+		String deliver = deliverableComboBoxEditor.getSelectionModel().getSelectedItem().toString();
+		MainUI.projectIndexes.put(project, MainUI.projectIndexes.get(project));
+
+	    if (effortLog != null) {
+	
+	        // create two new entries
+	        EffortLogs firstHalfEntry = new EffortLogs(act, project, lifeC, effortCat, deliver, MainUI.projectIndexes.get(project));
+	        EffortLogs secondHalfEntry = new EffortLogs(act, project, lifeC, effortCat, deliver, MainUI.projectIndexes.get(project));
+	
+	        // add the new entries to the data structure
+	        MainUI.effLogs.add(firstHalfEntry);
+	        MainUI.effLogs.add(secondHalfEntry);
+	
+	        // refresh the combo box
+	        effortLogsComboBox.getItems().addAll(firstHalfEntry, secondHalfEntry);
+	
+	        // Optionally, remove the original entry from the combo box
+	        effortLogsComboBox.getItems().remove(effortLog);
+	        // Optionally, remove the original entry from the data structure
+	        MainUI.effLogs.remove(effortLog);
+	    }
+	
+	    updateNumEntries();
+	}
+	
 	// written by David
-	public void checkDateFormat(ActionEvent event) {
+	public void checkDateFormat() {
 	    int wrongFormat = 0; // Variable to track if the input is in the wrong format
 	    String dateText = dateTextField.getText(); // Get date text from dateTextField
 	    String startText = startTimeTextField.getText(); // Get start time text from startTimeTextField
@@ -318,11 +685,18 @@ public class ConsoleController implements Initializable{
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		refreshComboBoxes();		
 		populateProjectBox();
+		populateProjectsBox(); // editor
 		populateLCBoxes();
+		populateLCBoxesEditor();
 		populateECBoxes();
+		populateECBoxesEditor();
 		populateDeliverableBox();
+		populateDeliverableBoxEditor();
+		updateNumEntries();
 		setLogsTable();
 		initIndexes();
+		
+		// console
 		projectComboBox.valueProperty().addListener((obs, old, newItem) -> {
 			if(newItem != null) {
 				System.out.println(newItem);
@@ -339,6 +713,26 @@ public class ConsoleController implements Initializable{
 			if(newItem != null) {
 				System.out.println(newItem);
 				populateDeliverableBox();
+			}
+		});
+		
+		// editor
+		projectComboBoxEditor.valueProperty().addListener((obs, old, newItem) -> {
+			if(newItem != null) {
+				System.out.println(newItem);
+				populateLCBoxesEditor();
+			}
+		});
+		lifeCycleComboBoxEditor.valueProperty().addListener((obx, old, newItem) -> {
+			if(newItem != null) {
+				System.out.println(newItem);
+				populateECBoxesEditor();
+			}
+		});
+		effortCategoryComboBoxEditor.valueProperty().addListener((obs, old, newItem) -> {
+			if(newItem != null) {
+				System.out.println(newItem);
+				populateDeliverableBoxEditor();
 			}
 		});
 	}

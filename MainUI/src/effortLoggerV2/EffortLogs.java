@@ -37,29 +37,57 @@ public class EffortLogs {
 		return proj.toString();
 	}
 	
+	public void setProj(Project proj) {
+		this.proj = proj;
+	}
+	
 	
 	public String getDel() {
 		return del;
+	}
+	
+	public void setDel(String del) {
+		this.del = del;
 	}
 	
 	public String getEffCat() {
 		return effCat.toString();
 	}
 	
+	public void setEffCat(EffortCategory effCat) {
+		this.effCat = effCat;
+	}
+	
 	public String getLCycleStep() {
 		return lCycleStep.toString();
 	}
 	
+	public void setLCycleStep(LifeCycle lCycleStep) {
+		this.lCycleStep = lCycleStep;
+	}
+	
 	public String getDate() {
-		return act.getDate();
+		return date;
+	}
+	
+	public void setDate(String date) {
+		this.date = date;
 	}
 	
 	public String getStart() {
-		return act.getStartTime();
+		return start;
+	}
+	
+	public void setStart(String start) {
+		this.start = start;
 	}
 	
 	public String getEnd() {
-		return act.getEndTime();
+		return end;
+	}
+	
+	public void setEnd(String end) {
+		this.end = end;
 	}
 	
 	public String getDelta() {
@@ -84,7 +112,7 @@ public class EffortLogs {
 	
 	public String toString() {
 		return "" + getProj() + ", " +  getLCycleStep() + ", " + getEffCat() + 
-				", " + getDel() + ", " + getDate() + ", " + getStart() + ", " + getDelta() + getKeyWords();
+				", " + getDel() + ", " + getDate() + ", (" + getStart() + "-" + getEnd() + "), " + getDelta() + getKeyWords();
 	}
 
 }
