@@ -78,6 +78,7 @@ public class LogsController {
 		}
 	}
 	
+	// shows the filtered logs in the effort logs table
 	public void populateFilteredLogs(ArrayList<String> keys) {
 		if(!keys.isEmpty()) {
 			// if the keys arrayList is not empty then go ahead with filtering the effort lgos
@@ -99,8 +100,8 @@ public class LogsController {
 	public void filterEffortLogs() {
 		// creates an instance of the UI with the EffortLogsFilter class object
 		// this UI is controlled by the FilterController class
-		Dialog<ArrayList<String>> dp = new EffortLogsFilter();
-		Optional<ArrayList<String>> result = dp.showAndWait();
+		Dialog<ArrayList<String>> filter = new EffortLogsFilter();
+		Optional<ArrayList<String>> result = filter.showAndWait();
 		if(result.isPresent() && (!result.get().isEmpty())) {
 			populateFilteredLogs(result.get());
 		} else {

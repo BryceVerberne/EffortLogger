@@ -24,6 +24,7 @@ public class MainUI {
 	
 	Employee user;
 	public static ArrayList<Activity> activityList;
+	// hold the effort logs that have been created by a user
 	public static ArrayList<EffortLogs> effLogs;
 	public static ArrayList<DefectLogs> defectLogs;
 	public static HashMap<Project, Integer> projectIndexes;

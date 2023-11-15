@@ -343,6 +343,7 @@ public class ConsoleController implements Initializable{
 	    }
 	}
 	
+	
 	public void addKeyWords() {
 		// if the input in the enter field is within a reasonable range, input into the key word ListView
 		String text = keyWordTextField.getText();

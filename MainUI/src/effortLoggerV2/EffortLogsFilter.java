@@ -45,14 +45,14 @@ public class EffortLogsFilter extends Dialog<ArrayList<String>> {
 			getDialogPane().setContent(pane);
 			getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 			Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
-			button.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-
-				@Override
-				public void handle(ActionEvent event) {
-					
-				}
-				
-			});
+//			button.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+//
+//				@Override
+//				public void handle(ActionEvent event) {
+//					
+//				}
+//				
+//			});
 	
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -91,9 +91,28 @@ public class EffortLogsFilter extends Dialog<ArrayList<String>> {
 		filterTextField = new TextField();
 		Button submit = new Button("Submit");
 		Button clear = new Button("Clear");
+		Button delete = new Button("Delete");
 		
 		
 		// when the submit button is pressed, the input is sent over to the ListView
+		addSubmitButton(submit);
+		
+		// when the clear button is pressed, the ListView is cleared and there is no more input
+		addClearButton(clear);
+		
+		// when you need to delete a keyword
+		addDeleteButton(delete);
+		
+		rightBox.getChildren().addAll(view, list);
+		insideBox.getChildren().addAll(filterTextField, submit, clear, delete);
+		leftBox.getChildren().addAll(enter, insideBox);
+		box.getChildren().addAll(leftBox, rightBox);
+		
+		
+		return box;
+	}
+	
+	public void addSubmitButton(Button submit) {
 		submit.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -107,8 +126,22 @@ public class EffortLogsFilter extends Dialog<ArrayList<String>> {
 				}
 			}
 		});
-		
-		// when the clear button is pressed, the ListView is cleared and there is no more input
+	}
+	
+	public void addDeleteButton(Button delete) {
+		delete.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				if(!list.getSelectionModel().isEmpty()) {
+					list.getItems().remove(list.getSelectionModel().getSelectedIndex());
+				}
+			}
+			
+		});
+	}
+	
+	public void addClearButton(Button clear) {
 		clear.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
 
 			@Override
@@ -117,13 +150,5 @@ public class EffortLogsFilter extends Dialog<ArrayList<String>> {
 			}
 			
 		});
-		
-		rightBox.getChildren().addAll(view, list);
-		insideBox.getChildren().addAll(filterTextField, submit, clear);
-		leftBox.getChildren().addAll(enter, insideBox);
-		box.getChildren().addAll(leftBox, rightBox);
-		
-		
-		return box;
 	}
 }

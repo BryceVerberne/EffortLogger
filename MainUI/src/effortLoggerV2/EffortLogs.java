@@ -17,12 +17,19 @@ import javafx.beans.property.SimpleIntegerProperty;
 
 public class EffortLogs {
 	
+	// User created Activity
 	Activity act;
+	// User's chosen project
 	Project proj;
+	// User's chosen Life Cycle Step
 	LifeCycle lCycleStep;
+	// User's chosen Effort Category 
 	EffortCategory effCat;
+	// Start, End, and Delta time along with the date
+	// And the respective Deliverable/Interruption/ETC
 	String del, start, end, delta, date;
 	int index;
+	// Each Effort Log has List of KeyWords
 	ArrayList<String> keyWords;
 	
 	public EffortLogs(Activity activity, Project project, LifeCycle lc, 
