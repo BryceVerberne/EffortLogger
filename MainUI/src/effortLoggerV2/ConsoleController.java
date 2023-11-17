@@ -1,6 +1,6 @@
 /**
  * Title:       Console Controller Class
- * Authors:     Dayton Koehler, David Lee, Bryce Verberne
+ * Authors:     Dayton Koehler, David Lee, Hardeek Das, Bryce Verberne
  * Emails:      Dkoehle4@asu.edu, dblee5@asu.edu, bverbern@asu.edu
  * Description: Part of the effortLoggerV2 JavaFX application, this class manages the console interface. 
  *              It handles UI elements like ComboBoxes, TableView, and TextBoxes for project management and effort logging. 
@@ -146,6 +146,8 @@ public class ConsoleController implements Initializable{
 	int numBusinessEntries = 0;
 	int numDevelopmentEntries = 0;
 	
+	// *************** BUTTONS TO SWITCH *****************
+	
 	public void switchToEffortConsole(ActionEvent event) {
 		TabPane tabPane = effortConsoleTab.getTabPane();
 		tabPane.getSelectionModel().select(effortConsoleTab);
@@ -155,6 +157,8 @@ public class ConsoleController implements Initializable{
 		TabPane tabPane = effortLogEditorTab.getTabPane();
 		tabPane.getSelectionModel().select(effortLogEditorTab);
 	}
+	
+	// ***************************************************
 	
 	public void setDefectLogsTable() {
 		indexColumn.setCellValueFactory(new PropertyValueFactory<>("index"));
@@ -192,7 +196,7 @@ public class ConsoleController implements Initializable{
 	}
 	
 	// editor
-	public void populateProjectsBox() {
+	public void populateProjectBoxEditor() {
 		ObservableList<Project> projectObserve = FXCollections.observableArrayList(MainUI.projects);
 		projectComboBoxEditor.getItems().addAll(projectObserve);
 		projectComboBoxEditor.getSelectionModel().select(0);
@@ -539,6 +543,46 @@ public class ConsoleController implements Initializable{
 			dateTextField.setText(selectedEffortLog.getDate());
 			startTimeTextField.setText(selectedEffortLog.getStart());
 			stopTimeTextField.setText(selectedEffortLog.getEnd());
+			lifeCycleComboBoxEditor.setValue(selectedEffortLog.getLCycleStepObj());
+			effortCategoryComboBoxEditor.setValue(selectedEffortLog.getEffCatObj());
+			String effortBox = selectedEffortLog.getEffCatObj().title;
+			String del = selectedEffortLog.getDel();
+			
+			// set value for deliverable combo box upon switching effort logs
+			
+			if (effortBox.equals("Plans")) {
+				for (Plan plan : MainUI.plan) {
+		            if (plan.toString().equals(del)) {
+		                // Set the value of deliverableComboBoxEditor based on the deliverable object
+		                deliverableComboBoxEditor.setValue(plan);
+		                break;
+		            }
+				}
+			} else if(effortBox.equals("Deliverables")) {
+				for (Deliverable deliverable : MainUI.deliv) {
+		            if (deliverable.toString().equals(del)) {
+		                // Set the value of deliverableComboBoxEditor based on the deliverable object
+		                deliverableComboBoxEditor.setValue(deliverable);
+		                break;
+		            }
+				}
+			} else if(effortBox.equals("Interruptions")) {
+				for (Interruption interrupt : MainUI.interrupt) {
+		            if (interrupt.toString().equals(del)) {
+		                // Set the value of deliverableComboBoxEditor based on the deliverable object
+		                deliverableComboBoxEditor.setValue(interrupt);
+		                break;
+		            }
+				}
+			} else if(effortBox.equals("Defects")) {
+				for (DefectCategory defect : MainUI.dc) {
+		            if (defect.toString().equals(del)) {
+		                // Set the value of deliverableComboBoxEditor based on the deliverable object
+		                deliverableComboBoxEditor.setValue(defect);
+		                break;
+		            }
+				}
+			}
 		}
 	}
 	
@@ -646,24 +690,51 @@ public class ConsoleController implements Initializable{
 		EffortCategory effortCat = effortCategoryComboBoxEditor.getSelectionModel().getSelectedItem();
 		String deliver = deliverableComboBoxEditor.getSelectionModel().getSelectedItem().toString();
 		MainUI.projectIndexes.put(project, MainUI.projectIndexes.get(project));
+		String date = dateTextField.getText();
+		String start = startTimeTextField.getText();
+		String end = stopTimeTextField.getText();
 
 	    if (effortLog != null) {
 	
 	        // create two new entries
-	        EffortLogs firstHalfEntry = new EffortLogs(act, project, lifeC, effortCat, deliver, MainUI.projectIndexes.get(project));
-	        EffortLogs secondHalfEntry = new EffortLogs(act, project, lifeC, effortCat, deliver, MainUI.projectIndexes.get(project));
+	        EffortLogs firstHalfEntry = new EffortLogs(project, lifeC, effortCat, deliver, MainUI.projectIndexes.get(project) + 1);
+	        EffortLogs secondHalfEntry = new EffortLogs(project, lifeC, effortCat, deliver, MainUI.projectIndexes.get(project) + 1);
+	        
+	        firstHalfEntry.setDate(date);
+	        firstHalfEntry.setStart(start);
+	        firstHalfEntry.setEnd(end);
+	        
+	        secondHalfEntry.setDate(date);
+	        secondHalfEntry.setStart(start);
+	        secondHalfEntry.setEnd(end);
 	
 	        // add the new entries to the data structure
 	        MainUI.effLogs.add(firstHalfEntry);
 	        MainUI.effLogs.add(secondHalfEntry);
 	
 	        // refresh the combo box
-	        effortLogsComboBox.getItems().addAll(firstHalfEntry, secondHalfEntry);
+	        ObservableList<EffortLogs> businessLogs = FXCollections.observableArrayList();
+	        ObservableList<EffortLogs> developmentLogs = FXCollections.observableArrayList();
+	        
+	        if ("Business Project".equals(project.title)) {
+	        	businessLogs.add(firstHalfEntry);
+	        	businessLogs.add(secondHalfEntry);
+	        	effortLogsComboBox.getItems().add(firstHalfEntry);		// giving me issues
+	        	effortLogsComboBox.getItems().add(secondHalfEntry);
+	        }
+	        
+	        if ("Development Project".equals(project.title)) {
+	        	developmentLogs.add(firstHalfEntry);
+	        	developmentLogs.add(secondHalfEntry);
+	        	effortLogsComboBox.getItems().add(firstHalfEntry);		// giving me issues
+	        	effortLogsComboBox.getItems().add(secondHalfEntry);
+	        }
 	
 	        // Optionally, remove the original entry from the combo box
 	        effortLogsComboBox.getItems().remove(effortLog);
 	        // Optionally, remove the original entry from the data structure
 	        MainUI.effLogs.remove(effortLog);
+	        
 	    }
 	
 	    updateNumEntries();
@@ -753,7 +824,7 @@ public class ConsoleController implements Initializable{
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		refreshComboBoxes();		
 		populateProjectBox();
-		populateProjectsBox(); // editor
+		populateProjectBoxEditor(); // editor
 		populateLCBoxes();
 		populateLCBoxesEditor();
 		populateECBoxes();
