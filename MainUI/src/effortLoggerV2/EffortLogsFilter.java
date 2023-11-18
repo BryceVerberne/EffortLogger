@@ -16,6 +16,7 @@ package effortLoggerV2;
 import java.util.ArrayList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -44,15 +45,6 @@ public class EffortLogsFilter extends Dialog<ArrayList<String>> {
 			pane = buildPane();
 			getDialogPane().setContent(pane);
 			getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-			Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
-//			button.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-//
-//				@Override
-//				public void handle(ActionEvent event) {
-//					
-//				}
-//				
-//			});
 	
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -93,6 +85,13 @@ public class EffortLogsFilter extends Dialog<ArrayList<String>> {
 		Button clear = new Button("Clear");
 		Button delete = new Button("Delete");
 		
+		// configure spacing of nodes
+		insideBox.setAlignment(Pos.CENTER);
+		insideBox.setSpacing(10);
+		box.setSpacing(10);
+		
+		// when enter is pressed in text field, enter input into list
+		addTextAction(filterTextField);
 		
 		// when the submit button is pressed, the input is sent over to the ListView
 		addSubmitButton(submit);
@@ -110,6 +109,22 @@ public class EffortLogsFilter extends Dialog<ArrayList<String>> {
 		
 		
 		return box;
+	}
+	
+	public void addTextAction(TextField tf) {
+		tf.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				String text = filterTextField.getText();
+				if(text.length() < 100 && text.length() > 0) {
+					list.getItems().add(text);
+					filterTextField.clear();
+				}
+				else {
+					System.out.println("error");
+				}
+			}
+		});
 	}
 	
 	public void addSubmitButton(Button submit) {

@@ -129,9 +129,9 @@
                                                       </VBox>
                                                    </children>
                                                 </HBox>
-                                                <HBox prefHeight="37.0" prefWidth="558.0">
+                                                <HBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="45.0" prefWidth="648.0">
                                                    <children>
-                                                      <VBox prefHeight="42.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
+                                                      <VBox maxHeight="42.0" prefHeight="37.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
                                                          <children>
                                                             <Label text="Effort Category:">
                                                                <font>
@@ -161,6 +161,19 @@
                                                       </VBox>
                                                    </children>
                                                 </HBox>
+                                                <VBox>
+                                                   <children>
+                                                      <Label fx:id="otherLabel" disable="true" text="Other:" visible="false">
+                                                         <font>
+                                                            <Font name="System Bold" size="12.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <TextField fx:id="otherTextField" onAction="#setOtherComboBox" visible="false" />
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets bottom="10.0" />
+                                                   </VBox.margin>
+                                                </VBox>
                                                 <HBox>
                                                    <children>
                                                       <VBox prefWidth="300.0">
@@ -172,7 +185,7 @@
                                                             </Label>
                                                             <VBox alignment="TOP_CENTER">
                                                                <children>
-                                                                  <TextField fx:id="keyWordTextField" />
+                                                                  <TextField fx:id="keyWordTextField" onAction="#addKeyWords" />
                                                                   <HBox alignment="CENTER">
                                                                      <children>
                                                                         <Button alignment="CENTER" mnemonicParsing="false" onAction="#addKeyWords" text="Submit Key Words" />
@@ -226,7 +239,7 @@
                                                       </VBox>
                                                       <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                                                          <children>
-                                                            <Button mnemonicParsing="false" text="        Proceed to Effort Log Editor        " onAction="#switchToEffortLogEditor" />
+                                                            <Button mnemonicParsing="false" onAction="#switchToEffortLogEditor" text="        Proceed to Effort Log Editor        " />
                                                          </children>
                                                          <HBox.margin>
                                                             <Insets bottom="15.0" />
@@ -285,7 +298,7 @@
                                                             </Label>
                                                             <VBox prefHeight="200.0" prefWidth="100.0">
                                                                <children>
-                                                                  <ComboBox fx:id="projectComboBoxEditor" editable="false" maxWidth="1.7976931348623157E308" prefWidth="150.0" onAction="#editEffortLog" />
+                                                                  <ComboBox fx:id="projectComboBoxEditor" editable="false" maxWidth="1.7976931348623157E308" onAction="#editEffortLog" prefWidth="150.0" />
                                                                   <Label fx:id="numEntriesLabel">
                                                                      <font>
                                                                         <Font size="12.0" />
@@ -308,7 +321,7 @@
                                                                   <Font name="System Bold Italic" size="12.0" />
                                                                </font>
                                                             </Label>
-                                                            <Button mnemonicParsing="false" text="          Clear This Effort Log          " onAction="#clearEntries" />
+                                                            <Button mnemonicParsing="false" onAction="#clearEntries" text="          Clear This Effort Log          " />
                                                          </children>
                                                       </VBox>
                                                    </children>
@@ -324,7 +337,7 @@
                                                             </Label>
                                                             <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
                                                                <children>
-                                                                  <ComboBox fx:id="effortLogsComboBox" editable="false" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="584.0" onAction="#setTextfields">
+                                                                  <ComboBox fx:id="effortLogsComboBox" editable="false" maxWidth="1.7976931348623157E308" onAction="#setTextfields" prefHeight="25.0" prefWidth="584.0">
                                                                      <VBox.margin>
                                                                         <Insets />
                                                                      </VBox.margin>
@@ -363,7 +376,7 @@
                                                                         </Label>
                                                                         <VBox alignment="TOP_RIGHT" prefHeight="85.0" prefWidth="105.0" HBox.hgrow="ALWAYS">
                                                                            <children>
-                                                                              <TextField fx:id="dateTextField" maxWidth="1.7976931348623157E308" prefHeight="8.0" prefWidth="109.0" onAction="#unsavedChanges">
+                                                                              <TextField fx:id="dateTextField" maxWidth="1.7976931348623157E308" onAction="#unsavedChanges" prefHeight="8.0" prefWidth="109.0">
                                                                                  <padding>
                                                                                     <Insets top="1.0" />
                                                                                  </padding>
@@ -450,7 +463,7 @@
                                                                   <Font name="System Bold" size="12.0" />
                                                                </font>
                                                             </Label>
-                                                            <ComboBox fx:id="lifeCycleComboBoxEditor" editable="false" maxWidth="1.7976931348623157E308" prefHeight="4.0" prefWidth="258.0" onAction="#unsavedChanges">
+                                                            <ComboBox fx:id="lifeCycleComboBoxEditor" editable="false" maxWidth="1.7976931348623157E308" onAction="#unsavedChanges" prefHeight="4.0" prefWidth="258.0">
                                                                <VBox.margin>
                                                                   <Insets right="250.0" />
                                                                </VBox.margin>
@@ -462,12 +475,12 @@
                                                             </Label>
                                                             <HBox prefHeight="15.0" prefWidth="508.0">
                                                                <children>
-                                                                  <ComboBox fx:id="effortCategoryComboBoxEditor" editable="false" prefWidth="150.0" onAction="#unsavedChanges">
+                                                                  <ComboBox fx:id="effortCategoryComboBoxEditor" editable="false" onAction="#unsavedChanges" prefWidth="150.0">
                                                                      <HBox.margin>
                                                                         <Insets right="15.0" />
                                                                      </HBox.margin>
                                                                   </ComboBox>
-                                                                  <ComboBox fx:id="deliverableComboBoxEditor" editable="false" prefHeight="25.0" prefWidth="357.0" onAction="#unsavedChanges"/>
+                                                                  <ComboBox fx:id="deliverableComboBoxEditor" editable="false" onAction="#unsavedChanges" prefHeight="25.0" prefWidth="357.0" />
                                                                </children>
                                                             </HBox>
                                                          </children>
@@ -505,7 +518,7 @@
                                                                   <Font name="System Bold" size="12.0" />
                                                                </font>
                                                             </Label>
-                                                            <Button mnemonicParsing="false" text="      Delete This Entry      "  onAction="#deleteEntry" />
+                                                            <Button mnemonicParsing="false" onAction="#deleteEntry" text="      Delete This Entry      " />
                                                          </children>
                                                          <HBox.margin>
                                                             <Insets bottom="10.0" />
@@ -522,7 +535,7 @@
                                                                   <Font name="System Bold" size="12.0" />
                                                                </font>
                                                             </Label>
-                                                            <Button mnemonicParsing="false" text="      Split This Entry into Two Entries      " onAction="#splitEntries" />
+                                                            <Button mnemonicParsing="false" onAction="#splitEntries" text="      Split This Entry into Two Entries      " />
                                                          </children>
                                                       </VBox>
                                                       <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
@@ -532,7 +545,7 @@
                                                                   <Font name="System Bold" size="12.0" />
                                                                </font>
                                                             </Label>
-                                                            <Button mnemonicParsing="false" text="      Proceed to the Effort Log Console      " onAction="#switchToEffortConsole" />
+                                                            <Button mnemonicParsing="false" onAction="#switchToEffortConsole" text="      Proceed to the Effort Log Console      " />
                                                          </children>
                                                       </VBox>
                                                    </children>

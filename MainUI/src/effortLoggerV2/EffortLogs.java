@@ -32,6 +32,10 @@ public class EffortLogs {
 	// Each Effort Log has List of KeyWords
 	ArrayList<String> keyWords;
 	
+	public EffortLogs() {
+		
+	}
+	
 	public EffortLogs(Activity activity, Project project, LifeCycle lc, 
 						EffortCategory ec, String deliver, int index) 
 	{

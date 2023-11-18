@@ -30,6 +30,8 @@ public class Main extends Application {
 	public static void main(String[] args) {
 		try {
 			launch(args);
-		} catch(Exception jjje) {}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

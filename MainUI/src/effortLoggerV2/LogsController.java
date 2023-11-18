@@ -74,13 +74,17 @@ public class LogsController {
 	public void populateLogs() {
 		if(MainUI.effLogs != null) {
 			ObservableList<EffortLogs> effortLogsObserve = FXCollections.observableArrayList(MainUI.effLogs);
-			logTab.setItems(effortLogsObserve);
+			System.out.println(MainUI.effLogs);
+			if(!logTab.getItems().isEmpty()) {
+				logTab.getItems().clear();
+			}
+			logTab.getItems().addAll(effortLogsObserve);
 		}
 	}
 	
 	// shows the filtered logs in the effort logs table
 	public void populateFilteredLogs(ArrayList<String> keys) {
-		if(!keys.isEmpty()) {
+		if(!keys.isEmpty() && MainUI.effLogs != null) {
 			// if the keys arrayList is not empty then go ahead with filtering the effort lgos
 			ObservableList<EffortLogs> effortLogsObserve = FXCollections.observableArrayList();
 			for(EffortLogs el : MainUI.effLogs) {
@@ -107,8 +111,6 @@ public class LogsController {
 		} else {
 			// if the filtered key words is empty, just show all effort logs
 			populateLogs();
-		}
-		
+		}	
 	}
-	
 }
