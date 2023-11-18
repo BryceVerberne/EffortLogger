@@ -15,6 +15,10 @@
 package effortLoggerV2;
 
 import java.net.URL;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -702,6 +706,9 @@ public class ConsoleController implements Initializable{
 			effortLog.setLCycleStep(lifeC);
 			effortLog.setEffCat(effortCat);
 			effortLog.setDel(deliver);
+			java.time.LocalTime st = java.time.LocalTime.parse(start);
+			java.time.LocalTime en = java.time.LocalTime.parse(end);		
+			effortLog.setDelta((double) Duration.between(st, en).toSeconds() / 60.0);
 		}
 		MainUI.effLogs.remove(index);
 		MainUI.effLogs.add(index, effortLog);
@@ -893,6 +900,9 @@ public class ConsoleController implements Initializable{
 	 * 
 	 * 
 	 */
+	// ***************
+	// Defect Console
+	// ***************
 	
 	public void setDefectLogsTable() {
 		indexColumn.setCellValueFactory(new PropertyValueFactory<>("index"));
@@ -921,9 +931,7 @@ public class ConsoleController implements Initializable{
 		
 	
 	public void defectInit() {
-		// ***************
-		// Defect Console
-		// ***************
+		
 		
 		// String arrays containing text to populate list views
 		String[] projectOptions = {"Business Project", "Development Project"};

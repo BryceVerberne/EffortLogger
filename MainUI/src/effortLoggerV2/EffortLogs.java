@@ -12,6 +12,7 @@
 
 package effortLoggerV2;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javafx.beans.property.SimpleIntegerProperty;
 
@@ -139,7 +140,11 @@ public class EffortLogs {
 	}
 	
 	public String getDelta() {
-		return act.getDeltaTime();
+		return delta;
+	}
+	
+	public void setDelta(double dTime) {
+		this.delta = new DecimalFormat("#.##").format(dTime);
 	}
 	
 	public String getKeyWords() {

@@ -51,7 +51,6 @@ public class Activity {
 	
 	public String getEndTime() {
 		return end.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-
 	}
 	
 	public String getDeltaTime() {
