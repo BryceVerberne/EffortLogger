@@ -25,6 +25,7 @@ public class EffortLogs {
 	LifeCycle lCycleStep;
 	// User's chosen Effort Category 
 	EffortCategory effCat;
+	
 	// Start, End, and Delta time along with the date
 	// And the respective Deliverable/Interruption/ETC
 	String del, start, end, delta, date;
@@ -52,12 +53,28 @@ public class EffortLogs {
 		keyWords = new ArrayList<String>();
 	}
 	
+	// overloaded constructor
+	public EffortLogs(Project project, LifeCycle lc, 
+						EffortCategory ec, String deliver, int index) 
+	{
+		this.index = index;
+		proj = project;
+		lCycleStep = lc;
+		effCat = ec;
+		del = deliver;
+		keyWords = new ArrayList<String>();
+	}
+	
 	public void setKeyWords(ArrayList<String> keyList) {
 		keyWords = keyList;
 	}
 	
 	public String getProj() {
 		return proj.toString();
+	}
+	
+	public Project getProjObj() {
+		return proj;
 	}
 	
 	public void setProj(Project proj) {
@@ -77,12 +94,20 @@ public class EffortLogs {
 		return effCat.toString();
 	}
 	
+	public EffortCategory getEffCatObj() {
+		return effCat;
+	}
+	
 	public void setEffCat(EffortCategory effCat) {
 		this.effCat = effCat;
 	}
 	
 	public String getLCycleStep() {
 		return lCycleStep.toString();
+	}
+	
+	public LifeCycle getLCycleStepObj() {
+		return lCycleStep;
 	}
 	
 	public void setLCycleStep(LifeCycle lCycleStep) {
