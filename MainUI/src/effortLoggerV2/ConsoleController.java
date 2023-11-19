@@ -60,7 +60,7 @@ public class ConsoleController implements Initializable{
 	TextArea defectSymptomsTextArea;
 	
 	@FXML
-	Button createDefectButton, updateDefectButton;
+	Button createDefectButton, updateDefectButton, clearDefectLogButton;
 	
 	@FXML
 	Label clockTitle, deliverableLabel, deliverableLabelEditor, numEntriesLabel, unsavedChangesLabel;
@@ -988,6 +988,10 @@ public class ConsoleController implements Initializable{
 		injectionStepListView.getItems().addAll(businessOptions);		
 		removalStepListView.getItems().addAll(businessOptions);
 		defectCategoryListView.getItems().addAll(defectCategoryOptions);
+		
+		clearDefectLogButton.setOnAction(event -> {
+			setDefaultValues();
+		});
 		
 		// Add an action listener to determine if the user wants to make a new defect log
 		createDefectButton.setOnAction(event -> {
