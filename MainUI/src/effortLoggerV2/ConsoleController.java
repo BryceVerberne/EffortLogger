@@ -141,7 +141,6 @@ public class ConsoleController implements Initializable{
 	
 	LogsController logControl;
 	
-	int index = 0;
 	boolean createNewDefect = false;
 	String currentInjection;
 	String currentRemoval;
@@ -842,7 +841,6 @@ public class ConsoleController implements Initializable{
 	    updateNumEntries();
 	}
 	
-	// written by David
 	public void checkDateFormat() {
 	    int wrongFormat = 0; // Variable to track if the input is in the wrong format
 	    String dateText = dateTextField.getText(); // Get date text from dateTextField
@@ -895,11 +893,6 @@ public class ConsoleController implements Initializable{
 	 */
 	
 	
-	/* Start of Bryce's Changes
-	 * 
-	 * 
-	 * 
-	 */
 	// ***************
 	// Defect Console
 	// ***************
@@ -925,7 +918,8 @@ public class ConsoleController implements Initializable{
 	if (MainUI.defectLogs == null) {
 		MainUI.defectLogs = new ArrayList<DefectLogs>();
 	}
-	DefectLogs defectLog = new DefectLogs(index, currentDefectCategory, currentProjectType, currentTextAreaContent, currentInjection, currentRemoval, currentDefectCategory);
+	
+	DefectLogs defectLog = new DefectLogs(MainUI.defectLogs.size() + 1, currentDefectCategory, currentProjectType, currentTextAreaContent, currentInjection, currentRemoval, currentDefectCategory);
 	MainUI.defectLogs.add(defectLog);
 	}	
 		
@@ -960,7 +954,6 @@ public class ConsoleController implements Initializable{
 		updateDefectButton.setOnAction(event -> {
 			
 			if (createNewDefect) {
-				++index;
 				defectSelection.getItems().addAll(currentDefectName);
 				defectSelection.setValue(currentDefectName);
 				System.out.println("Success: Defect Created");
