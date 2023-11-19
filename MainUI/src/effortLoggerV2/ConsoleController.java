@@ -141,15 +141,6 @@ public class ConsoleController implements Initializable{
 	
 	LogsController logControl;
 	
-	boolean createNewDefect = false;
-	String currentInjection;
-	String currentRemoval;
-	String currentDefectCategory;
-	String currentProjectType = "Business Project";
-	String currentDefectSelected;
-	String currentTextAreaContent;
-	String currentDefectName;
-	
 	int numBusinessEntries = 0;
 	int numDevelopmentEntries = 0;
 	
@@ -897,32 +888,76 @@ public class ConsoleController implements Initializable{
 	// Defect Console
 	// ***************
 	
+	// Member variables for managing defect log details
+	boolean createNewDefect = false;
+	String currentInjection;
+	String currentRemoval;
+	String currentDefectCategory;
+	String currentProjectType = "Business Project";
+	String currentDefectSelected;
+	DefectLogs selectedDefect = null;
+	String currentTextAreaContent;
+	String currentDefectName;
+
+	// Sets default values for the defect log form elements.
+	public void setDefaultValues() {
+	    // Set default values for project selection and defect selection
+	    projectSelection.setValue("Business Project");
+	    defectSelection.setValue("- no defect selected -");
+	    
+	    // Clear text fields and text area
+	    defectNameTextField.setText("");
+	    defectSymptomsTextArea.setText("");
+	    
+	    // Clear selections in list views
+	    injectionStepListView.getSelectionModel().clearSelection();
+	    removalStepListView.getSelectionModel().clearSelection();
+	    defectCategoryListView.getSelectionModel().clearSelection();
+	}
+
+	// Configures the columns of the defect logs table with the appropriate data properties.
 	public void setDefectLogsTable() {
-		indexColumn.setCellValueFactory(new PropertyValueFactory<>("index"));
-		projectNameColumn.setCellValueFactory(new PropertyValueFactory<>("projectName"));
-		projectTypeColumn.setCellValueFactory(new PropertyValueFactory<>("projectType"));
-		detailColumn.setCellValueFactory(new PropertyValueFactory<>("detail"));
-		injectedColumn.setCellValueFactory(new PropertyValueFactory<>("injected"));
-		removedColumn.setCellValueFactory(new PropertyValueFactory<>("removed"));
-		categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
+	    // Setting up columns for the table view
+	    indexColumn.setCellValueFactory(new PropertyValueFactory<>("index"));
+	    projectNameColumn.setCellValueFactory(new PropertyValueFactory<>("projectName"));
+	    projectTypeColumn.setCellValueFactory(new PropertyValueFactory<>("projectType"));
+	    detailColumn.setCellValueFactory(new PropertyValueFactory<>("detail"));
+	    injectedColumn.setCellValueFactory(new PropertyValueFactory<>("injected"));
+	    removedColumn.setCellValueFactory(new PropertyValueFactory<>("removed"));
+	    categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
 	}
-	
+
+	// Populates the defect logs table with data from MainUI's defectLogs list.
 	public void populateDefectLogs() {
-		if(MainUI.defectLogs != null) {
-			ObservableList<DefectLogs> defectLogsObserve = FXCollections.observableArrayList(MainUI.defectLogs);
-			defectLogsTable.setItems(defectLogsObserve);
-		}
+	    // Check if defectLogs is not null and populate the table view
+	    if(MainUI.defectLogs != null) {
+	        ObservableList<DefectLogs> defectLogsObserve = FXCollections.observableArrayList(MainUI.defectLogs);
+	        defectLogsTable.setItems(defectLogsObserve);
+	    }
 	}
-	
+
+	// Creates a new defect log and adds it to the MainUI's defectLogs list.
 	public void createDefectLog() {
-	if (MainUI.defectLogs == null) {
-		MainUI.defectLogs = new ArrayList<DefectLogs>();
+	    // Initialize defectLogs in MainUI if null
+	    if (MainUI.defectLogs == null) {
+	        MainUI.defectLogs = new ArrayList<DefectLogs>();
+	    }
+	    
+	    // Create a new defect log and add it to the defectLogs list
+	    DefectLogs defectLog = new DefectLogs(MainUI.defectLogs.size() + 1, currentDefectName, currentProjectType, currentTextAreaContent, currentInjection, currentRemoval, currentDefectCategory);
+	    MainUI.defectLogs.add(defectLog);
 	}
-	
-	DefectLogs defectLog = new DefectLogs(MainUI.defectLogs.size() + 1, currentDefectName, currentProjectType, currentTextAreaContent, currentInjection, currentRemoval, currentDefectCategory);
-	MainUI.defectLogs.add(defectLog);
-	}	
-		
+
+	// Updates the currently selected defect log with the current form values.
+	public void updateDefectLog() {
+	    // Update the selected defect log's properties with current values
+	    selectedDefect.setProjectName(currentDefectName);
+	    selectedDefect.setProjectType(currentProjectType);
+	    selectedDefect.setDetail(currentTextAreaContent);
+	    selectedDefect.setInjected(currentInjection);
+	    selectedDefect.setRemoved(currentRemoval);
+	    selectedDefect.setCategory(currentDefectCategory);
+	}
 	
 	public void defectInit() {
 		
@@ -933,9 +968,14 @@ public class ConsoleController implements Initializable{
 		String[] developmentOptions = {"Problem Understanding", "Conceptual Design Plan", "Requirements", "Conceptual Design", "Conceptual Design Review"};
 		String[] defectCategoryOptions = {"Not specified", "10 Documentation", "20 Syntax", "30 Build, Package", "40 Assignment"};
 		
-		// Populate ComboBox with project type & set default
+		// Populate ComboBox with project type
 		projectSelection.getItems().addAll(projectOptions);
-		projectSelection.setValue("Business Project");
+		
+		// Add default option to defect selection
+		defectSelection.getItems().addAll("- no defect selected -");
+		
+		// Set default values
+		setDefaultValues();
 		
 		// Populate ListViews with options
 		injectionStepListView.getItems().addAll(businessOptions);		
@@ -946,41 +986,55 @@ public class ConsoleController implements Initializable{
 		createDefectButton.setOnAction(event -> {
 			createNewDefect = true;
 			System.out.println("Create New Defect");
+			
+			setDefaultValues();
+			
 			currentDefectName = "- new defect -";
 			defectNameTextField.setText("- new defect -");
 		});
 		
-		// Finish the creation of the new defect
+		// Set an action on the updateDefectButton
 		updateDefectButton.setOnAction(event -> {
-			if (createNewDefect) {
-				boolean found = false;
-				
-				if (MainUI.defectLogs != null) {
-					for (int i = 0; i < MainUI.defectLogs.size(); ++i) {
-						if (MainUI.defectLogs.get(i).getProjectName().equals(currentDefectName)) {
-							found = true;
-							break;
-						}
-					}
-				}
-				
-				if (found) {
-					System.out.println("Error: Project Name Already Exists");
-				}
-				else {
-					defectSelection.getItems().addAll(currentDefectName);
-					defectSelection.setValue(currentDefectName);
-					System.out.println("Success: Defect Created");
-					
-					createDefectLog();
-					populateDefectLogs();
-				}
-			}
-			else {
-				System.out.println("Error: No New Defects Created");
-			}
-			
+		    if (createNewDefect) { // Check if creating a new defect
+		        boolean found = false; // Flag to detect if the project name already exists
+
+		        // Iterate through defectLogs in MainUI to find any matching project name
+		        if (MainUI.defectLogs != null) {
+		            for (int i = 0; i < MainUI.defectLogs.size(); ++i) {
+		                if (MainUI.defectLogs.get(i).getProjectName().equals(currentDefectName)) {
+		                    found = true; // Set found to true if a duplicate project name is found
+		                    break;
+		                }
+		            }
+		        }
+
+		        if (found) {
+		            System.out.println("Error: Project Name Already Exists"); // Log error if duplicate is found
+		        } else {
+		            // Add the new defect name to the selection and select it
+		            defectSelection.getItems().addAll(currentDefectName);
+		            defectSelection.setValue(currentDefectName);
+
+		            createDefectLog(); // Create a new defect log
+		            populateDefectLogs(); // Refresh the defect logs display
+
+		            System.out.println("Success: Defect Created"); // Log success message
+		        }
+		    } else if (selectedDefect != null) {
+		        // Update the currently selected defect log if one is selected
+		        updateDefectLog(); // Update the defect log
+		        populateDefectLogs(); // Refresh the defect logs display
+
+		        System.out.println("Success: Defect Updated"); // Log success message for update
+		    } else {
+		        System.out.println("Error: No Changes Made"); // Log error if no action is performed
+		    }
+
+		    // Reset flag to indicate creation of new defect is complete
+		    createNewDefect = false;
 		});
+
+
 		
 		// Add event listener to track user selection for project type & populate list views accordingly
 		projectSelection.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
@@ -1008,11 +1062,54 @@ public class ConsoleController implements Initializable{
 		
 		// Add event listener to track user selection for existing defect logs
 		defectSelection.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
-				currentDefectSelected = injectionStepListView.getSelectionModel().getSelectedItem();
-			}
+		    @Override
+		    public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
+		        // Retrieve the selected defect name and store it in currentDefectSelected
+		        currentDefectSelected = defectSelection.getSelectionModel().getSelectedItem();
+		        System.out.println("Defect Selected: " + currentDefectSelected);
+		        
+		        // Check if the default option is selected
+		        if (currentDefectSelected.equals("- no defect selected -")) {
+		            selectedDefect = null; // No defect is selected
+		            setDefaultValues(); // Reset form values to defaults
+		        } else {
+		            // Find and display the details of the selected defect
+		            selectedDefect = null;
+		            
+		            // Iterate through defectLogs to find the selected defect
+		            if (MainUI.defectLogs != null) {
+		                for (int i = 0; i < MainUI.defectLogs.size(); ++i) {
+		                    selectedDefect = MainUI.defectLogs.get(i);
+		                    
+		                    // Check if the defect name matches the selected defect
+		                    if (selectedDefect.getProjectName().equals(currentDefectSelected)) {
+		                        // Update form fields to reflect the details of the selected defect
+		                        currentProjectType = selectedDefect.getProjectType();
+		                        projectSelection.setValue(currentProjectType);
+		                        
+		                        currentDefectName = selectedDefect.getProjectName();
+		                        defectNameTextField.setText(currentDefectName);
+		                        
+		                        currentTextAreaContent = selectedDefect.getDetail();
+		                        defectSymptomsTextArea.setText(currentTextAreaContent);
+		                        
+		                        currentInjection = selectedDefect.getInjected();
+		                        injectionStepListView.getSelectionModel().select(currentInjection);
+		                        
+		                        currentRemoval = selectedDefect.getRemoved();
+		                        removalStepListView.getSelectionModel().select(currentRemoval);
+		                        
+		                        currentDefectCategory = selectedDefect.getCategory();
+		                        defectCategoryListView.getSelectionModel().select(currentDefectCategory);
+		                        
+		                        break; // Exit after appropriate changes have been made
+		                    }
+		                }
+		            }
+		        }
+		    }
 		});
+
 		
 		// Add event listener to track user input for the Defect Name TextField section
 		defectNameTextField.textProperty().addListener(new ChangeListener<String>() {
