@@ -889,18 +889,21 @@ public class ConsoleController implements Initializable{
 	// ***************
 	
 	// Member variables for managing defect log details
-	boolean createNewDefect = false;
+	boolean createNewDefect;
+	DefectLogs selectedDefect;
 	String currentInjection;
 	String currentRemoval;
 	String currentDefectCategory;
-	String currentProjectType = "Business Project";
+	String currentProjectType;
 	String currentDefectSelected;
-	DefectLogs selectedDefect = null;
 	String currentTextAreaContent;
 	String currentDefectName;
 
 	// Sets default values for the defect log form elements.
 	public void setDefaultValues() {
+		createNewDefect = false;
+		selectedDefect = null;
+		
 	    // Set default values for project selection and defect selection
 	    projectSelection.setValue("Business Project");
 	    defectSelection.setValue("- no defect selected -");
@@ -930,10 +933,14 @@ public class ConsoleController implements Initializable{
 	// Populates the defect logs table with data from MainUI's defectLogs list.
 	public void populateDefectLogs() {
 	    // Check if defectLogs is not null and populate the table view
-	    if(MainUI.defectLogs != null) {
-	        ObservableList<DefectLogs> defectLogsObserve = FXCollections.observableArrayList(MainUI.defectLogs);
-	        defectLogsTable.setItems(defectLogsObserve);
-	    }
+		if(MainUI.defectLogs != null) {
+			ObservableList<DefectLogs> defectLogsObserve = FXCollections.observableArrayList(MainUI.defectLogs);
+			System.out.println(MainUI.defectLogs);
+			if(!defectLogsTable.getItems().isEmpty()) {
+				defectLogsTable.getItems().clear();
+			}
+			defectLogsTable.getItems().addAll(defectLogsObserve);
+		}
 	}
 
 	// Creates a new defect log and adds it to the MainUI's defectLogs list.
@@ -984,10 +991,10 @@ public class ConsoleController implements Initializable{
 		
 		// Add an action listener to determine if the user wants to make a new defect log
 		createDefectButton.setOnAction(event -> {
+			setDefaultValues();
+			
 			createNewDefect = true;
 			System.out.println("Create New Defect");
-			
-			setDefaultValues();
 			
 			currentDefectName = "- new defect -";
 			defectNameTextField.setText("- new defect -");
@@ -1033,8 +1040,6 @@ public class ConsoleController implements Initializable{
 		    // Reset flag to indicate creation of new defect is complete
 		    createNewDefect = false;
 		});
-
-
 		
 		// Add event listener to track user selection for project type & populate list views accordingly
 		projectSelection.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
@@ -1070,12 +1075,9 @@ public class ConsoleController implements Initializable{
 		        
 		        // Check if the default option is selected
 		        if (currentDefectSelected.equals("- no defect selected -")) {
-		            selectedDefect = null; // No defect is selected
 		            setDefaultValues(); // Reset form values to defaults
-		        } else {
-		            // Find and display the details of the selected defect
-		            selectedDefect = null;
-		            
+		        } 
+		        else {
 		            // Iterate through defectLogs to find the selected defect
 		            if (MainUI.defectLogs != null) {
 		                for (int i = 0; i < MainUI.defectLogs.size(); ++i) {
