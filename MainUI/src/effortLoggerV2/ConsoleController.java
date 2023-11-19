@@ -919,7 +919,7 @@ public class ConsoleController implements Initializable{
 		MainUI.defectLogs = new ArrayList<DefectLogs>();
 	}
 	
-	DefectLogs defectLog = new DefectLogs(MainUI.defectLogs.size() + 1, currentDefectCategory, currentProjectType, currentTextAreaContent, currentInjection, currentRemoval, currentDefectCategory);
+	DefectLogs defectLog = new DefectLogs(MainUI.defectLogs.size() + 1, currentDefectName, currentProjectType, currentTextAreaContent, currentInjection, currentRemoval, currentDefectCategory);
 	MainUI.defectLogs.add(defectLog);
 	}	
 		
@@ -952,14 +952,29 @@ public class ConsoleController implements Initializable{
 		
 		// Finish the creation of the new defect
 		updateDefectButton.setOnAction(event -> {
-			
 			if (createNewDefect) {
-				defectSelection.getItems().addAll(currentDefectName);
-				defectSelection.setValue(currentDefectName);
-				System.out.println("Success: Defect Created");
+				boolean found = false;
 				
-				createDefectLog();
-				populateDefectLogs();
+				if (MainUI.defectLogs != null) {
+					for (int i = 0; i < MainUI.defectLogs.size(); ++i) {
+						if (MainUI.defectLogs.get(i).getProjectName().equals(currentDefectName)) {
+							found = true;
+							break;
+						}
+					}
+				}
+				
+				if (found) {
+					System.out.println("Error: Project Name Already Exists");
+				}
+				else {
+					defectSelection.getItems().addAll(currentDefectName);
+					defectSelection.setValue(currentDefectName);
+					System.out.println("Success: Defect Created");
+					
+					createDefectLog();
+					populateDefectLogs();
+				}
 			}
 			else {
 				System.out.println("Error: No New Defects Created");
