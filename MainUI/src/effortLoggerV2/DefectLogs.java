@@ -2,8 +2,11 @@
  * Title:       Defect Logs Class
  * Author:      Bryce Verberne
  * Email:       bverbern@asu.edu
- * Description: 
+ * Description: This class is part of the effortLoggerV2 package, designed for tracking defects in software projects. 
+ *              It includes attributes like project details, defect description, injection and removal phases, and defect category, 
+ *              along with a constructor and accessor methods for these fields. Essential for efficient defect management and quality control.
  */
+
 
 
 
@@ -45,9 +48,10 @@ public class DefectLogs {
 	// This function returns the name of the project name pertaining to a defect log
 	public String getProjectName() {return projectName;}
 	
+	// This function returns the project type of a specific defect log
 	public String getProjectType() {return projectType;}
 	
-	// This function returns a string containing further details regarding the defect -- TODO --
+	// This function returns a string containing further details regarding the defect
 	public String getDetail() {return detail;}
 	
 	// This function returns the user choice for the "Step when Injected" list view section
@@ -58,19 +62,4 @@ public class DefectLogs {
 	
 	// This function returns the category of a specific defect log
 	public String getCategory() {return category;}
-	
-	
-	// ******************
-	// Mutator Functions
-	// ******************
-	
-	
-	
-	// ******************
-	// Other Functions
-	// ******************
-	
-	
-	// This function concatenates all the values of the object into one descriptive string -- TODO --
-	public String toString() {return index + ", " + injected + ", " + removed + ", " + category;}
 }
