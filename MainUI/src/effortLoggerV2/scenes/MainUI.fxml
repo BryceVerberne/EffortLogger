@@ -824,7 +824,7 @@
 			                                                            <Insets right="10.0" />
 			                                                         </HBox.margin>
 			                                                      </Button>
-			                                                      <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="186.0" text="Delete the Current Defect">
+			                                                      <Button fx:id="deleteCurrentDefect" mnemonicParsing="false" prefHeight="25.0" prefWidth="186.0" text="Delete the Current Defect">
 			                                                         <HBox.margin>
 			                                                            <Insets right="10.0" />
 			                                                         </HBox.margin>

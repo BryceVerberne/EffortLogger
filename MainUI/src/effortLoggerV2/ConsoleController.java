@@ -60,7 +60,7 @@ public class ConsoleController implements Initializable{
 	TextArea defectSymptomsTextArea;
 	
 	@FXML
-	Button createDefectButton, updateDefectButton, clearDefectLogButton;
+	Button createDefectButton, updateDefectButton, clearDefectLogButton, deleteCurrentDefect;
 	
 	@FXML
 	Label clockTitle, deliverableLabel, deliverableLabelEditor, numEntriesLabel, unsavedChangesLabel;
@@ -966,9 +966,19 @@ public class ConsoleController implements Initializable{
 	    selectedDefect.setCategory(currentDefectCategory);
 	}
 	
+	//Resets the indexes of defect logs in MainUI.defectLogs to their current positions and refreshes the display.
+	public void resetIndexValues() {
+	    if (MainUI.defectLogs != null) {
+	        for (int i = 0; i < MainUI.defectLogs.size(); ++i) {
+	            MainUI.defectLogs.get(i).setIndex(i + 1);
+	        }
+	    }
+
+	    populateDefectLogs(); // Refresh the display of defect logs
+	}
+
+	
 	public void defectInit() {
-		
-		
 		// String arrays containing text to populate list views
 		String[] projectOptions = {"Business Project", "Development Project"};
 		String[] businessOptions = {"Planning", "Information Gathering", "Information Understanding", "Verifying", "Outlining"};
@@ -989,8 +999,17 @@ public class ConsoleController implements Initializable{
 		removalStepListView.getItems().addAll(businessOptions);
 		defectCategoryListView.getItems().addAll(defectCategoryOptions);
 		
+		// Add an action listener to clear the current defect log if activated
 		clearDefectLogButton.setOnAction(event -> {
 			setDefaultValues();
+		});
+		
+		// Add an action listener to delete the current defect log if activated
+		deleteCurrentDefect.setOnAction(event -> {
+			MainUI.defectLogs.remove(selectedDefect);
+			populateDefectLogs();
+			setDefaultValues();
+			resetIndexValues();
 		});
 		
 		// Add an action listener to determine if the user wants to make a new defect log
