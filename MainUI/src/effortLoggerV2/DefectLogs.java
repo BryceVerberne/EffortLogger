@@ -13,53 +13,103 @@
 package effortLoggerV2;
 
 public class DefectLogs {
-	int index;
-	String projectName;
-	String projectType;
-	String detail;
-	String injected;
-	String removed;
-	String category;
-	
-	
-	// ******************
-	// Special Functions
-	// ******************
-	
-	// Constructor
-	public DefectLogs(int index, String projectName, String projectType, String detail, String injected, String removed, String category) {
-		this.index = index;
-		this.projectName = projectName;
-		this.projectType = projectType;
-		this.detail = detail;
-		this.injected = injected;
-		this.removed = removed;
-		this.category = category;
-	}
-	
-	
-	// ******************
-	// Accessor Functions
-	// ******************
-	
-	// This function returns the index of a specific defect log
-	public int getIndex() {return index;}
-	
-	// This function returns the name of the project name pertaining to a defect log
-	public String getProjectName() {return projectName;}
-	
-	// This function returns the project type of a specific defect log
-	public String getProjectType() {return projectType;}
-	
-	// This function returns a string containing further details regarding the defect
-	public String getDetail() {return detail;}
-	
-	// This function returns the user choice for the "Step when Injected" list view section
-	public String getInjected() {return injected;}
-	
-	// This function returns the user choice for the "Step when Removed" list view section
-	public String getRemoved() {return removed;}
-	
-	// This function returns the category of a specific defect log
-	public String getCategory() {return category;}
+    // Fields to store defect log properties
+    int index;
+    String projectName;
+    String projectType;
+    String detail;
+    String injected;
+    String removed;
+    String category;
+
+    // Constructor to initialize a DefectLog object with specific details
+    public DefectLogs(int index, String projectName, String projectType, String detail, String injected, String removed, String category) {
+        this.index = index;
+        this.projectName = projectName;
+        this.projectType = projectType;
+        this.detail = detail;
+        this.injected = injected;
+        this.removed = removed;
+        this.category = category;
+    }
+
+    
+    // *****************
+    // Accessor Methods
+    // *****************
+
+    // Returns the index of the defect log
+    public int getIndex() {
+        return index;
+    }
+
+    // Returns the project name associated with the defect log
+    public String getProjectName() {
+        return projectName;
+    }
+
+    // Returns the type of project associated with the defect
+    public String getProjectType() {
+        return projectType;
+    }
+
+    // Returns detailed description of the defect
+    public String getDetail() {
+        return detail;
+    }
+
+    // Returns the phase when the defect was injected
+    public String getInjected() {
+        return injected;
+    }
+
+    // Returns the phase when the defect was removed
+    public String getRemoved() {
+        return removed;
+    }
+
+    // Returns the category of the defect
+    public String getCategory() {
+        return category;
+    }
+
+    
+    // *****************
+    // Mutator Methods
+    // *****************
+
+    // Sets the index of the defect log
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    // Sets the project name associated with the defect log
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    // Sets the type of project associated with the defect
+    public void setProjectType(String projectType) {
+        this.projectType = projectType;
+    }
+
+    // Sets detailed description of the defect
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+    // Sets the phase when the defect was injected
+    public void setInjected(String injected) {
+        this.injected = injected;
+    }
+
+    // Sets the phase when the defect was removed
+    public void setRemoved(String removed) {
+        this.removed = removed;
+    }
+
+    // Sets the category of the defect
+    public void setCategory(String category) {
+        this.category = category;
+    }
 }
