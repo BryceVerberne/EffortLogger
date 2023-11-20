@@ -54,16 +54,16 @@ public class ConsoleController implements Initializable{
 	TableView<DefectLogs> defectLogsTable;
 	
 	@FXML
-	TableColumn<?, ?> indexColumn, projectNameColumn, projectTypeColumn, detailColumn, injectedColumn, removedColumn, categoryColumn, fixedColumn;
+	TableColumn<?, ?> indexColumn, projectNameColumn, projectTypeColumn, detailColumn, injectedColumn, removedColumn, categoryColumn, statusColumn, fixedColumn;
 	
 	@FXML
 	TextArea defectSymptomsTextArea;
 	
 	@FXML
-	Button createDefectButton, updateDefectButton, clearDefectLogButton, deleteCurrentDefect;
+	Button createDefectButton, updateDefectButton, clearDefectLogButton, deleteCurrentDefect, closeDefectButton, openDefectButton;
 	
 	@FXML
-	Label clockTitle, deliverableLabel, deliverableLabelEditor, numEntriesLabel, unsavedChangesLabel;
+	Label clockTitle, deliverableLabel, deliverableLabelEditor, numEntriesLabel, unsavedChangesLabel, statusDisplay;
 
 	
 	@FXML
@@ -898,11 +898,13 @@ public class ConsoleController implements Initializable{
 	String currentDefectSelected;
 	String currentTextAreaContent;
 	String currentDefectName;
+	String defectStatus;
 	String fixedDefect;
 
 	// Sets default values for the defect log form elements.
 	public void setDefaultValues() {
 		currentProjectType = "Business Project";
+		defectStatus = "Closed";
 		createNewDefect = false;
 		selectedDefect = null;
 		
@@ -910,6 +912,7 @@ public class ConsoleController implements Initializable{
 	    projectSelection.setValue("Business Project");
 	    defectSelection.setValue("- no defect selected -");
 	    fixedDefectList.setValue("- no defect selected -");
+		statusDisplay.setText("Status: Closed");
 	    
 	    // Clear text fields and text area
 	    defectNameTextField.setText("");
@@ -931,6 +934,7 @@ public class ConsoleController implements Initializable{
 	    injectedColumn.setCellValueFactory(new PropertyValueFactory<>("injected"));
 	    removedColumn.setCellValueFactory(new PropertyValueFactory<>("removed"));
 	    categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
+	    statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
 	    fixedColumn.setCellValueFactory(new PropertyValueFactory<>("fix"));
 	}
 
@@ -955,7 +959,8 @@ public class ConsoleController implements Initializable{
 	    }
 	    
 	    // Create a new defect log and add it to the defectLogs list
-	    DefectLogs defectLog = new DefectLogs(MainUI.defectLogs.size() + 1, currentDefectName, currentProjectType, currentTextAreaContent, currentInjection, currentRemoval, currentDefectCategory, fixedDefect);
+	    DefectLogs defectLog = new DefectLogs(MainUI.defectLogs.size() + 1, currentDefectName, currentProjectType, currentTextAreaContent, 
+	    									  currentInjection, currentRemoval, currentDefectCategory, defectStatus,fixedDefect);
 	    MainUI.defectLogs.add(defectLog);
 	    selectedDefect = defectLog;
 	}
@@ -969,6 +974,7 @@ public class ConsoleController implements Initializable{
 	    selectedDefect.setInjected(currentInjection);
 	    selectedDefect.setRemoved(currentRemoval);
 	    selectedDefect.setCategory(currentDefectCategory);
+	    selectedDefect.setStatus(defectStatus);
 	    selectedDefect.setFix(fixedDefect);
 	}
 	
@@ -982,7 +988,39 @@ public class ConsoleController implements Initializable{
 
 	    populateDefectLogs(); // Refresh the display of defect logs
 	}
-
+	
+	// Assigns all the information allocated to the defect selected to defect variables
+	public void retrieveDefectInfo() {
+        // Update form fields to reflect the details of the selected defect
+        currentProjectType = selectedDefect.getProjectType();
+        projectSelection.setValue(currentProjectType);
+        
+        currentDefectName = selectedDefect.getProjectName();
+        defectNameTextField.setText(currentDefectName);
+        
+        currentTextAreaContent = selectedDefect.getDetail();
+        defectSymptomsTextArea.setText(currentTextAreaContent);
+        
+        currentInjection = selectedDefect.getInjected();
+        injectionStepListView.getSelectionModel().select(currentInjection);
+        
+        currentRemoval = selectedDefect.getRemoved();
+        removalStepListView.getSelectionModel().select(currentRemoval);
+        
+        currentDefectCategory = selectedDefect.getCategory();
+        defectCategoryListView.getSelectionModel().select(currentDefectCategory);
+        
+        fixedDefect = selectedDefect.getFix();
+        fixedDefectList.getSelectionModel().select(fixedDefect);
+        
+        defectStatus = selectedDefect.getStatus();
+        if (defectStatus.equals("Closed")) {
+			statusDisplay.setText("Status: Closed");
+        }
+        else {
+        	statusDisplay.setText("Status: Opened");
+        }
+	}
 	
 	public void defectInit() {
 		// String arrays containing text to populate list views
@@ -1009,6 +1047,16 @@ public class ConsoleController implements Initializable{
 		// Add an action listener to clear the current defect log if activated
 		clearDefectLogButton.setOnAction(event -> {
 			setDefaultValues();
+		});
+		
+		openDefectButton.setOnAction(event -> {
+			statusDisplay.setText("Status: Opened");
+			defectStatus = "Opened";
+		});
+		
+		closeDefectButton.setOnAction(event -> {
+			statusDisplay.setText("Status: Closed");
+			defectStatus = "Closed";
 		});
 		
 		// Add an action listener to delete the current defect log if activated
@@ -1040,6 +1088,9 @@ public class ConsoleController implements Initializable{
 			
 			currentDefectName = "- new defect -";
 			defectNameTextField.setText("- new defect -");
+			
+			statusDisplay.setText("Status: Opened");
+			defectStatus = "Opened";
 		});
 		
 		// Set an action on the updateDefectButton
@@ -1128,25 +1179,7 @@ public class ConsoleController implements Initializable{
 		                    
 		                    // Check if the defect name matches the selected defect
 		                    if (selectedDefect.getProjectName().equals(currentDefectSelected)) {
-		                        // Update form fields to reflect the details of the selected defect
-		                        currentProjectType = selectedDefect.getProjectType();
-		                        projectSelection.setValue(currentProjectType);
-		                        
-		                        currentDefectName = selectedDefect.getProjectName();
-		                        defectNameTextField.setText(currentDefectName);
-		                        
-		                        currentTextAreaContent = selectedDefect.getDetail();
-		                        defectSymptomsTextArea.setText(currentTextAreaContent);
-		                        
-		                        currentInjection = selectedDefect.getInjected();
-		                        injectionStepListView.getSelectionModel().select(currentInjection);
-		                        
-		                        currentRemoval = selectedDefect.getRemoved();
-		                        removalStepListView.getSelectionModel().select(currentRemoval);
-		                        
-		                        currentDefectCategory = selectedDefect.getCategory();
-		                        defectCategoryListView.getSelectionModel().select(currentDefectCategory);
-		                        
+		                    	retrieveDefectInfo();
 		                        break; // Exit after appropriate changes have been made
 		                    }
 		                }

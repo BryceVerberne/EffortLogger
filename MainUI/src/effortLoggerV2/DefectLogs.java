@@ -21,10 +21,11 @@ public class DefectLogs {
     String injected;
     String removed;
     String category;
+    String status;
     String fix;
 
     // Constructor to initialize a DefectLog object with specific details
-    public DefectLogs(int index, String projectName, String projectType, String detail, String injected, String removed, String category, String fix) {
+    public DefectLogs(int index, String projectName, String projectType, String detail, String injected, String removed, String category, String status, String fix) {
         this.index = index;
         this.projectName = projectName;
         this.projectType = projectType;
@@ -32,6 +33,7 @@ public class DefectLogs {
         this.injected = injected;
         this.removed = removed;
         this.category = category;
+        this.status = status;
         this.fix = fix;
     }
 
@@ -73,6 +75,11 @@ public class DefectLogs {
     // Returns the category of the defect
     public String getCategory() {
         return category;
+    }
+    
+    // Returns the status of the selected defect
+    public String getStatus() {
+    	return status;
     }
 
     // Returns the fixed defect
@@ -117,6 +124,11 @@ public class DefectLogs {
     // Sets the category of the defect
     public void setCategory(String category) {
         this.category = category;
+    }
+    
+    // Sets the status of the current defect
+    public void setStatus(String status) {
+    	this.status = status;
     }
     
     // Sets the fixed defect
