@@ -63,7 +63,7 @@ public class ConsoleController implements Initializable{
 	Button createDefectButton, updateDefectButton, clearDefectLogButton, deleteCurrentDefect, closeDefectButton, openDefectButton;
 	
 	@FXML
-	Label clockTitle, deliverableLabel, deliverableLabelEditor, numEntriesLabel, unsavedChangesLabel, statusDisplay, savedIndicatorLabel;
+	Label clockTitle, deliverableLabel, deliverableLabelEditor, numEntriesLabel, unsavedChangesLabel, statusDisplay, savedIndicatorLabel, projectDefectCounter;
 
 	
 	@FXML
@@ -910,6 +910,8 @@ public class ConsoleController implements Initializable{
 		
 	    // Set default values for project selection and defect selection
 	    projectSelection.setValue("Business Project");
+	    defectCounter("Business Project");
+	    
 	    defectSelection.setValue("- no defect selected -");
 	    fixedDefectList.setValue("- no defect selected -");
 		statusDisplay.setText("Status: Closed");
@@ -989,6 +991,7 @@ public class ConsoleController implements Initializable{
 	    populateDefectLogs(); // Refresh the display of defect logs
 	}
 	
+	// Styles the save indicator depending on if the information is saved or not
 	public void informationSaved(boolean saved) {
 		if (!saved) {
 			savedIndicatorLabel.setStyle("-fx-background-color: red; -fx-text-fill: white;");
@@ -1000,11 +1003,32 @@ public class ConsoleController implements Initializable{
 		}
 	}
 	
+	// Counts the number of defects attached to a particular project type
+	public void defectCounter(String defectType) {
+		int counter = 0;
+		
+		if (MainUI.defectLogs != null) {
+			for (int i = 0; i < MainUI.defectLogs.size(); ++i) {
+				if (MainUI.defectLogs.get(i).getProjectType().equals(defectType)) {
+					++counter;
+				}
+			}
+		}
+		
+		if (counter > 0) {
+			projectDefectCounter.setText(counter + " defects for this project.");
+		}
+		else {
+			projectDefectCounter.setText("No defects for this project.");
+		}
+	}
+	
 	// Assigns all the information allocated to the defect selected to defect variables
 	public void retrieveDefectInfo() {
         // Update form fields to reflect the details of the selected defect
         currentProjectType = selectedDefect.getProjectType();
         projectSelection.setValue(currentProjectType);
+        defectCounter(currentProjectType);
         
         currentDefectName = selectedDefect.getProjectName();
         defectNameTextField.setText(currentDefectName);
@@ -1137,6 +1161,7 @@ public class ConsoleController implements Initializable{
 		            System.out.println("Success: Defect Created"); // Log success message
 		            informationSaved(true);
 		            createNewDefect = false;
+		            defectCounter(currentProjectType);
 		        }
 		    } else if (selectedDefect != null) {
 		        // Update the currently selected defect log if one is selected
@@ -1173,6 +1198,7 @@ public class ConsoleController implements Initializable{
 				}
 				
 				informationSaved(!(createNewDefect || (selectedDefect != null)));
+				defectCounter(currentProjectType);
 			}
 		});
 		
