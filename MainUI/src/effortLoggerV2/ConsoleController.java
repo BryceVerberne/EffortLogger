@@ -17,8 +17,10 @@ package effortLoggerV2;
 import java.net.URL;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -399,6 +401,7 @@ public class ConsoleController implements Initializable{
 		EffortLogs effortLog = new EffortLogs(act, project, lifeC, effortCat, deliver, MainUI.projectIndexes.get(project));
 		effortLog.setKeyWords(new ArrayList<>(keyWordList.getItems()));
 		MainUI.effLogs.add(effortLog);
+		resetIndexEditor();
 		logControl.populateLogs();
 	}
 	
@@ -674,6 +677,7 @@ public class ConsoleController implements Initializable{
 		saveChanges();
 	}
 	
+	// written by hardeek
 	// method to update effort logs in the editor
 	public void updateEntry() {
 		EffortLogs effortLog = effortLogsComboBox.getSelectionModel().getSelectedItem();
@@ -686,8 +690,6 @@ public class ConsoleController implements Initializable{
 		String end = stopTimeTextField.getText();
 		
 		int index = MainUI.effLogs.indexOf(effortLog);
-		System.out.println(effortLog.toString());
-
 		
 		if(effortLog != null) {
 			effortLog.setDate(date);
@@ -699,15 +701,16 @@ public class ConsoleController implements Initializable{
 			java.time.LocalTime st = java.time.LocalTime.parse(start);
 			java.time.LocalTime en = java.time.LocalTime.parse(end);		
 			effortLog.setDelta((double) Duration.between(st, en).toSeconds() / 60.0);
+			
+			MainUI.effLogs.remove(index);
+			MainUI.effLogs.add(index, effortLog);
+			logControl.populateLogs();
+			
+			// Manually refresh the combo box items
+		    int selectedIndex = effortLogsComboBox.getSelectionModel().getSelectedIndex();
+		    effortLogsComboBox.getItems().set(selectedIndex, effortLog);
+		    effortLogsComboBox.getSelectionModel().select(selectedIndex);
 		}
-		MainUI.effLogs.remove(index);
-		MainUI.effLogs.add(index, effortLog);
-		logControl.populateLogs();
-		
-		// Manually refresh the combo box items
-	    int selectedIndex = effortLogsComboBox.getSelectionModel().getSelectedIndex();
-	    effortLogsComboBox.getItems().set(selectedIndex, effortLog);
-	    effortLogsComboBox.getSelectionModel().select(selectedIndex);
 	}
 	
 	public void deleteEntry(ActionEvent event) {
@@ -731,7 +734,7 @@ public class ConsoleController implements Initializable{
 		}
 		
 		updateNumEntries();
-		
+		resetIndexEditor();
 		logControl.populateLogs();
 	}
 	
@@ -750,6 +753,7 @@ public class ConsoleController implements Initializable{
 	
 	    effortLogsComboBox.getItems().clear(); // Clear the combo box items
 	    updateNumEntries();
+	    resetIndexEditor();
 	    logControl.populateLogs();
 	}
 	
@@ -773,7 +777,15 @@ public class ConsoleController implements Initializable{
 		unsavedChangesLabel.setText("These attributes have been saved.");
 	}
 	
-	// FIXME
+	public void resetIndexEditor() {
+		if (MainUI.effLogs != null) {
+			for (int i = 0; i < MainUI.effLogs.size(); i++) {
+				MainUI.effLogs.get(i).setIndex(i + 1);
+			}
+		}
+	}
+	
+	// written by david
 	public void splitEntries(ActionEvent event) {
 		EffortLogs effortLog = effortLogsComboBox.getSelectionModel().getSelectedItem();
     
@@ -785,51 +797,57 @@ public class ConsoleController implements Initializable{
 		String date = dateTextField.getText();
 		String start = startTimeTextField.getText();
 		String end = stopTimeTextField.getText();
+		LocalTime startTime = LocalTime.parse(start);
+		LocalTime endTime = LocalTime.parse(end);
 
 	    if (effortLog != null) {
 	
 	        // create two new entries
-	        EffortLogs firstHalfEntry = new EffortLogs(project, lifeC, effortCat, deliver, MainUI.projectIndexes.get(project) + 1);
+	        EffortLogs firstHalfEntry = new EffortLogs(project, lifeC, effortCat, deliver, MainUI.projectIndexes.get(project));
 	        EffortLogs secondHalfEntry = new EffortLogs(project, lifeC, effortCat, deliver, MainUI.projectIndexes.get(project) + 1);
+	        
+	        // Calculate the total duration of the original entry
+			Duration totalDuration = Duration.between(startTime, endTime);
+			
+			// Calculate the duration for each half
+			Duration halfDuration = totalDuration.dividedBy(2);
+			
+			// Calculate the split time
+			LocalTime splitTime = startTime.plus(halfDuration);
+			String split = splitTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 	        
 	        firstHalfEntry.setDate(date);
 	        firstHalfEntry.setStart(start);
-	        firstHalfEntry.setEnd(end);
+	        firstHalfEntry.setEnd(split);
 	        
 	        secondHalfEntry.setDate(date);
-	        secondHalfEntry.setStart(start);
+	        secondHalfEntry.setStart(split);
 	        secondHalfEntry.setEnd(end);
 	
 	        // add the new entries to the data structure
 	        MainUI.effLogs.add(firstHalfEntry);
 	        MainUI.effLogs.add(secondHalfEntry);
-	
-	        // refresh the combo box
-	        ObservableList<EffortLogs> businessLogs = FXCollections.observableArrayList();
-	        ObservableList<EffortLogs> developmentLogs = FXCollections.observableArrayList();
 	        
-	        if ("Business Project".equals(project.title)) {
-	        	businessLogs.add(firstHalfEntry);
-	        	businessLogs.add(secondHalfEntry);
-	        	effortLogsComboBox.getItems().add(firstHalfEntry);		// giving me issues
-	        	effortLogsComboBox.getItems().add(secondHalfEntry);
-	        }
-	        
-	        if ("Development Project".equals(project.title)) {
-	        	developmentLogs.add(firstHalfEntry);
-	        	developmentLogs.add(secondHalfEntry);
-	        	effortLogsComboBox.getItems().add(firstHalfEntry);		// giving me issues
-	        	effortLogsComboBox.getItems().add(secondHalfEntry);
-	        }
+	        effortLogsComboBox.getItems().addAll(firstHalfEntry, secondHalfEntry);
 	
 	        // Optionally, remove the original entry from the combo box
 	        effortLogsComboBox.getItems().remove(effortLog);
 	        // Optionally, remove the original entry from the data structure
 	        MainUI.effLogs.remove(effortLog);
 	        
+		    String projectsBox = projectComboBoxEditor.getSelectionModel().getSelectedItem().title;
+			if (projectsBox.equals("Business Project")){
+				numBusinessEntries++;
+			}
+			else if (projectsBox.equals("Development Project")) {
+				numDevelopmentEntries++;
+			}
+	        
 	    }
 	
 	    updateNumEntries();
+	    resetIndexEditor();
+	    logControl.populateLogs();
 	}
 	
 	public void checkDateFormat() {

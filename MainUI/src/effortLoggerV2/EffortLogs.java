@@ -13,6 +13,7 @@
 package effortLoggerV2;
 
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import javafx.beans.property.SimpleIntegerProperty;
 
@@ -30,6 +31,9 @@ public class EffortLogs {
 	// Start, End, and Delta time along with the date
 	// And the respective Deliverable/Interruption/ETC
 	String del, start, end, delta, date;
+	
+	LocalDateTime startTemp, endTemp;
+	
 	int index;
 	// Each Effort Log has List of KeyWords
 	ArrayList<String> keyWords;
@@ -49,6 +53,8 @@ public class EffortLogs {
 		del = deliver;
 		start = act.getStartTime();
 		end = act.getEndTime();
+		startTemp = act.getStartTimeTemp();
+		endTemp = act.getEndTimeTemp();
 		delta = act.getDeltaTime();
 		date = act.getDate();
 		keyWords = new ArrayList<String>();
@@ -131,8 +137,16 @@ public class EffortLogs {
 		this.start = start;
 	}
 	
+	public LocalDateTime getStartTime() {
+		return startTemp;
+	}
+	
 	public String getEnd() {
 		return end;
+	}
+	
+	public LocalDateTime getEndTime() {
+		return endTemp;
 	}
 	
 	public void setEnd(String end) {
@@ -145,6 +159,14 @@ public class EffortLogs {
 	
 	public void setDelta(double dTime) {
 		this.delta = new DecimalFormat("#.##").format(dTime);
+	}
+	
+	public int getIndex() {
+		return index;
+	}
+	
+	public void setIndex(int index) {
+		this.index = index;
 	}
 	
 	public String getKeyWords() {
