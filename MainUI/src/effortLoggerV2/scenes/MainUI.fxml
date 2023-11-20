@@ -789,13 +789,16 @@
 			                                          <Insets bottom="10.0" left="30.0" />
 			                                       </VBox.margin>
 			                                       <children>
-			                                          <Label text="These attributes have been saved">
+			                                          <Label fx:id="savedIndicatorLabel" text="These attributes have been saved">
 			                                             <HBox.margin>
-			                                                <Insets right="50.0" />
+			                                                <Insets right="10.0" />
 			                                             </HBox.margin>
 			                                             <font>
 			                                                <Font name="System Bold" size="12.0" />
 			                                             </font>
+                                                         <padding>
+                                                            <Insets right="40.0" />
+                                                         </padding>
 			                                          </Label>
 			                                          <Label text="Fix:">
 			                                             <font>

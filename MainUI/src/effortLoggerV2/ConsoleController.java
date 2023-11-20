@@ -63,7 +63,7 @@ public class ConsoleController implements Initializable{
 	Button createDefectButton, updateDefectButton, clearDefectLogButton, deleteCurrentDefect, closeDefectButton, openDefectButton;
 	
 	@FXML
-	Label clockTitle, deliverableLabel, deliverableLabelEditor, numEntriesLabel, unsavedChangesLabel, statusDisplay;
+	Label clockTitle, deliverableLabel, deliverableLabelEditor, numEntriesLabel, unsavedChangesLabel, statusDisplay, savedIndicatorLabel;
 
 	
 	@FXML
@@ -989,6 +989,17 @@ public class ConsoleController implements Initializable{
 	    populateDefectLogs(); // Refresh the display of defect logs
 	}
 	
+	public void informationSaved(boolean saved) {
+		if (!saved) {
+			savedIndicatorLabel.setStyle("-fx-background-color: red; -fx-text-fill: white;");
+			savedIndicatorLabel.setText("These attributes have not been saved");
+		}
+		else {
+			savedIndicatorLabel.setStyle("");
+			savedIndicatorLabel.setText("These attributes have been saved");
+		}
+	}
+	
 	// Assigns all the information allocated to the defect selected to defect variables
 	public void retrieveDefectInfo() {
         // Update form fields to reflect the details of the selected defect
@@ -1052,11 +1063,13 @@ public class ConsoleController implements Initializable{
 		openDefectButton.setOnAction(event -> {
 			statusDisplay.setText("Status: Opened");
 			defectStatus = "Opened";
+			informationSaved(!(createNewDefect || (selectedDefect != null)));
 		});
 		
 		closeDefectButton.setOnAction(event -> {
 			statusDisplay.setText("Status: Closed");
 			defectStatus = "Closed";
+			informationSaved(!(createNewDefect || (selectedDefect != null)));
 		});
 		
 		// Add an action listener to delete the current defect log if activated
@@ -1091,6 +1104,8 @@ public class ConsoleController implements Initializable{
 			
 			statusDisplay.setText("Status: Opened");
 			defectStatus = "Opened";
+			
+			informationSaved(false);
 		});
 		
 		// Set an action on the updateDefectButton
@@ -1120,6 +1135,8 @@ public class ConsoleController implements Initializable{
 		            populateDefectLogs(); // Refresh the defect logs display
 
 		            System.out.println("Success: Defect Created"); // Log success message
+		            informationSaved(true);
+		            createNewDefect = false;
 		        }
 		    } else if (selectedDefect != null) {
 		        // Update the currently selected defect log if one is selected
@@ -1127,12 +1144,10 @@ public class ConsoleController implements Initializable{
 		        populateDefectLogs(); // Refresh the defect logs display
 
 		        System.out.println("Success: Defect Updated"); // Log success message for update
+		        informationSaved(true);
 		    } else {
 		        System.out.println("Error: No Changes Made"); // Log error if no action is performed
 		    }
-
-		    // Reset flag to indicate creation of new defect is complete
-		    createNewDefect = false;
 		});
 		
 		// Add event listener to track user selection for project type & populate list views accordingly
@@ -1156,6 +1171,8 @@ public class ConsoleController implements Initializable{
 					injectionStepListView.getItems().addAll(developmentOptions);
 					removalStepListView.getItems().addAll(developmentOptions);
 				}
+				
+				informationSaved(!(createNewDefect || (selectedDefect != null)));
 			}
 		});
 		
@@ -1180,6 +1197,7 @@ public class ConsoleController implements Initializable{
 		                    // Check if the defect name matches the selected defect
 		                    if (selectedDefect.getProjectName().equals(currentDefectSelected)) {
 		                    	retrieveDefectInfo();
+		                    	informationSaved(true);
 		                        break; // Exit after appropriate changes have been made
 		                    }
 		                }
@@ -1195,6 +1213,8 @@ public class ConsoleController implements Initializable{
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				currentDefectName = newValue;
 				System.out.println("TextField Text Changed: \n" + currentDefectName);
+				
+				informationSaved(!(createNewDefect || (selectedDefect != null)));
 			}
 		});
 		
@@ -1204,6 +1224,8 @@ public class ConsoleController implements Initializable{
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				currentTextAreaContent = newValue;
 				System.out.println("TextArea Text Changed: \n" + currentTextAreaContent);
+				
+				informationSaved(!(createNewDefect || (selectedDefect != null)));
 			}
 		});
 		
@@ -1214,6 +1236,8 @@ public class ConsoleController implements Initializable{
 				// Based on user input, set the current injection value
 				currentInjection = injectionStepListView.getSelectionModel().getSelectedItem();
 				System.out.println("Step when injected: " + currentInjection);
+				
+				informationSaved(!(createNewDefect || (selectedDefect != null)));
 			}
 		});
 		
@@ -1224,6 +1248,8 @@ public class ConsoleController implements Initializable{
 				// Based on user input, set the current removal value
 				currentRemoval = removalStepListView.getSelectionModel().getSelectedItem();
 				System.out.println("Step when removed: " + currentRemoval);
+				
+				informationSaved(!(createNewDefect || (selectedDefect != null)));
 			}
 		});
 		
@@ -1234,6 +1260,8 @@ public class ConsoleController implements Initializable{
 				// Based on user input, set the current defect category value
 				currentDefectCategory = defectCategoryListView.getSelectionModel().getSelectedItem();
 				System.out.println("Defect Category: " + currentDefectCategory);
+				
+				informationSaved(!(createNewDefect || (selectedDefect != null)));
 			}
 		});
 		
@@ -1241,6 +1269,8 @@ public class ConsoleController implements Initializable{
 			@Override
 			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
 				fixedDefect = fixedDefectList.getSelectionModel().getSelectedItem();
+				
+				informationSaved(!(createNewDefect || (selectedDefect != null)));
 			}
 		});
 		
