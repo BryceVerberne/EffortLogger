@@ -954,6 +954,7 @@ public class ConsoleController implements Initializable{
 	    // Create a new defect log and add it to the defectLogs list
 	    DefectLogs defectLog = new DefectLogs(MainUI.defectLogs.size() + 1, currentDefectName, currentProjectType, currentTextAreaContent, currentInjection, currentRemoval, currentDefectCategory);
 	    MainUI.defectLogs.add(defectLog);
+	    selectedDefect = defectLog;
 	}
 
 	// Updates the currently selected defect log with the current form values.
@@ -1008,11 +1009,14 @@ public class ConsoleController implements Initializable{
 		// Add an action listener to delete the current defect log if activated
 		deleteCurrentDefect.setOnAction(event -> {
 			if (selectedDefect != null) {
-				defectSelection.getItems().remove(selectedDefect.getProjectName());
+				String tempName = selectedDefect.getProjectName();
+				
 				MainUI.defectLogs.remove(selectedDefect);
 				populateDefectLogs();
 				setDefaultValues();
 				resetIndexValues();
+				
+				defectSelection.getItems().remove(tempName);
 				
 				System.out.println("Success: Defect Deleted");
 			}
