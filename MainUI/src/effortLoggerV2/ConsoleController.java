@@ -60,7 +60,7 @@ public class ConsoleController implements Initializable{
 	TextArea defectSymptomsTextArea;
 	
 	@FXML
-	Button createDefectButton, updateDefectButton, clearDefectLogButton, deleteCurrentDefect, closeDefectButton, openDefectButton;
+	Button createDefectButton, updateDefectButton, clearDefectLogButton, deleteCurrentDefect, closeDefectButton, openDefectButton, effortLoggerConsoleButton;
 	
 	@FXML
 	Label clockTitle, deliverableLabel, deliverableLabelEditor, numEntriesLabel, unsavedChangesLabel, statusDisplay, savedIndicatorLabel, projectDefectCounter;
@@ -1102,7 +1102,6 @@ public class ConsoleController implements Initializable{
 				String tempName = selectedDefect.getProjectName();
 				
 				MainUI.defectLogs.remove(selectedDefect);
-				populateDefectLogs();
 				setDefaultValues();
 				resetIndexValues();
 				
@@ -1130,6 +1129,11 @@ public class ConsoleController implements Initializable{
 			defectStatus = "Opened";
 			
 			informationSaved(false);
+		});
+		
+		// Add an action listener to switch to EffortLog Console if activated
+		effortLoggerConsoleButton.setOnAction(event -> {
+			switchToEffortConsole(event);
 		});
 		
 		// Set an action on the updateDefectButton

@@ -832,7 +832,7 @@
 			                                                            <Insets right="10.0" />
 			                                                         </HBox.margin>
 			                                                      </Button>
-			                                                      <Button mnemonicParsing="false" text="Proceed to the Effort Log Cosole" />
+			                                                      <Button fx:id="effortLoggerConsoleButton" mnemonicParsing="false" text="Proceed to the Effort Log Cosole" />
 			                                                   </children>
 			                                                </HBox>
 			                                             </children>
