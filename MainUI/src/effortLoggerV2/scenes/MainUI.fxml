@@ -642,7 +642,7 @@
 			                                                </Label>
 			                                                <HBox prefHeight="21.0" prefWidth="564.0">
 			                                                   <children>
-			                                                      <ComboBox fx:id="defectSelection" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="305.0" promptText="- no defect selected -" HBox.hgrow="ALWAYS">
+			                                                      <ComboBox fx:id="defectSelection" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="305.0" HBox.hgrow="ALWAYS">
 			                                                         <HBox.margin>
 			                                                            <Insets right="80.0" />
 			                                                         </HBox.margin>
@@ -805,7 +805,7 @@
 			                                                <Insets right="15.0" />
 			                                             </HBox.margin>
 			                                          </Label>
-			                                          <ComboBox editable="true" maxWidth="1.7976931348623157E308" prefWidth="150.0" HBox.hgrow="ALWAYS" />
+			                                          <ComboBox fx:id="fixedDefectList" maxWidth="1.7976931348623157E308" prefWidth="150.0" HBox.hgrow="ALWAYS" />
 			                                       </children>
 			                                    </HBox>
 			                                    <HBox prefHeight="100.0" prefWidth="200.0">
@@ -938,6 +938,7 @@
                                                       <TableColumn fx:id="injectedColumn" prefWidth="75.0" text="Injected" />
                                                       <TableColumn fx:id="removedColumn" prefWidth="75.0" text="Removed" />
                                                       <TableColumn fx:id="categoryColumn" prefWidth="75.0" text="Category" />
+                                                      <TableColumn fx:id="fixedColumn" prefWidth="75.0" text="Fix" />
                                                   </columns>
                                                 </TableView>
                                              </children>

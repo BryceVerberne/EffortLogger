@@ -21,9 +21,10 @@ public class DefectLogs {
     String injected;
     String removed;
     String category;
+    String fix;
 
     // Constructor to initialize a DefectLog object with specific details
-    public DefectLogs(int index, String projectName, String projectType, String detail, String injected, String removed, String category) {
+    public DefectLogs(int index, String projectName, String projectType, String detail, String injected, String removed, String category, String fix) {
         this.index = index;
         this.projectName = projectName;
         this.projectType = projectType;
@@ -31,6 +32,7 @@ public class DefectLogs {
         this.injected = injected;
         this.removed = removed;
         this.category = category;
+        this.fix = fix;
     }
 
     
@@ -73,6 +75,10 @@ public class DefectLogs {
         return category;
     }
 
+    // Returns the fixed defect
+    public String getFix() {
+    	return fix;
+    }
     
     // *****************
     // Mutator Methods
@@ -111,5 +117,10 @@ public class DefectLogs {
     // Sets the category of the defect
     public void setCategory(String category) {
         this.category = category;
+    }
+    
+    // Sets the fixed defect
+    public void setFix(String fix) {
+    	this.fix = fix;
     }
 }

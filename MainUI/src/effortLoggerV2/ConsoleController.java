@@ -54,7 +54,7 @@ public class ConsoleController implements Initializable{
 	TableView<DefectLogs> defectLogsTable;
 	
 	@FXML
-	TableColumn<?, ?> indexColumn, projectNameColumn, projectTypeColumn, detailColumn, injectedColumn, removedColumn, categoryColumn;
+	TableColumn<?, ?> indexColumn, projectNameColumn, projectTypeColumn, detailColumn, injectedColumn, removedColumn, categoryColumn, fixedColumn;
 	
 	@FXML
 	TextArea defectSymptomsTextArea;
@@ -112,7 +112,7 @@ public class ConsoleController implements Initializable{
 	ComboBox<LifeCycle> lifeCycleComboBox;
 	
 	@FXML
-	ComboBox<String> projectSelection, defectSelection;
+	ComboBox<String> projectSelection, defectSelection, fixedDefectList;
 	
 	// EDITOR
 	
@@ -898,6 +898,7 @@ public class ConsoleController implements Initializable{
 	String currentDefectSelected;
 	String currentTextAreaContent;
 	String currentDefectName;
+	String fixedDefect;
 
 	// Sets default values for the defect log form elements.
 	public void setDefaultValues() {
@@ -908,6 +909,7 @@ public class ConsoleController implements Initializable{
 	    // Set default values for project selection and defect selection
 	    projectSelection.setValue("Business Project");
 	    defectSelection.setValue("- no defect selected -");
+	    fixedDefectList.setValue("- no defect selected -");
 	    
 	    // Clear text fields and text area
 	    defectNameTextField.setText("");
@@ -929,6 +931,7 @@ public class ConsoleController implements Initializable{
 	    injectedColumn.setCellValueFactory(new PropertyValueFactory<>("injected"));
 	    removedColumn.setCellValueFactory(new PropertyValueFactory<>("removed"));
 	    categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
+	    fixedColumn.setCellValueFactory(new PropertyValueFactory<>("fix"));
 	}
 
 	// Populates the defect logs table with data from MainUI's defectLogs list.
@@ -952,7 +955,7 @@ public class ConsoleController implements Initializable{
 	    }
 	    
 	    // Create a new defect log and add it to the defectLogs list
-	    DefectLogs defectLog = new DefectLogs(MainUI.defectLogs.size() + 1, currentDefectName, currentProjectType, currentTextAreaContent, currentInjection, currentRemoval, currentDefectCategory);
+	    DefectLogs defectLog = new DefectLogs(MainUI.defectLogs.size() + 1, currentDefectName, currentProjectType, currentTextAreaContent, currentInjection, currentRemoval, currentDefectCategory, fixedDefect);
 	    MainUI.defectLogs.add(defectLog);
 	    selectedDefect = defectLog;
 	}
@@ -966,6 +969,7 @@ public class ConsoleController implements Initializable{
 	    selectedDefect.setInjected(currentInjection);
 	    selectedDefect.setRemoved(currentRemoval);
 	    selectedDefect.setCategory(currentDefectCategory);
+	    selectedDefect.setFix(fixedDefect);
 	}
 	
 	//Resets the indexes of defect logs in MainUI.defectLogs to their current positions and refreshes the display.
@@ -990,8 +994,9 @@ public class ConsoleController implements Initializable{
 		// Populate ComboBox with project type
 		projectSelection.getItems().addAll(projectOptions);
 		
-		// Add default option to defect selection
+		// Add default option to defect & fixed defect selection
 		defectSelection.getItems().addAll("- no defect selected -");
+		fixedDefectList.getItems().addAll("- no defect selected -");
 		
 		// Set default values
 		setDefaultValues();
@@ -1017,6 +1022,7 @@ public class ConsoleController implements Initializable{
 				resetIndexValues();
 				
 				defectSelection.getItems().remove(tempName);
+				fixedDefectList.getItems().remove(tempName);
 				
 				System.out.println("Success: Defect Deleted");
 			}
@@ -1056,6 +1062,7 @@ public class ConsoleController implements Initializable{
 		        } else {
 		            // Add the new defect name to the selection and select it
 		            defectSelection.getItems().addAll(currentDefectName);
+		            fixedDefectList.getItems().addAll(currentDefectName);
 		            defectSelection.setValue(currentDefectName);
 
 		            createDefectLog(); // Create a new defect log
@@ -1194,6 +1201,13 @@ public class ConsoleController implements Initializable{
 				// Based on user input, set the current defect category value
 				currentDefectCategory = defectCategoryListView.getSelectionModel().getSelectedItem();
 				System.out.println("Defect Category: " + currentDefectCategory);
+			}
+		});
+		
+		fixedDefectList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
+				fixedDefect = fixedDefectList.getSelectionModel().getSelectedItem();
 			}
 		});
 		
