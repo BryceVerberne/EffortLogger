@@ -71,6 +71,7 @@ public class LogsController {
 		keyWordCol.setCellValueFactory(new PropertyValueFactory<>("keyWords"));
 	}
 	
+	// written by hardeek
 	public void populateLogs() {
 		if(MainUI.effLogs != null) {
 			ObservableList<EffortLogs> effortLogsObserve = FXCollections.observableArrayList(MainUI.effLogs);
