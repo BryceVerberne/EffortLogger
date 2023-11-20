@@ -901,6 +901,7 @@ public class ConsoleController implements Initializable{
 
 	// Sets default values for the defect log form elements.
 	public void setDefaultValues() {
+		currentProjectType = "Business Project";
 		createNewDefect = false;
 		selectedDefect = null;
 		
@@ -1006,10 +1007,18 @@ public class ConsoleController implements Initializable{
 		
 		// Add an action listener to delete the current defect log if activated
 		deleteCurrentDefect.setOnAction(event -> {
-			MainUI.defectLogs.remove(selectedDefect);
-			populateDefectLogs();
-			setDefaultValues();
-			resetIndexValues();
+			if (selectedDefect != null) {
+				defectSelection.getItems().remove(selectedDefect.getProjectName());
+				MainUI.defectLogs.remove(selectedDefect);
+				populateDefectLogs();
+				setDefaultValues();
+				resetIndexValues();
+				
+				System.out.println("Success: Defect Deleted");
+			}
+			else {
+				System.out.println("Error: Defect Not Selected");
+			}
 		});
 		
 		// Add an action listener to determine if the user wants to make a new defect log
