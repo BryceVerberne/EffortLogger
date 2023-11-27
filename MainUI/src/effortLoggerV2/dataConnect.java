@@ -10,8 +10,6 @@
  */
 
 
-
-
 package effortLoggerV2;
 
 import java.sql.Connection;
@@ -44,37 +42,37 @@ public class dataConnect {
 	}
 	
 	// Searches for the username of employees in database
-		public static boolean findUser(String enterUser) {
-			try {
-				// create a connection to database
-				connection = connect();
-				
-				// create a standard SQL search for employee with specific username and password
-				String query = "SELECT * FROM employee WHERE username = ?";
-				
-				// create a prepared statement so we can avoid SQL injection
-				PreparedStatement statement = connection.prepareStatement(query);
-				
-				// insert username and password at the question mark instead of concatenation
-				statement.setString(1, enterUser);
-				
-		        // we execute a SQL query
-		        ResultSet rs = statement.executeQuery();
-		        
-		        // if there is another table entry
-		        // then a employee has the entered username and password
-		        if(rs.next()) {
-		        	rs.close();
-		 	        statement.close();
-		        	return true;
-		        }
-		        rs.close();
-		        statement.close();
-		        	
-			} catch(Exception e) {}
+	public static boolean findUser(String enterUser) {
+		try {
+			// create a connection to database
+			connection = connect();
 			
-			return false;
-		}
+			// create a standard SQL search for employee with specific username and password
+			String query = "SELECT * FROM employee WHERE username = ?";
+			
+			// create a prepared statement so we can avoid SQL injection
+			PreparedStatement statement = connection.prepareStatement(query);
+			
+			// insert username and password at the question mark instead of concatenation
+			statement.setString(1, enterUser);
+			
+	        // we execute a SQL query
+	        ResultSet rs = statement.executeQuery();
+	        
+	        // if there is another table entry
+	        // then a employee has the entered username and password
+	        if(rs.next()) {
+	        	rs.close();
+	 	        statement.close();
+	        	return true;
+	        }
+	        rs.close();
+	        statement.close();
+	        	
+		} catch(Exception e) {}
+		
+		return false;
+	}
 	
 	// searches for the username and password of employees in database
 	public static boolean findUserPass(String enterUser, String enterPass) {
