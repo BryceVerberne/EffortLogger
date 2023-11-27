@@ -384,7 +384,6 @@ public class ConsoleController implements Initializable{
 					// clear the key words list for next activity
 					keyWordList.getItems().clear();
 					act = null;
-					deliverableComboBox.getItems().clear();
 					// gets rid of the old activity
 					clockTitle.setText("Clock is stopped");
 					clockBox.setStyle("-fx-background-color: red");
