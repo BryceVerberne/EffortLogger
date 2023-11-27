@@ -599,7 +599,7 @@
 			                                                      <Insets left="30.0" />
 			                                                   </VBox.margin>
 			                                                </ComboBox>
-			                                                <Label text="No defects for this project.">
+			                                                <Label fx:id="projectDefectCounter" text="No defects for this project.">
 			                                                   <VBox.margin>
 			                                                      <Insets left="30.0" />
 			                                                   </VBox.margin>
@@ -619,7 +619,7 @@
 			                                                      <Font name="System Bold" size="12.0" />
 			                                                   </font>
 			                                                </Label>
-			                                                <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="170.0" text="Clear this Defect Log">
+			                                                <Button fx:id="clearDefectLogButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="170.0" text="Clear this Defect Log">
 			                                                   <VBox.margin>
 			                                                      <Insets left="30.0" />
 			                                                   </VBox.margin>
@@ -642,7 +642,7 @@
 			                                                </Label>
 			                                                <HBox prefHeight="21.0" prefWidth="564.0">
 			                                                   <children>
-			                                                      <ComboBox fx:id="defectSelection" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="305.0" promptText="- no defect selected -" HBox.hgrow="ALWAYS">
+			                                                      <ComboBox fx:id="defectSelection" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="305.0" HBox.hgrow="ALWAYS">
 			                                                         <HBox.margin>
 			                                                            <Insets right="80.0" />
 			                                                         </HBox.margin>
@@ -693,19 +693,19 @@
 			                                                      </VBox>
 			                                                      <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
 			                                                         <children>
-			                                                            <Label text="Status: Closed">
+			                                                            <Label fx:id="statusDisplay" text="Status: Closed">
 			                                                               <font>
 			                                                                  <Font name="System Bold" size="12.0" />
 			                                                               </font>
 			                                                            </Label>
 			                                                            <HBox prefHeight="100.0" prefWidth="200.0">
 			                                                               <children>
-			                                                                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="      Close      ">
+			                                                                  <Button fx:id="closeDefectButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="      Close      ">
 			                                                                     <HBox.margin>
 			                                                                        <Insets right="10.0" />
 			                                                                     </HBox.margin>
 			                                                                  </Button>
-			                                                                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="154.0" text="      Reopen      " />
+			                                                                  <Button fx:id="openDefectButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="154.0" text="      Reopen      " />
 			                                                               </children>
 			                                                            </HBox>
 			                                                         </children>
@@ -789,13 +789,16 @@
 			                                          <Insets bottom="10.0" left="30.0" />
 			                                       </VBox.margin>
 			                                       <children>
-			                                          <Label text="These attributes have been saved">
+			                                          <Label fx:id="savedIndicatorLabel" text="These attributes have been saved">
 			                                             <HBox.margin>
-			                                                <Insets right="50.0" />
+			                                                <Insets right="10.0" />
 			                                             </HBox.margin>
 			                                             <font>
 			                                                <Font name="System Bold" size="12.0" />
 			                                             </font>
+                                                         <padding>
+                                                            <Insets right="40.0" />
+                                                         </padding>
 			                                          </Label>
 			                                          <Label text="Fix:">
 			                                             <font>
@@ -805,7 +808,7 @@
 			                                                <Insets right="15.0" />
 			                                             </HBox.margin>
 			                                          </Label>
-			                                          <ComboBox editable="true" maxWidth="1.7976931348623157E308" prefWidth="150.0" HBox.hgrow="ALWAYS" />
+			                                          <ComboBox fx:id="fixedDefectList" maxWidth="1.7976931348623157E308" prefWidth="150.0" HBox.hgrow="ALWAYS" />
 			                                       </children>
 			                                    </HBox>
 			                                    <HBox prefHeight="100.0" prefWidth="200.0">
@@ -824,12 +827,12 @@
 			                                                            <Insets right="10.0" />
 			                                                         </HBox.margin>
 			                                                      </Button>
-			                                                      <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="186.0" text="Delete the Current Defect">
+			                                                      <Button fx:id="deleteCurrentDefect" mnemonicParsing="false" prefHeight="25.0" prefWidth="186.0" text="Delete the Current Defect">
 			                                                         <HBox.margin>
 			                                                            <Insets right="10.0" />
 			                                                         </HBox.margin>
 			                                                      </Button>
-			                                                      <Button mnemonicParsing="false" text="Proceed to the Effort Log Cosole" />
+			                                                      <Button fx:id="effortLoggerConsoleButton" mnemonicParsing="false" text="Proceed to the Effort Log Cosole" />
 			                                                   </children>
 			                                                </HBox>
 			                                             </children>
@@ -938,6 +941,8 @@
                                                       <TableColumn fx:id="injectedColumn" prefWidth="75.0" text="Injected" />
                                                       <TableColumn fx:id="removedColumn" prefWidth="75.0" text="Removed" />
                                                       <TableColumn fx:id="categoryColumn" prefWidth="75.0" text="Category" />
+                                                      <TableColumn fx:id="statusColumn" prefWidth="75.0" text="Status" />
+                                                      <TableColumn fx:id="fixedColumn" prefWidth="75.0" text="Fix" />
                                                   </columns>
                                                 </TableView>
                                              </children>

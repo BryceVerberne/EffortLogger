@@ -15,8 +15,10 @@ package effortLoggerV2;
 import java.net.URL;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -51,16 +53,16 @@ public class ConsoleController implements Initializable{
 	TableView<DefectLogs> defectLogsTable;
 	
 	@FXML
-	TableColumn<?, ?> indexColumn, projectNameColumn, projectTypeColumn, detailColumn, injectedColumn, removedColumn, categoryColumn;
+	TableColumn<?, ?> indexColumn, projectNameColumn, projectTypeColumn, detailColumn, injectedColumn, removedColumn, categoryColumn, statusColumn, fixedColumn;
 	
 	@FXML
 	TextArea defectSymptomsTextArea;
 	
 	@FXML
-	Button createDefectButton, updateDefectButton;
+	Button createDefectButton, updateDefectButton, clearDefectLogButton, deleteCurrentDefect, closeDefectButton, openDefectButton, effortLoggerConsoleButton;
 	
 	@FXML
-	Label clockTitle, deliverableLabel, deliverableLabelEditor, numEntriesLabel, unsavedChangesLabel;
+	Label clockTitle, deliverableLabel, deliverableLabelEditor, numEntriesLabel, unsavedChangesLabel, statusDisplay, savedIndicatorLabel, projectDefectCounter;
 
 	
 	@FXML
@@ -109,7 +111,7 @@ public class ConsoleController implements Initializable{
 	ComboBox<LifeCycle> lifeCycleComboBox;
 	
 	@FXML
-	ComboBox<String> projectSelection, defectSelection;
+	ComboBox<String> projectSelection, defectSelection, fixedDefectList;
 	
 	// EDITOR
 	
@@ -137,16 +139,6 @@ public class ConsoleController implements Initializable{
 	Activity act = null;
 	
 	LogsController logControl;
-	
-	int index = 0;
-	boolean createNewDefect = false;
-	String currentInjection;
-	String currentRemoval;
-	String currentDefectCategory;
-	String currentProjectType = "Business Project";
-	String currentDefectSelected;
-	String currentTextAreaContent;
-	String currentDefectName;
 	
 	int numBusinessEntries = 0;
 	int numDevelopmentEntries = 0;
@@ -412,6 +404,7 @@ public class ConsoleController implements Initializable{
 		EffortLogs effortLog = new EffortLogs(act, project, lifeC, effortCat, deliver, MainUI.projectIndexes.get(project));
 		effortLog.setKeyWords(new ArrayList<>(keyWordList.getItems()));
 		MainUI.effLogs.add(effortLog);
+		resetIndexEditor();
 		logControl.populateLogs();
 	}
 	
@@ -687,6 +680,7 @@ public class ConsoleController implements Initializable{
 		saveChanges();
 	}
 	
+	// written by hardeek
 	// method to update effort logs in the editor
 	public void updateEntry() {
 		EffortLogs effortLog = effortLogsComboBox.getSelectionModel().getSelectedItem();
@@ -699,7 +693,6 @@ public class ConsoleController implements Initializable{
 		String end = stopTimeTextField.getText();
 		
 		int index = MainUI.effLogs.indexOf(effortLog);
-
 		
 		if(effortLog != null) {
 			effortLog.setDate(date);
@@ -711,15 +704,16 @@ public class ConsoleController implements Initializable{
 			java.time.LocalTime st = java.time.LocalTime.parse(start);
 			java.time.LocalTime en = java.time.LocalTime.parse(end);		
 			effortLog.setDelta((double) Duration.between(st, en).toSeconds() / 60.0);
+			
+			MainUI.effLogs.remove(index);
+			MainUI.effLogs.add(index, effortLog);
+			logControl.populateLogs();
+			
+			// Manually refresh the combo box items
+		    int selectedIndex = effortLogsComboBox.getSelectionModel().getSelectedIndex();
+		    effortLogsComboBox.getItems().set(selectedIndex, effortLog);
+		    effortLogsComboBox.getSelectionModel().select(selectedIndex);
 		}
-		MainUI.effLogs.remove(index);
-		MainUI.effLogs.add(index, effortLog);
-		logControl.populateLogs();
-		
-		// Manually refresh the combo box items
-	    int selectedIndex = effortLogsComboBox.getSelectionModel().getSelectedIndex();
-	    effortLogsComboBox.getItems().set(selectedIndex, effortLog);
-	    effortLogsComboBox.getSelectionModel().select(selectedIndex);
 	}
 	
 	public void deleteEntry(ActionEvent event) {
@@ -743,7 +737,7 @@ public class ConsoleController implements Initializable{
 		}
 		
 		updateNumEntries();
-		
+		resetIndexEditor();
 		logControl.populateLogs();
 	}
 	
@@ -762,6 +756,7 @@ public class ConsoleController implements Initializable{
 	
 	    effortLogsComboBox.getItems().clear(); // Clear the combo box items
 	    updateNumEntries();
+	    resetIndexEditor();
 	    logControl.populateLogs();
 	}
 	
@@ -785,7 +780,15 @@ public class ConsoleController implements Initializable{
 		unsavedChangesLabel.setText("These attributes have been saved.");
 	}
 	
-	// FIXME
+	public void resetIndexEditor() {
+		if (MainUI.effLogs != null) {
+			for (int i = 0; i < MainUI.effLogs.size(); i++) {
+				MainUI.effLogs.get(i).setIndex(i + 1);
+			}
+		}
+	}
+	
+	// written by david
 	public void splitEntries(ActionEvent event) {
 		EffortLogs effortLog = effortLogsComboBox.getSelectionModel().getSelectedItem();
     
@@ -797,54 +800,59 @@ public class ConsoleController implements Initializable{
 		String date = dateTextField.getText();
 		String start = startTimeTextField.getText();
 		String end = stopTimeTextField.getText();
+		LocalTime startTime = LocalTime.parse(start);
+		LocalTime endTime = LocalTime.parse(end);
 
 	    if (effortLog != null) {
 	
 	        // create two new entries
-	        EffortLogs firstHalfEntry = new EffortLogs(project, lifeC, effortCat, deliver, MainUI.projectIndexes.get(project) + 1);
+	        EffortLogs firstHalfEntry = new EffortLogs(project, lifeC, effortCat, deliver, MainUI.projectIndexes.get(project));
 	        EffortLogs secondHalfEntry = new EffortLogs(project, lifeC, effortCat, deliver, MainUI.projectIndexes.get(project) + 1);
+	        
+	        // Calculate the total duration of the original entry
+			Duration totalDuration = Duration.between(startTime, endTime);
+			
+			// Calculate the duration for each half
+			Duration halfDuration = totalDuration.dividedBy(2);
+			
+			// Calculate the split time
+			LocalTime splitTime = startTime.plus(halfDuration);
+			String split = splitTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 	        
 	        firstHalfEntry.setDate(date);
 	        firstHalfEntry.setStart(start);
-	        firstHalfEntry.setEnd(end);
+	        firstHalfEntry.setEnd(split);
 	        
 	        secondHalfEntry.setDate(date);
-	        secondHalfEntry.setStart(start);
+	        secondHalfEntry.setStart(split);
 	        secondHalfEntry.setEnd(end);
 	
 	        // add the new entries to the data structure
 	        MainUI.effLogs.add(firstHalfEntry);
 	        MainUI.effLogs.add(secondHalfEntry);
-	
-	        // refresh the combo box
-	        ObservableList<EffortLogs> businessLogs = FXCollections.observableArrayList();
-	        ObservableList<EffortLogs> developmentLogs = FXCollections.observableArrayList();
 	        
-	        if ("Business Project".equals(project.title)) {
-	        	businessLogs.add(firstHalfEntry);
-	        	businessLogs.add(secondHalfEntry);
-	        	effortLogsComboBox.getItems().add(firstHalfEntry);		// giving me issues
-	        	effortLogsComboBox.getItems().add(secondHalfEntry);
-	        }
-	        
-	        if ("Development Project".equals(project.title)) {
-	        	developmentLogs.add(firstHalfEntry);
-	        	developmentLogs.add(secondHalfEntry);
-	        	effortLogsComboBox.getItems().add(firstHalfEntry);		// giving me issues
-	        	effortLogsComboBox.getItems().add(secondHalfEntry);
-	        }
+	        effortLogsComboBox.getItems().addAll(firstHalfEntry, secondHalfEntry);
 	
 	        // Optionally, remove the original entry from the combo box
 	        effortLogsComboBox.getItems().remove(effortLog);
 	        // Optionally, remove the original entry from the data structure
 	        MainUI.effLogs.remove(effortLog);
 	        
+		    String projectsBox = projectComboBoxEditor.getSelectionModel().getSelectedItem().title;
+			if (projectsBox.equals("Business Project")){
+				numBusinessEntries++;
+			}
+			else if (projectsBox.equals("Development Project")) {
+				numDevelopmentEntries++;
+			}
+	        
 	    }
 	
 	    updateNumEntries();
+	    resetIndexEditor();
+	    logControl.populateLogs();
 	}
 	
-	// written by David
 	public void checkDateFormat() {
 	    int wrongFormat = 0; // Variable to track if the input is in the wrong format
 	    String dateText = dateTextField.getText(); // Get date text from dateTextField
@@ -897,83 +905,299 @@ public class ConsoleController implements Initializable{
 	 */
 	
 	
-	/* Start of Bryce's Changes
-	 * 
-	 * 
-	 * 
-	 */
 	// ***************
 	// Defect Console
 	// ***************
 	
-	public void setDefectLogsTable() {
-		indexColumn.setCellValueFactory(new PropertyValueFactory<>("index"));
-		projectNameColumn.setCellValueFactory(new PropertyValueFactory<>("projectName"));
-		projectTypeColumn.setCellValueFactory(new PropertyValueFactory<>("projectType"));
-		detailColumn.setCellValueFactory(new PropertyValueFactory<>("detail"));
-		injectedColumn.setCellValueFactory(new PropertyValueFactory<>("injected"));
-		removedColumn.setCellValueFactory(new PropertyValueFactory<>("removed"));
-		categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
+	// Member variables for managing defect log details
+	boolean createNewDefect;
+	DefectLogs selectedDefect;
+	String currentInjection;
+	String currentRemoval;
+	String currentDefectCategory;
+	String currentProjectType;
+	String currentDefectSelected;
+	String currentTextAreaContent;
+	String currentDefectName;
+	String defectStatus;
+	String fixedDefect;
+
+	// Sets default values for the defect log form elements.
+	public void setDefaultValues() {
+		currentProjectType = "Business Project";
+		defectStatus = "Closed";
+		createNewDefect = false;
+		selectedDefect = null;
+		
+	    // Set default values for project selection and defect selection
+	    projectSelection.setValue("Business Project");
+	    defectCounter("Business Project");
+	    
+	    defectSelection.setValue("- no defect selected -");
+	    fixedDefectList.setValue("- no defect selected -");
+		statusDisplay.setText("Status: Closed");
+	    
+	    // Clear text fields and text area
+	    defectNameTextField.setText("");
+	    defectSymptomsTextArea.setText("");
+	    
+	    // Clear selections in list views
+	    injectionStepListView.getSelectionModel().clearSelection();
+	    removalStepListView.getSelectionModel().clearSelection();
+	    defectCategoryListView.getSelectionModel().clearSelection();
 	}
-	
+
+	// Configures the columns of the defect logs table with the appropriate data properties.
+	public void setDefectLogsTable() {
+	    // Setting up columns for the table view
+	    indexColumn.setCellValueFactory(new PropertyValueFactory<>("index"));
+	    projectNameColumn.setCellValueFactory(new PropertyValueFactory<>("projectName"));
+	    projectTypeColumn.setCellValueFactory(new PropertyValueFactory<>("projectType"));
+	    detailColumn.setCellValueFactory(new PropertyValueFactory<>("detail"));
+	    injectedColumn.setCellValueFactory(new PropertyValueFactory<>("injected"));
+	    removedColumn.setCellValueFactory(new PropertyValueFactory<>("removed"));
+	    categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
+	    statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+	    fixedColumn.setCellValueFactory(new PropertyValueFactory<>("fix"));
+	}
+
+	// Populates the defect logs table with data from MainUI's defectLogs list.
 	public void populateDefectLogs() {
+	    // Check if defectLogs is not null and populate the table view
 		if(MainUI.defectLogs != null) {
 			ObservableList<DefectLogs> defectLogsObserve = FXCollections.observableArrayList(MainUI.defectLogs);
-			defectLogsTable.setItems(defectLogsObserve);
+			System.out.println(MainUI.defectLogs);
+			if(!defectLogsTable.getItems().isEmpty()) {
+				defectLogsTable.getItems().clear();
+			}
+			defectLogsTable.getItems().addAll(defectLogsObserve);
+		}
+	}
+
+	// Creates a new defect log and adds it to the MainUI's defectLogs list.
+	public void createDefectLog() {
+	    // Initialize defectLogs in MainUI if null
+	    if (MainUI.defectLogs == null) {
+	        MainUI.defectLogs = new ArrayList<DefectLogs>();
+	    }
+	    
+	    // Create a new defect log and add it to the defectLogs list
+	    DefectLogs defectLog = new DefectLogs(MainUI.defectLogs.size() + 1, currentDefectName, currentProjectType, currentTextAreaContent, 
+	    									  currentInjection, currentRemoval, currentDefectCategory, defectStatus,fixedDefect);
+	    MainUI.defectLogs.add(defectLog);
+	    selectedDefect = defectLog;
+	}
+
+	// Updates the currently selected defect log with the current form values.
+	public void updateDefectLog() {
+	    // Update the selected defect log's properties with current values
+	    selectedDefect.setProjectName(currentDefectName);
+	    selectedDefect.setProjectType(currentProjectType);
+	    selectedDefect.setDetail(currentTextAreaContent);
+	    selectedDefect.setInjected(currentInjection);
+	    selectedDefect.setRemoved(currentRemoval);
+	    selectedDefect.setCategory(currentDefectCategory);
+	    selectedDefect.setStatus(defectStatus);
+	    selectedDefect.setFix(fixedDefect);
+	}
+	
+	//Resets the indexes of defect logs in MainUI.defectLogs to their current positions and refreshes the display.
+	public void resetIndexValues() {
+	    if (MainUI.defectLogs != null) {
+	        for (int i = 0; i < MainUI.defectLogs.size(); ++i) {
+	            MainUI.defectLogs.get(i).setIndex(i + 1);
+	        }
+	    }
+
+	    populateDefectLogs(); // Refresh the display of defect logs
+	}
+	
+	// Styles the save indicator depending on if the information is saved or not
+	public void informationSaved(boolean saved) {
+		if (!saved) {
+			savedIndicatorLabel.setStyle("-fx-background-color: red; -fx-text-fill: white;");
+			savedIndicatorLabel.setText("These attributes have not been saved");
+		}
+		else {
+			savedIndicatorLabel.setStyle("");
+			savedIndicatorLabel.setText("These attributes have been saved");
 		}
 	}
 	
-	public void createDefectLog() {
-	if (MainUI.defectLogs == null) {
-		MainUI.defectLogs = new ArrayList<DefectLogs>();
-	}
-	DefectLogs defectLog = new DefectLogs(index, currentDefectCategory, currentProjectType, currentTextAreaContent, currentInjection, currentRemoval, currentDefectCategory);
-	MainUI.defectLogs.add(defectLog);
-	}	
+	// Counts the number of defects attached to a particular project type
+	public void defectCounter(String defectType) {
+		int counter = 0;
 		
+		if (MainUI.defectLogs != null) {
+			for (int i = 0; i < MainUI.defectLogs.size(); ++i) {
+				if (MainUI.defectLogs.get(i).getProjectType().equals(defectType)) {
+					++counter;
+				}
+			}
+		}
+		
+		if (counter > 0) {
+			projectDefectCounter.setText(counter + " defects for this project.");
+		}
+		else {
+			projectDefectCounter.setText("No defects for this project.");
+		}
+	}
+	
+	// Assigns all the information allocated to the defect selected to defect variables
+	public void retrieveDefectInfo() {
+        // Update form fields to reflect the details of the selected defect
+        currentProjectType = selectedDefect.getProjectType();
+        projectSelection.setValue(currentProjectType);
+        defectCounter(currentProjectType);
+        
+        currentDefectName = selectedDefect.getProjectName();
+        defectNameTextField.setText(currentDefectName);
+        
+        currentTextAreaContent = selectedDefect.getDetail();
+        defectSymptomsTextArea.setText(currentTextAreaContent);
+        
+        currentInjection = selectedDefect.getInjected();
+        injectionStepListView.getSelectionModel().select(currentInjection);
+        
+        currentRemoval = selectedDefect.getRemoved();
+        removalStepListView.getSelectionModel().select(currentRemoval);
+        
+        currentDefectCategory = selectedDefect.getCategory();
+        defectCategoryListView.getSelectionModel().select(currentDefectCategory);
+        
+        fixedDefect = selectedDefect.getFix();
+        fixedDefectList.getSelectionModel().select(fixedDefect);
+        
+        defectStatus = selectedDefect.getStatus();
+        if (defectStatus.equals("Closed")) {
+			statusDisplay.setText("Status: Closed");
+        }
+        else {
+        	statusDisplay.setText("Status: Opened");
+        }
+	}
 	
 	public void defectInit() {
-		
-		
 		// String arrays containing text to populate list views
 		String[] projectOptions = {"Business Project", "Development Project"};
 		String[] businessOptions = {"Planning", "Information Gathering", "Information Understanding", "Verifying", "Outlining"};
 		String[] developmentOptions = {"Problem Understanding", "Conceptual Design Plan", "Requirements", "Conceptual Design", "Conceptual Design Review"};
 		String[] defectCategoryOptions = {"Not specified", "10 Documentation", "20 Syntax", "30 Build, Package", "40 Assignment"};
 		
-		// Populate ComboBox with project type & set default
+		// Populate ComboBox with project type
 		projectSelection.getItems().addAll(projectOptions);
-		projectSelection.setValue("Business Project");
+		
+		// Add default option to defect & fixed defect selection
+		defectSelection.getItems().addAll("- no defect selected -");
+		fixedDefectList.getItems().addAll("- no defect selected -");
+		
+		// Set default values
+		setDefaultValues();
 		
 		// Populate ListViews with options
 		injectionStepListView.getItems().addAll(businessOptions);		
 		removalStepListView.getItems().addAll(businessOptions);
 		defectCategoryListView.getItems().addAll(defectCategoryOptions);
 		
-		// Add an action listener to determine if the user wants to make a new defect log
-		createDefectButton.setOnAction(event -> {
-			createNewDefect = true;
-			System.out.println("Create New Defect");
-			currentDefectName = "- new defect -";
-			defectNameTextField.setText("- new defect -");
+		// Add an action listener to clear the current defect log if activated
+		clearDefectLogButton.setOnAction(event -> {
+			setDefaultValues();
 		});
 		
-		// Finish the creation of the new defect
-		updateDefectButton.setOnAction(event -> {
-			
-			if (createNewDefect) {
-				++index;
-				defectSelection.getItems().addAll(currentDefectName);
-				defectSelection.setValue(currentDefectName);
-				System.out.println("Success: Defect Created");
+		openDefectButton.setOnAction(event -> {
+			statusDisplay.setText("Status: Opened");
+			defectStatus = "Opened";
+			informationSaved(!(createNewDefect || (selectedDefect != null)));
+		});
+		
+		closeDefectButton.setOnAction(event -> {
+			statusDisplay.setText("Status: Closed");
+			defectStatus = "Closed";
+			informationSaved(!(createNewDefect || (selectedDefect != null)));
+		});
+		
+		// Add an action listener to delete the current defect log if activated
+		deleteCurrentDefect.setOnAction(event -> {
+			if (selectedDefect != null) {
+				String tempName = selectedDefect.getProjectName();
 				
-				createDefectLog();
-				populateDefectLogs();
+				MainUI.defectLogs.remove(selectedDefect);
+				setDefaultValues();
+				resetIndexValues();
+				
+				defectSelection.getItems().remove(tempName);
+				fixedDefectList.getItems().remove(tempName);
+				
+				System.out.println("Success: Defect Deleted");
 			}
 			else {
-				System.out.println("Error: No New Defects Created");
+				System.out.println("Error: Defect Not Selected");
 			}
+		});
+		
+		// Add an action listener to determine if the user wants to make a new defect log
+		createDefectButton.setOnAction(event -> {
+			setDefaultValues();
 			
+			createNewDefect = true;
+			System.out.println("Create New Defect");
+			
+			currentDefectName = "- new defect -";
+			defectNameTextField.setText("- new defect -");
+			
+			statusDisplay.setText("Status: Opened");
+			defectStatus = "Opened";
+			
+			informationSaved(false);
+		});
+		
+		// Add an action listener to switch to EffortLog Console if activated
+		effortLoggerConsoleButton.setOnAction(event -> {
+			switchToEffortConsole(event);
+		});
+		
+		// Set an action on the updateDefectButton
+		updateDefectButton.setOnAction(event -> {
+		    if (createNewDefect) { // Check if creating a new defect
+		        boolean found = false; // Flag to detect if the project name already exists
+
+		        // Iterate through defectLogs in MainUI to find any matching project name
+		        if (MainUI.defectLogs != null) {
+		            for (int i = 0; i < MainUI.defectLogs.size(); ++i) {
+		                if (MainUI.defectLogs.get(i).getProjectName().equals(currentDefectName)) {
+		                    found = true; // Set found to true if a duplicate project name is found
+		                    break;
+		                }
+		            }
+		        }
+
+		        if (found) {
+		            System.out.println("Error: Project Name Already Exists"); // Log error if duplicate is found
+		        } else {
+		            // Add the new defect name to the selection and select it
+		            defectSelection.getItems().addAll(currentDefectName);
+		            fixedDefectList.getItems().addAll(currentDefectName);
+		            defectSelection.setValue(currentDefectName);
+
+		            createDefectLog(); // Create a new defect log
+		            populateDefectLogs(); // Refresh the defect logs display
+
+		            System.out.println("Success: Defect Created"); // Log success message
+		            informationSaved(true);
+		            createNewDefect = false;
+		            defectCounter(currentProjectType);
+		        }
+		    } else if (selectedDefect != null) {
+		        // Update the currently selected defect log if one is selected
+		        updateDefectLog(); // Update the defect log
+		        populateDefectLogs(); // Refresh the defect logs display
+
+		        System.out.println("Success: Defect Updated"); // Log success message for update
+		        informationSaved(true);
+		    } else {
+		        System.out.println("Error: No Changes Made"); // Log error if no action is performed
+		    }
 		});
 		
 		// Add event listener to track user selection for project type & populate list views accordingly
@@ -997,16 +1221,42 @@ public class ConsoleController implements Initializable{
 					injectionStepListView.getItems().addAll(developmentOptions);
 					removalStepListView.getItems().addAll(developmentOptions);
 				}
+				
+				informationSaved(!(createNewDefect || (selectedDefect != null)));
+				defectCounter(currentProjectType);
 			}
 		});
 		
 		// Add event listener to track user selection for existing defect logs
 		defectSelection.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
-				currentDefectSelected = injectionStepListView.getSelectionModel().getSelectedItem();
-			}
+		    @Override
+		    public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
+		        // Retrieve the selected defect name and store it in currentDefectSelected
+		        currentDefectSelected = defectSelection.getSelectionModel().getSelectedItem();
+		        System.out.println("Defect Selected: " + currentDefectSelected);
+		        
+		        // Check if the default option is selected
+		        if (currentDefectSelected.equals("- no defect selected -")) {
+		            setDefaultValues(); // Reset form values to defaults
+		        } 
+		        else {
+		            // Iterate through defectLogs to find the selected defect
+		            if (MainUI.defectLogs != null) {
+		                for (int i = 0; i < MainUI.defectLogs.size(); ++i) {
+		                    selectedDefect = MainUI.defectLogs.get(i);
+		                    
+		                    // Check if the defect name matches the selected defect
+		                    if (selectedDefect.getProjectName().equals(currentDefectSelected)) {
+		                    	retrieveDefectInfo();
+		                    	informationSaved(true);
+		                        break; // Exit after appropriate changes have been made
+		                    }
+		                }
+		            }
+		        }
+		    }
 		});
+
 		
 		// Add event listener to track user input for the Defect Name TextField section
 		defectNameTextField.textProperty().addListener(new ChangeListener<String>() {
@@ -1014,6 +1264,8 @@ public class ConsoleController implements Initializable{
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				currentDefectName = newValue;
 				System.out.println("TextField Text Changed: \n" + currentDefectName);
+				
+				informationSaved(!(createNewDefect || (selectedDefect != null)));
 			}
 		});
 		
@@ -1023,6 +1275,8 @@ public class ConsoleController implements Initializable{
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				currentTextAreaContent = newValue;
 				System.out.println("TextArea Text Changed: \n" + currentTextAreaContent);
+				
+				informationSaved(!(createNewDefect || (selectedDefect != null)));
 			}
 		});
 		
@@ -1033,6 +1287,8 @@ public class ConsoleController implements Initializable{
 				// Based on user input, set the current injection value
 				currentInjection = injectionStepListView.getSelectionModel().getSelectedItem();
 				System.out.println("Step when injected: " + currentInjection);
+				
+				informationSaved(!(createNewDefect || (selectedDefect != null)));
 			}
 		});
 		
@@ -1043,6 +1299,8 @@ public class ConsoleController implements Initializable{
 				// Based on user input, set the current removal value
 				currentRemoval = removalStepListView.getSelectionModel().getSelectedItem();
 				System.out.println("Step when removed: " + currentRemoval);
+				
+				informationSaved(!(createNewDefect || (selectedDefect != null)));
 			}
 		});
 		
@@ -1053,6 +1311,17 @@ public class ConsoleController implements Initializable{
 				// Based on user input, set the current defect category value
 				currentDefectCategory = defectCategoryListView.getSelectionModel().getSelectedItem();
 				System.out.println("Defect Category: " + currentDefectCategory);
+				
+				informationSaved(!(createNewDefect || (selectedDefect != null)));
+			}
+		});
+		
+		fixedDefectList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
+				fixedDefect = fixedDefectList.getSelectionModel().getSelectedItem();
+				
+				informationSaved(!(createNewDefect || (selectedDefect != null)));
 			}
 		});
 		

@@ -49,8 +49,16 @@ public class Activity {
 		return start.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 	}
 	
+	public LocalDateTime getStartTimeTemp() {
+		return start;
+	}
+	
 	public String getEndTime() {
 		return end.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+	}
+	
+	public LocalDateTime getEndTimeTemp() {
+		return end;
 	}
 	
 	public String getDeltaTime() {
