@@ -14,11 +14,8 @@ package effortLoggerV2;
 
 import java.net.URL;
 import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,7 +25,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -138,6 +134,9 @@ public class ConsoleController implements Initializable{
 	@FXML
 	Tab effortLogEditorTab;
 	
+	@FXML
+	Tab defectConsoleTab;
+	
 	Activity act = null;
 	
 	LogsController logControl;
@@ -157,6 +156,10 @@ public class ConsoleController implements Initializable{
 		tabPane.getSelectionModel().select(effortLogEditorTab);
 	}
 
+	public void switchToDefectConsole(ActionEvent event) {
+		TabPane tabPane = effortConsoleTab.getTabPane();
+		tabPane.getSelectionModel().select(defectConsoleTab);
+	}
 
 	
 	/* Start of Dayton's Changes
