@@ -1,0 +1,970 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Scene?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.stage.Stage?>
+
+<Stage title="Effort Logger V2" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="effortLoggerV2.ConsoleController">
+   <scene>
+      <Scene>
+         <root>
+            <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="525.0" prefWidth="700.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab fx:id="effortConsoleTab" text="EffortConsole">
+                     <content>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </VBox.margin>
+                                       <children>
+                                          <HBox alignment="CENTER" prefHeight="27.0" prefWidth="578.0" style="-fx-border-color: transparent transparent black transparent;">
+                                             <children>
+                                                <Label text="Effort Logger Console">
+                                                   <font>
+                                                      <Font name="System Bold" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                          <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
+                                             <children>
+                                                <HBox fx:id="clockBox" alignment="CENTER" prefHeight="21.0" prefWidth="558.0" style="-fx-background-color: red;">
+                                                   <VBox.margin>
+                                                      <Insets bottom="10.0" top="10.0" />
+                                                   </VBox.margin>
+                                                   <children>
+                                                      <Label fx:id="clockTitle" text="Clock is stopped" textFill="WHITE">
+                                                         <font>
+                                                            <Font name="System Bold" size="16.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </HBox>
+                                                <Label text="1. When you start a new activity, press the &quot;Start an Activity&quot; button.">
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </Label>
+                                                <HBox prefHeight="18.0" prefWidth="558.0">
+                                                   <VBox.margin>
+                                                      <Insets bottom="15.0" />
+                                                   </VBox.margin>
+                                                   <children>
+                                                      <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <Button mnemonicParsing="false" onAction="#startActivity" text="           Start an Activity           " />
+                                                         </children>
+                                                         <padding>
+                                                            <Insets left="25.0" />
+                                                         </padding>
+                                                      </VBox>
+                                                      <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <Button mnemonicParsing="false" text="           Proceed to Defect Log Console           ">
+                                                               <VBox.margin>
+                                                                  <Insets />
+                                                               </VBox.margin>
+                                                            </Button>
+                                                         </children>
+                                                      </VBox>
+                                                   </children>
+                                                </HBox>
+                                                <Label text="2. Select the project, life cycle step, effort category, and deliverable from the following list:">
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                   <VBox.margin>
+                                                      <Insets bottom="10.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <HBox prefHeight="35.0" prefWidth="558.0">
+                                                   <children>
+                                                      <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <Label text="Project:">
+                                                               <font>
+                                                                  <Font name="System Bold" size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <ComboBox fx:id="projectComboBox" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="264.0">
+                                                               <VBox.margin>
+                                                                  <Insets right="10.0" />
+                                                               </VBox.margin>
+                                                            </ComboBox>
+                                                         </children>
+                                                         <HBox.margin>
+                                                            <Insets />
+                                                         </HBox.margin>
+                                                         <padding>
+                                                            <Insets left="25.0" />
+                                                         </padding>
+                                                      </VBox>
+                                                      <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <Label text="Life Cycle Step:">
+                                                               <font>
+                                                                  <Font name="System Bold" size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <ComboBox fx:id="lifeCycleComboBox" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="307.0" />
+                                                         </children>
+                                                      </VBox>
+                                                   </children>
+                                                </HBox>
+                                                <HBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="45.0" prefWidth="648.0">
+                                                   <children>
+                                                      <VBox maxHeight="42.0" prefHeight="37.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <Label text="Effort Category:">
+                                                               <font>
+                                                                  <Font name="System Bold" size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <ComboBox fx:id="effortCategoryComboBox" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="201.0" />
+                                                         </children>
+                                                         <padding>
+                                                            <Insets left="25.0" />
+                                                         </padding>
+                                                         <HBox.margin>
+                                                            <Insets right="10.0" />
+                                                         </HBox.margin>
+                                                      </VBox>
+                                                      <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <Label fx:id="deliverableLabel">
+                                                               <font>
+                                                                  <Font name="System Bold" size="12.0" />
+                                                               </font></Label>
+                                                            <ComboBox fx:id="deliverableComboBox" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="315.0" />
+                                                         </children>
+                                                         <HBox.margin>
+                                                            <Insets bottom="30.0" />
+                                                         </HBox.margin>
+                                                      </VBox>
+                                                   </children>
+                                                </HBox>
+                                                <VBox>
+                                                   <children>
+                                                      <Label fx:id="otherLabel" disable="true" text="Other:" visible="false">
+                                                         <font>
+                                                            <Font name="System Bold" size="12.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <TextField fx:id="otherTextField" onAction="#setOtherComboBox" visible="false" />
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets bottom="10.0" />
+                                                   </VBox.margin>
+                                                </VBox>
+                                                <HBox>
+                                                   <children>
+                                                      <VBox prefWidth="300.0">
+                                                         <children>
+                                                            <Label alignment="CENTER" text="Enter Activity Key Words:">
+                                                               <font>
+                                                                  <Font name="System Bold" size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <VBox alignment="TOP_CENTER">
+                                                               <children>
+                                                                  <TextField fx:id="keyWordTextField" onAction="#addKeyWords" />
+                                                                  <HBox alignment="CENTER">
+                                                                     <children>
+                                                                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#addKeyWords" text="Submit Key Words" />
+                                                                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#clearKeyWords" text="Clear">
+                                                                           <HBox.margin>
+                                                                              <Insets left="10.0" right="10.0" />
+                                                                           </HBox.margin>
+                                                                        </Button>
+                                                                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#deleteKeyWord" text="Delete" />
+                                                                     </children>
+                                                                     <VBox.margin>
+                                                                        <Insets top="10.0" />
+                                                                     </VBox.margin>
+                                                                  </HBox>
+                                                               </children>
+                                                            </VBox>
+                                                         </children>
+                                                         <HBox.margin>
+                                                            <Insets right="24.0" />
+                                                         </HBox.margin>
+                                                      </VBox>
+                                                      <VBox>
+                                                         <children>
+                                                            <Label text="Activity's Key Words">
+                                                               <font>
+                                                                  <Font name="System Bold" size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <ListView fx:id="keyWordList" editable="true" prefHeight="125.0" prefWidth="300.0" />
+                                                         </children>
+                                                         <HBox.margin>
+                                                            <Insets left="24.0" />
+                                                         </HBox.margin>
+                                                      </VBox>
+                                                   </children>
+                                                </HBox>
+                                                <Label text="3. Press the &quot;Stop this activity&quot; to generate an effort log entry using the attributes above.">
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </Label>
+                                                <HBox prefHeight="19.0" prefWidth="548.0">
+                                                   <children>
+                                                      <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <Button mnemonicParsing="false" onAction="#endActivity" text="           Stop an Activity           " />
+                                                         </children>
+                                                         <padding>
+                                                            <Insets left="25.0" />
+                                                         </padding>
+                                                      </VBox>
+                                                      <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <Button mnemonicParsing="false" onAction="#switchToEffortLogEditor" text="        Proceed to Effort Log Editor        " />
+                                                         </children>
+                                                         <HBox.margin>
+                                                            <Insets bottom="15.0" />
+                                                         </HBox.margin>
+                                                      </VBox>
+                                                   </children>
+                                                </HBox>
+                                                <Label text="4. Unless you are done for the day, it is best to perform steps 1 and 2 above before resuming work.">
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                             <padding>
+                                                <Insets left="15.0" right="15.0" />
+                                             </padding>
+                                          </VBox>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                </Tab>
+                <Tab fx:id="effortLogEditorTab" text="EffortLogEditor">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </VBox.margin>
+                                       <children>
+                                          <HBox alignment="CENTER" prefHeight="26.0" prefWidth="578.0" style="-fx-border-color: transparent transparent black transparent;">
+                                             <children>
+                                                <Label text="Effort Log Editor">
+                                                   <font>
+                                                      <Font name="System Bold" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                          <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
+                                             <children>
+                                                <HBox prefHeight="37.0" prefWidth="578.0">
+                                                   <children>
+                                                      <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <Label text="1. Select the Project in order to edit it's Effort Log.">
+                                                               <font>
+                                                                  <Font name="System Bold" size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <VBox prefHeight="200.0" prefWidth="100.0">
+                                                               <children>
+                                                                  <ComboBox fx:id="projectComboBoxEditor" editable="false" maxWidth="1.7976931348623157E308" onAction="#editEffortLog" prefWidth="150.0" />
+                                                                  <Label fx:id="numEntriesLabel">
+                                                                     <font>
+                                                                        <Font size="12.0" />
+                                                                     </font>
+                                                                  </Label>
+                                                               </children>
+                                                               <VBox.margin>
+                                                                  <Insets left="30.0" />
+                                                               </VBox.margin>
+                                                            </VBox>
+                                                         </children>
+                                                         <HBox.margin>
+                                                            <Insets right="50.0" />
+                                                         </HBox.margin>
+                                                      </VBox>
+                                                      <VBox prefHeight="42.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <Label text="2.a. Clear this Project's Effort Log.">
+                                                               <font>
+                                                                  <Font name="System Bold Italic" size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Button mnemonicParsing="false" onAction="#clearEntries" text="          Clear This Effort Log          " />
+                                                         </children>
+                                                      </VBox>
+                                                   </children>
+                                                </HBox>
+                                                <HBox prefHeight="53.0" prefWidth="578.0">
+                                                   <children>
+                                                      <VBox prefHeight="127.0" prefWidth="578.0" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <Label text="2.b. Select the Effort Log Entry to be modified and make it the Current Effort Log Entry">
+                                                               <font>
+                                                                  <Font name="System Bold" size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
+                                                               <children>
+                                                                  <ComboBox fx:id="effortLogsComboBox" editable="false" maxWidth="1.7976931348623157E308" onAction="#setTextfields" prefHeight="25.0" prefWidth="584.0">
+                                                                     <VBox.margin>
+                                                                        <Insets />
+                                                                     </VBox.margin>
+                                                                  </ComboBox>
+                                                                  <Label text="nn. yyyy-mm-dd (hh:mm:ss-hh:mm:ss) &lt;Life Cycle Step&gt;: &lt;Effort Category&gt;: &lt;Details&gt;">
+                                                                     <font>
+                                                                        <Font size="12.0" />
+                                                                     </font>
+                                                                  </Label>
+                                                               </children>
+                                                               <VBox.margin>
+                                                                  <Insets left="30.0" />
+                                                               </VBox.margin>
+                                                            </VBox>
+                                                         </children>
+                                                      </VBox>
+                                                   </children>
+                                                </HBox>
+                                                <HBox prefHeight="48.0" prefWidth="538.0">
+                                                   <children>
+                                                      <VBox prefHeight="49.0" prefWidth="538.0" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <Label text="3.a. Modify the Current Effort Log Entry's attributes and press &quot;Update This Entry&quot; when finished.">
+                                                               <font>
+                                                                  <Font name="System Bold" size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <HBox prefHeight="100.0" prefWidth="508.0">
+                                                               <children>
+                                                                  <HBox prefHeight="85.0" prefWidth="192.0">
+                                                                     <children>
+                                                                        <Label text="Date:  ">
+                                                                           <font>
+                                                                              <Font name="System Bold" size="12.0" />
+                                                                           </font>
+                                                                        </Label>
+                                                                        <VBox alignment="TOP_RIGHT" prefHeight="85.0" prefWidth="105.0" HBox.hgrow="ALWAYS">
+                                                                           <children>
+                                                                              <TextField fx:id="dateTextField" maxWidth="1.7976931348623157E308" onAction="#unsavedChanges" prefHeight="8.0" prefWidth="109.0">
+                                                                                 <padding>
+                                                                                    <Insets top="1.0" />
+                                                                                 </padding>
+                                                                              </TextField>
+                                                                              <Label text="yyyy-mm-dd">
+                                                                                 <font>
+                                                                                    <Font size="12.0" />
+                                                                                 </font>
+                                                                              </Label>
+                                                                           </children>
+                                                                           <padding>
+                                                                              <Insets right="20.0" />
+                                                                           </padding>
+                                                                        </VBox>
+                                                                     </children>
+                                                                  </HBox>
+                                                                  <HBox prefHeight="85.0" prefWidth="213.0">
+                                                                     <children>
+                                                                        <Label text="Start Time:  ">
+                                                                           <font>
+                                                                              <Font name="System Bold" size="12.0" />
+                                                                           </font>
+                                                                        </Label>
+                                                                        <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                                                           <children>
+                                                                              <TextField fx:id="startTimeTextField" maxWidth="1.7976931348623157E308" onAction="#unsavedChanges">
+                                                                                 <padding>
+                                                                                    <Insets top="1.0" />
+                                                                                 </padding>
+                                                                              </TextField>
+                                                                              <Label text="hh:mm:ss">
+                                                                                 <font>
+                                                                                    <Font size="12.0" />
+                                                                                 </font>
+                                                                              </Label>
+                                                                           </children>
+                                                                           <padding>
+                                                                              <Insets right="20.0" />
+                                                                           </padding>
+                                                                        </VBox>
+                                                                     </children>
+                                                                  </HBox>
+                                                                  <HBox prefHeight="40.0" prefWidth="211.0">
+                                                                     <children>
+                                                                        <Label text="Stop Time:  ">
+                                                                           <font>
+                                                                              <Font name="System Bold" size="12.0" />
+                                                                           </font>
+                                                                        </Label>
+                                                                        <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                                                           <children>
+                                                                              <TextField fx:id="stopTimeTextField" maxWidth="1.7976931348623157E308" onAction="#unsavedChanges">
+                                                                                 <padding>
+                                                                                    <Insets top="1.0" />
+                                                                                 </padding>
+                                                                              </TextField>
+                                                                              <Label text="hh:mm:ss">
+                                                                                 <font>
+                                                                                    <Font size="12.0" />
+                                                                                 </font>
+                                                                              </Label>
+                                                                           </children>
+                                                                           <padding>
+                                                                              <Insets right="20.0" />
+                                                                           </padding>
+                                                                        </VBox>
+                                                                     </children>
+                                                                  </HBox>
+                                                               </children>
+                                                               <VBox.margin>
+                                                                  <Insets left="30.0" />
+                                                               </VBox.margin>
+                                                            </HBox>
+                                                         </children>
+                                                      </VBox>
+                                                   </children>
+                                                </HBox>
+                                                <HBox prefHeight="52.0" prefWidth="508.0">
+                                                   <children>
+                                                      <VBox prefHeight="64.0" prefWidth="508.0" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <Label text="Life Cycle Step:">
+                                                               <font>
+                                                                  <Font name="System Bold" size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <ComboBox fx:id="lifeCycleComboBoxEditor" editable="false" maxWidth="1.7976931348623157E308" onAction="#unsavedChanges" prefHeight="4.0" prefWidth="258.0">
+                                                               <VBox.margin>
+                                                                  <Insets right="250.0" />
+                                                               </VBox.margin>
+                                                            </ComboBox>
+                                                            <Label text="Effort Category:">
+                                                               <font>
+                                                                  <Font name="System Bold" size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <HBox prefHeight="15.0" prefWidth="508.0">
+                                                               <children>
+                                                                  <ComboBox fx:id="effortCategoryComboBoxEditor" editable="false" onAction="#unsavedChanges" prefWidth="150.0">
+                                                                     <HBox.margin>
+                                                                        <Insets right="15.0" />
+                                                                     </HBox.margin>
+                                                                  </ComboBox>
+                                                                  <ComboBox fx:id="deliverableComboBoxEditor" editable="false" onAction="#unsavedChanges" prefHeight="25.0" prefWidth="357.0" />
+                                                               </children>
+                                                            </HBox>
+                                                         </children>
+                                                         <HBox.margin>
+                                                            <Insets bottom="30.0" />
+                                                         </HBox.margin>
+                                                      </VBox>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets left="30.0" />
+                                                   </VBox.margin>
+                                                </HBox>
+                                                <HBox prefHeight="0.0" prefWidth="594.0">
+                                                   <children>
+                                                      <Label fx:id="unsavedChangesLabel" text="These attributes have been saved.">
+                                                         <font>
+                                                            <Font name="System Bold" size="12.0" />
+                                                         </font>
+                                                         <HBox.margin>
+                                                            <Insets right="50.0" />
+                                                         </HBox.margin>
+                                                      </Label>
+                                                      <Button fx:id="updateEntryButton" mnemonicParsing="false" onAction="#updateCheckDateSave" text="      Update This Entry      " />
+                                                   </children>
+                                                   <padding>
+                                                      <Insets left="30.0" />
+                                                   </padding>
+                                                </HBox>
+                                                <HBox prefHeight="35.0" prefWidth="594.0">
+                                                   <children>
+                                                      <VBox prefHeight="41.0" prefWidth="594.0" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <Label text="3.b. Delete the Current Effort Log Entry">
+                                                               <font>
+                                                                  <Font name="System Bold" size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Button mnemonicParsing="false" onAction="#deleteEntry" text="      Delete This Entry      " />
+                                                         </children>
+                                                         <HBox.margin>
+                                                            <Insets bottom="10.0" />
+                                                         </HBox.margin>
+                                                      </VBox>
+                                                   </children>
+                                                </HBox>
+                                                <HBox prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <Label text="3.c. Split the Current Effort Log Entry into two entries">
+                                                               <font>
+                                                                  <Font name="System Bold" size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Button mnemonicParsing="false" onAction="#splitEntries" text="      Split This Entry into Two Entries      " />
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <Label text="4. Proceed to the Effort Log Console">
+                                                               <font>
+                                                                  <Font name="System Bold" size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Button mnemonicParsing="false" onAction="#switchToEffortConsole" text="      Proceed to the Effort Log Console      " />
+                                                         </children>
+                                                      </VBox>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                             <padding>
+                                                <Insets left="20.0" right="20.0" top="15.0" />
+                                             </padding>
+                                          </VBox>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                  <Tab text="DefectConsole">
+			         <content>
+			            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+			               <children>
+			                  <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+			                     <children>
+			                        <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
+			                           <VBox.margin>
+			                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+			                           </VBox.margin>
+			                           <children>
+			                              <HBox alignment="CENTER" prefHeight="26.0" prefWidth="578.0" style="-fx-border-color: transparent transparent black transparent;">
+			                                 <children>
+			                                    <Label text="Defect Console">
+			                                       <font>
+			                                          <Font name="System Bold" size="16.0" />
+			                                       </font>
+			                                    </Label>
+			                                 </children>
+			                              </HBox>
+			                              <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
+			                                 <children>
+			                                    <HBox prefHeight="49.0" prefWidth="594.0">
+			                                       <children>
+			                                          <VBox prefHeight="40.0" prefWidth="443.0" HBox.hgrow="ALWAYS">
+			                                             <children>
+			                                                <Label text="1. Select the Project">
+			                                                   <font>
+			                                                      <Font name="System Bold" size="12.0" />
+			                                                   </font>
+			                                                </Label>
+			                                                <ComboBox fx:id="projectSelection" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="381.0" VBox.vgrow="ALWAYS">
+			                                                   <VBox.margin>
+			                                                      <Insets left="30.0" />
+			                                                   </VBox.margin>
+			                                                </ComboBox>
+			                                                <Label fx:id="projectDefectCounter" text="No defects for this project.">
+			                                                   <VBox.margin>
+			                                                      <Insets left="30.0" />
+			                                                   </VBox.margin>
+			                                                   <font>
+			                                                      <Font size="12.0" />
+			                                                   </font>
+			                                                </Label>
+			                                             </children>
+			                                             <HBox.margin>
+			                                                <Insets right="50.0" />
+			                                             </HBox.margin>
+			                                          </VBox>
+			                                          <VBox prefHeight="40.0" prefWidth="287.0" HBox.hgrow="ALWAYS">
+			                                             <children>
+			                                                <Label text="2.a. Clear this Project's Defect Log.">
+			                                                   <font>
+			                                                      <Font name="System Bold" size="12.0" />
+			                                                   </font>
+			                                                </Label>
+			                                                <Button fx:id="clearDefectLogButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="170.0" text="Clear this Defect Log">
+			                                                   <VBox.margin>
+			                                                      <Insets left="30.0" />
+			                                                   </VBox.margin>
+			                                                </Button>
+			                                             </children>
+			                                             <HBox.margin>
+			                                                <Insets />
+			                                             </HBox.margin>
+			                                          </VBox>
+			                                       </children>
+			                                    </HBox>
+			                                    <HBox prefHeight="28.0" prefWidth="594.0">
+			                                       <children>
+			                                          <VBox prefHeight="21.0" prefWidth="594.0" HBox.hgrow="ALWAYS">
+			                                             <children>
+			                                                <Label text="2.b. Select one of the following defects to make it the Current Defect or press &quot;Create a New Defect&quot;.">
+			                                                   <font>
+			                                                      <Font name="System Bold" size="12.0" />
+			                                                   </font>
+			                                                </Label>
+			                                                <HBox prefHeight="21.0" prefWidth="564.0">
+			                                                   <children>
+			                                                      <ComboBox fx:id="defectSelection" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="305.0" HBox.hgrow="ALWAYS">
+			                                                         <HBox.margin>
+			                                                            <Insets right="80.0" />
+			                                                         </HBox.margin>
+			                                                      </ComboBox>
+			                                                      <Button fx:id="createDefectButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="164.0" text="Create a New Defect" />
+			                                                   </children>
+			                                                   <VBox.margin>
+			                                                      <Insets left="30.0" />
+			                                                   </VBox.margin>
+			                                                </HBox>
+			                                             </children>
+			                                          </VBox>
+			                                       </children>
+			                                       <VBox.margin>
+			                                          <Insets bottom="15.0" />
+			                                       </VBox.margin>
+			                                    </HBox>
+			                                    <HBox prefHeight="38.0" prefWidth="594.0">
+			                                       <children>
+			                                          <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+			                                             <children>
+			                                                <Label text="3. Define or update the following Current Defect attributes:">
+			                                                   <font>
+			                                                      <Font name="System Bold" size="12.0" />
+			                                                   </font>
+			                                                </Label>
+			                                                <HBox prefHeight="100.0" prefWidth="200.0">
+			                                                   <children>
+			                                                      <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+			                                                         <children>
+			                                                            <Label text="Num   Defect Name">
+			                                                               <font>
+			                                                                  <Font name="System Bold" size="12.0" />
+			                                                               </font>
+			                                                            </Label>
+			                                                            <TextField fx:id="defectNameTextField" prefHeight="6.0" prefWidth="297.0">
+			                                                               <padding>
+			                                                                  <Insets right="1.0" />
+			                                                               </padding>
+			                                                               <VBox.margin>
+			                                                                  <Insets left="30.0" />
+			                                                               </VBox.margin>
+			                                                            </TextField>
+			                                                         </children>
+			                                                         <HBox.margin>
+			                                                            <Insets left="30.0" right="30.0" />
+			                                                         </HBox.margin>
+			                                                      </VBox>
+			                                                      <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+			                                                         <children>
+			                                                            <Label fx:id="statusDisplay" text="Status: Closed">
+			                                                               <font>
+			                                                                  <Font name="System Bold" size="12.0" />
+			                                                               </font>
+			                                                            </Label>
+			                                                            <HBox prefHeight="100.0" prefWidth="200.0">
+			                                                               <children>
+			                                                                  <Button fx:id="closeDefectButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="      Close      ">
+			                                                                     <HBox.margin>
+			                                                                        <Insets right="10.0" />
+			                                                                     </HBox.margin>
+			                                                                  </Button>
+			                                                                  <Button fx:id="openDefectButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="154.0" text="      Reopen      " />
+			                                                               </children>
+			                                                            </HBox>
+			                                                         </children>
+			                                                      </VBox>
+			                                                   </children>
+			                                                </HBox>
+			                                             </children>
+			                                          </VBox>
+			                                       </children>
+			                                    </HBox>
+			                                    <HBox prefHeight="76.0" prefWidth="594.0">
+			                                       <children>
+			                                          <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+			                                             <children>
+			                                                <Label text="Defect Symptoms or Cause/Resolution">
+			                                                   <font>
+			                                                      <Font name="System Bold" size="12.0" />
+			                                                   </font>
+			                                                </Label>
+                                                            <TextArea fx:id="defectSymptomsTextArea" prefHeight="200.0" prefWidth="200.0" />
+			                                             </children>
+			                                          </VBox>
+			                                       </children>
+			                                       <VBox.margin>
+			                                          <Insets left="30.0" />
+			                                       </VBox.margin>
+			                                    </HBox>
+			                                    <Label text="To insert a new line, press &lt;ctrl + option + return&gt;">
+			                                       <VBox.margin>
+			                                          <Insets left="60.0" />
+			                                       </VBox.margin>
+			                                       <font>
+			                                          <Font size="12.0" />
+			                                       </font>
+			                                    </Label>
+			                                    <HBox prefHeight="87.0" prefWidth="564.0">
+			                                       <children>
+			                                          <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+			                                             <children>
+			                                                <Label text="Step when injected">
+			                                                   <font>
+			                                                      <Font name="System Bold" size="12.0" />
+			                                                   </font>
+			                                                </Label>
+                                                            <ListView fx:id="injectionStepListView" prefHeight="200.0" prefWidth="200.0" />
+			                                             </children>
+			                                             <HBox.margin>
+			                                                <Insets right="30.0" />
+			                                             </HBox.margin>
+			                                          </VBox>
+			                                          <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+			                                             <children>
+			                                                <Label text="Step when removed">
+			                                                   <font>
+			                                                      <Font name="System Bold" size="12.0" />
+			                                                   </font>
+			                                                </Label>
+                                                            <ListView fx:id="removalStepListView" prefHeight="200.0" prefWidth="200.0" />
+			                                             </children>
+			                                             <HBox.margin>
+			                                                <Insets right="30.0" />
+			                                             </HBox.margin>
+			                                          </VBox>
+			                                          <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+			                                             <children>
+			                                                <Label text="Defect Category">
+			                                                   <font>
+			                                                      <Font name="System Bold" size="12.0" />
+			                                                   </font>
+			                                                </Label>
+                                                            <ListView fx:id="defectCategoryListView" prefHeight="200.0" prefWidth="200.0" />
+			                                             </children>
+			                                          </VBox>
+			                                       </children>
+			                                       <VBox.margin>
+			                                          <Insets bottom="15.0" left="30.0" />
+			                                       </VBox.margin>
+			                                    </HBox>
+			                                    <HBox prefHeight="19.0" prefWidth="562.0">
+			                                       <VBox.margin>
+			                                          <Insets bottom="10.0" left="30.0" />
+			                                       </VBox.margin>
+			                                       <children>
+			                                          <Label fx:id="savedIndicatorLabel" text="These attributes have been saved">
+			                                             <HBox.margin>
+			                                                <Insets right="10.0" />
+			                                             </HBox.margin>
+			                                             <font>
+			                                                <Font name="System Bold" size="12.0" />
+			                                             </font>
+                                                         <padding>
+                                                            <Insets right="40.0" />
+                                                         </padding>
+			                                          </Label>
+			                                          <Label text="Fix:">
+			                                             <font>
+			                                                <Font name="System Bold" size="12.0" />
+			                                             </font>
+			                                             <HBox.margin>
+			                                                <Insets right="15.0" />
+			                                             </HBox.margin>
+			                                          </Label>
+			                                          <ComboBox fx:id="fixedDefectList" maxWidth="1.7976931348623157E308" prefWidth="150.0" HBox.hgrow="ALWAYS" />
+			                                       </children>
+			                                    </HBox>
+			                                    <HBox prefHeight="100.0" prefWidth="200.0">
+			                                       <children>
+			                                          <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+			                                             <children>
+			                                                <Label text="4. Press the &quot;Update the Current Defect&quot; to save the changes made above.">
+			                                                   <font>
+			                                                      <Font name="System Bold" size="12.0" />
+			                                                   </font>
+			                                                </Label>
+			                                                <HBox prefHeight="100.0" prefWidth="200.0">
+			                                                   <children>
+			                                                      <Button fx:id="updateDefectButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="193.0" text="Update the Current Defect">
+			                                                         <HBox.margin>
+			                                                            <Insets right="10.0" />
+			                                                         </HBox.margin>
+			                                                      </Button>
+			                                                      <Button fx:id="deleteCurrentDefect" mnemonicParsing="false" prefHeight="25.0" prefWidth="186.0" text="Delete the Current Defect">
+			                                                         <HBox.margin>
+			                                                            <Insets right="10.0" />
+			                                                         </HBox.margin>
+			                                                      </Button>
+			                                                      <Button fx:id="effortLoggerConsoleButton" mnemonicParsing="false" text="Proceed to the Effort Log Cosole" />
+			                                                   </children>
+			                                                </HBox>
+			                                             </children>
+			                                          </VBox>
+			                                       </children>
+			                                    </HBox>
+			                                 </children>
+			                                 <padding>
+			                                    <Insets left="20.0" right="20.0" top="15.0" />
+			                                 </padding></VBox>
+			                           </children>
+			                        </VBox>
+			                     </children>
+			                  </VBox>
+			               </children>
+			            </AnchorPane>
+			         </content>
+			      </Tab>
+                  <Tab text="Logs">
+                     <content>
+                        <VBox>
+                           <children>
+                              <VBox alignment="CENTER" maxWidth="5000.0">
+                                 <children>
+                                    <Label text="Effort Logs">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="202.0" prefWidth="649.0">
+                                       <children>
+                                          <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <TableView fx:id="logTab" editable="true" fixedCellSize="28.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="200.0" prefWidth="500.0">
+                                                  <columns>
+                                                    <TableColumn fx:id="indexCol" minWidth="34.5" prefWidth="43.5" text="Index" />
+                                                      <TableColumn fx:id="projCol" prefWidth="100.0" text="Project Name: " />
+                                                      <TableColumn fx:id="keyWordCol" prefWidth="125.0" text="Key Words" />
+                                                      <TableColumn fx:id="dateCol" minWidth="49.0" prefWidth="100.0" text="Date" />
+                                                      <TableColumn fx:id="lifeCycleCol" prefWidth="120.0" text="Life Cycle Step" />
+                                                      <TableColumn fx:id="effortCol" prefWidth="120.0" text="Effort Category" />
+                                                      <TableColumn fx:id="delCol" prefWidth="175.0" text="Deliverable/Interruption/etc" />
+                                                      <TableColumn maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="-1.0" text="Time">
+                                                         <columns>
+                                                            <TableColumn fx:id="startCol" maxWidth="100.0" prefWidth="60.0" text="Start" />
+                                                            <TableColumn fx:id="endCol" maxWidth="100.0" prefWidth="60.0" text="End" />
+                                                            <TableColumn fx:id="deltaCol" prefWidth="50.0" text="Delta" />
+                                                         </columns>
+                                                      </TableColumn>
+                                                  </columns>
+                                                </TableView>
+                                             </children>
+                                          </VBox>
+                                          <VBox alignment="CENTER" maxHeight="5000.0" maxWidth="5000.0" prefHeight="202.0" prefWidth="290.0" HBox.hgrow="NEVER">
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin>
+                                             <children>
+                                                <Button mnemonicParsing="false" onAction="#filterEffortLogs" text="Filter Effort Logs">
+                                                   <VBox.margin>
+                                                      <Insets top="10.0" />
+                                                   </VBox.margin>
+                                                </Button>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets left="20.0" right="20.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </VBox>
+                              <VBox alignment="CENTER">
+                                 <children>
+                                    <Label text="Defect Logs">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox alignment="CENTER_RIGHT">
+                                       <children>
+                                          <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                                             <children>
+                                                <TableView fx:id="defectLogsTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="200.0" prefWidth="500.0">
+                                                  <columns>
+                                                    <TableColumn fx:id="indexColumn" prefWidth="75.0" text="Index" />
+                                                    <TableColumn fx:id="projectNameColumn" prefWidth="100.0" text="Project Name" />
+                                                      <TableColumn fx:id="projectTypeColumn" prefWidth="100.0" text="Project Type" />
+                                                      <TableColumn fx:id="detailColumn" prefWidth="75.0" text="Detail" />
+                                                      <TableColumn fx:id="injectedColumn" prefWidth="75.0" text="Injected" />
+                                                      <TableColumn fx:id="removedColumn" prefWidth="75.0" text="Removed" />
+                                                      <TableColumn fx:id="categoryColumn" prefWidth="75.0" text="Category" />
+                                                      <TableColumn fx:id="statusColumn" prefWidth="75.0" text="Status" />
+                                                      <TableColumn fx:id="fixedColumn" prefWidth="75.0" text="Fix" />
+                                                  </columns>
+                                                </TableView>
+                                             </children>
+                                          </VBox>
+                                          <VBox alignment="CENTER" maxHeight="5000.0" maxWidth="5000.0" prefHeight="202.0" prefWidth="290.0">
+                                             <children>
+                                                <Button mnemonicParsing="false" text="Export Data">
+                                                   <VBox.margin>
+                                                      <Insets top="10.0" />
+                                                   </VBox.margin>
+                                                </Button>
+                                                <Button mnemonicParsing="false" onAction="#filterDefectLogs" text="Filter Defect Logs">
+                                                   <VBox.margin>
+                                                      <Insets top="10.0" />
+                                                   </VBox.margin>
+                                                </Button>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets left="20.0" right="20.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </VBox>
+                           </children>
+                        </VBox>
+                     </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+         </root>
+      </Scene>
+   </scene>
+</Stage>
