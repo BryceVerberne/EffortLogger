@@ -387,7 +387,6 @@ public class ConsoleController implements Initializable{
 				System.out.println("\"Other\" text is not within 1 - 200 characters range");
 			}
 		} else {
-			System.out.println("Nothing written in the Other box");
 		}
 		
 	}

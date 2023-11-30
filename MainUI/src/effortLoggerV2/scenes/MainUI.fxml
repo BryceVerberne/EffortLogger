@@ -891,11 +891,6 @@
                                                 <Insets />
                                              </HBox.margin>
                                              <children>
-                                                <Button alignment="CENTER" mnemonicParsing="false" text="Preview Export Data">
-                                                   <VBox.margin>
-                                                      <Insets bottom="10.0" />
-                                                   </VBox.margin>
-                                                </Button>
                                                 <Button mnemonicParsing="false" onAction="#filterEffortLogs" text="Filter Effort Logs">
                                                    <VBox.margin>
                                                       <Insets top="10.0" />
@@ -941,11 +936,6 @@
                                           </VBox>
                                           <VBox alignment="CENTER" maxHeight="5000.0" maxWidth="5000.0" prefHeight="202.0" prefWidth="290.0">
                                              <children>
-                                                <Button alignment="CENTER" mnemonicParsing="false" text="Preview Export Data">
-                                                   <VBox.margin>
-                                                      <Insets bottom="10.0" />
-                                                   </VBox.margin>
-                                                </Button>
                                                 <Button mnemonicParsing="false" text="Export Data">
                                                    <VBox.margin>
                                                       <Insets top="10.0" />
