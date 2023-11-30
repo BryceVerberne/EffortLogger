@@ -10,8 +10,6 @@
  */
 
 
-
-
 package effortLoggerV2;
 
 import java.net.URL;
@@ -24,13 +22,13 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import java.util.stream.Collectors;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -38,6 +36,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
@@ -215,6 +214,15 @@ public class ConsoleController implements Initializable{
 		effortCategoryComboBox.getSelectionModel().select(lifeCycleComboBox.getSelectionModel().getSelectedItem().EC);	
 	}
 
+	public void startActivity(ActionEvent event) {
+		if(act == null) {
+			// create a new activity
+			act = new Activity();
+			clockTitle.setText("Clock is running");
+			clockBox.setStyle("-fx-background-color: green");
+		} 
+	}
+	
 	public void populateDeliverableBox() {
 		String effortbox = effortCategoryComboBox.getSelectionModel().getSelectedItem().title;
 		if (effortbox.equals("Plans")){
@@ -288,6 +296,8 @@ public class ConsoleController implements Initializable{
 			deliverableLabel.setText(combo);
 
 		} else {
+			// when effort Category Box is "Other"
+			// sets the "Other" text field visible for input
 			if(!deliverableComboBox.getSelectionModel().isEmpty()) {
 				deliverableComboBox.getItems().clear();
 			}
@@ -330,21 +340,16 @@ public class ConsoleController implements Initializable{
 	}
 	
 	
-	public void startActivity(ActionEvent event) {
-		if(act == null) {
-			act = new Activity();
-			clockTitle.setText("Clock is running");
-			clockBox.setStyle("-fx-background-color: green");
-		} 
-	}
+	
 	
 	public void endActivity(ActionEvent event) {
 		// if the user tries to create an effort log with other for the effort category, the deliverable box
 		// cannot be empty
 		if(act != null && deliverableComboBox.getSelectionModel().getSelectedItem() != null) {
-			// the other effort category cannot be filled with a string longer than 150 characters
+			// the other effort category cannot be filled with a string longer than 200 characters or shorter than 1 character
 			// avoids users from entering dangerously long strings
-			if(deliverableComboBox.getSelectionModel().getSelectedItem().toString().length() < 150) {
+			String otherText = deliverableComboBox.getSelectionModel().getSelectedItem().toString();
+			if(otherText.length() <= 200 && otherText.length() > 0) {
 				act.stopActivity();
 				try {
 					// if the effort Logs is null then make a new arrayList 
@@ -381,10 +386,9 @@ public class ConsoleController implements Initializable{
 					e.printStackTrace();
 				}
 			} else {
-				System.out.println("Other is more than 150 characters");
+				System.out.println("\"Other\" text is not within 1 - 200 characters range");
 			}
 		} else {
-			System.out.println("Nothing written in the Other box");
 		}
 		
 	}
@@ -1341,6 +1345,46 @@ public class ConsoleController implements Initializable{
 				populateDeliverableBoxEditor();
 			}
 		});
+	}
+	
+	
+	/*
+	 * 
+	 * 
+	 Defect Logs Filter
+	 *
+	 *
+	 */
+	
+	
+	public void populateFilteredDefectLogs(ArrayList<String> detailList) {
+	    if (MainUI.defectLogs != null && !detailList.isEmpty()) {
+	        ObservableList<DefectLogs> filteredDefectLogsObserve = FXCollections.observableArrayList();
+
+	        for (DefectLogs dl : MainUI.defectLogs) {
+	            // Assuming that the detail value is the first element in the ArrayList
+	            if (dl.getDetail().contains(detailList.get(0))) {
+	                filteredDefectLogsObserve.add(dl);
+	            }
+	        }
+
+	        defectLogsTable.setItems(filteredDefectLogsObserve);
+	    } else {
+	        // If the detail value is empty, show all defect logs
+	        populateDefectLogs();
+	    }
+	}
+
+	public void filterDefectLogs() {
+	    Dialog<ArrayList<String>> filter = new DefectLogsFilter(); // Assuming you have a specific dialog class for filtering by detail
+	    Optional<ArrayList<String>> result = filter.showAndWait();
+
+	    if (result.isPresent() && !result.get().isEmpty()) {
+	        populateFilteredDefectLogs(result.get());
+	    } else {
+	        // If the detail value is empty, show all defect logs
+	        populateDefectLogs();
+	    }
 	}
 	
 	@Override
