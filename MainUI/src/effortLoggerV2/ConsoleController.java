@@ -22,6 +22,7 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,6 +36,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
@@ -1343,6 +1345,46 @@ public class ConsoleController implements Initializable{
 				populateDeliverableBoxEditor();
 			}
 		});
+	}
+	
+	
+	/*
+	 * 
+	 * 
+	 Defect Logs Filter
+	 *
+	 *
+	 */
+	
+	
+	public void populateFilteredDefectLogs(ArrayList<String> detailList) {
+	    if (MainUI.defectLogs != null && !detailList.isEmpty()) {
+	        ObservableList<DefectLogs> filteredDefectLogsObserve = FXCollections.observableArrayList();
+
+	        for (DefectLogs dl : MainUI.defectLogs) {
+	            // Assuming that the detail value is the first element in the ArrayList
+	            if (dl.getDetail().contains(detailList.get(0))) {
+	                filteredDefectLogsObserve.add(dl);
+	            }
+	        }
+
+	        defectLogsTable.setItems(filteredDefectLogsObserve);
+	    } else {
+	        // If the detail value is empty, show all defect logs
+	        populateDefectLogs();
+	    }
+	}
+
+	public void filterDefectLogs() {
+	    Dialog<ArrayList<String>> filter = new DefectLogsFilter(); // Assuming you have a specific dialog class for filtering by detail
+	    Optional<ArrayList<String>> result = filter.showAndWait();
+
+	    if (result.isPresent() && !result.get().isEmpty()) {
+	        populateFilteredDefectLogs(result.get());
+	    } else {
+	        // If the detail value is empty, show all defect logs
+	        populateDefectLogs();
+	    }
 	}
 	
 	@Override
